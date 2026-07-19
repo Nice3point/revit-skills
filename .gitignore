@@ -1,0 +1,9 @@
+# IDE folders
+*.idea/
+*.vs/
+*.vscode/
+
+# Build output
+*obj/
+*bin/
+/output/

@@ -1,0 +1,50 @@
+{
+  "name": "revit-skills",
+  "interface": {
+    "displayName": "Revit Agent Skills"
+  },
+  "plugins": [
+    {
+      "name": "revit-ui",
+      "source": { "source": "local", "path": "./plugins/revit-ui" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    },
+    {
+      "name": "revit-api",
+      "source": { "source": "local", "path": "./plugins/revit-api" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    },
+    {
+      "name": "revit-solution",
+      "source": { "source": "local", "path": "./plugins/revit-solution" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    },
+    {
+      "name": "revit-testing",
+      "source": { "source": "local", "path": "./plugins/revit-testing" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    },
+    {
+      "name": "revit-benchmarking",
+      "source": { "source": "local", "path": "./plugins/revit-benchmarking" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    },
+    {
+      "name": "dotnet",
+      "source": { "source": "local", "path": "./plugins/dotnet" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    },
+    {
+      "name": "dotnet-advanced",
+      "source": { "source": "local", "path": "./plugins/dotnet-advanced" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    }
+  ]
+}

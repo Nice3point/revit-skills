@@ -1,0 +1,20 @@
+{
+  "name": "revit-benchmarking",
+  "version": "0.1.0",
+  "description": "Benchmark Revit API code inside Revit with Nice3point.BenchmarkDotNet.Revit.",
+  "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
+  "homepage": "https://github.com/Nice3point/revit-skills",
+  "repository": "https://github.com/Nice3point/revit-skills",
+  "license": "MIT",
+  "keywords": ["revit", "benchmarkdotnet", "benchmarking", "skills"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Revit Benchmarking",
+    "shortDescription": "Measure Revit API performance",
+    "longDescription": "Reusable workflows for BenchmarkDotNet performance measurements that execute inside Revit.",
+    "developerName": "Nice3point",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Use Revit Benchmarking to measure a Revit API operation."]
+  }
+}

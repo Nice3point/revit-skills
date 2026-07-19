@@ -1,0 +1,15 @@
+<Project>
+
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageVersion Include="ModularPipelines" Version="3.2.8"/>
+        <PackageVersion Include="ModularPipelines.Git" Version="3.2.8"/>
+        <PackageVersion Include="ModularPipelines.GitHub" Version="3.2.8"/>
+        <PackageVersion Include="Shouldly" Version="4.3.0"/>
+    </ItemGroup>
+
+</Project>

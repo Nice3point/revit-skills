@@ -1,0 +1,20 @@
+{
+  "name": "revit-solution",
+  "version": "0.1.0",
+  "description": "Build and maintain Revit add-in projects with Nice3point.Revit.Sdk and Nice3point.Revit.Templates.",
+  "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
+  "homepage": "https://github.com/Nice3point/revit-skills",
+  "repository": "https://github.com/Nice3point/revit-skills",
+  "license": "MIT",
+  "keywords": ["revit", "dotnet", "build", "publishing", "skills"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Revit Solution",
+    "shortDescription": "Scaffold and configure Revit add-ins",
+    "longDescription": "Reusable workflows for new Revit project scaffolding and existing SDK-driven add-in configuration, multi-version builds, dependencies, debugging, publishing, bundles, and template migration.",
+    "developerName": "Nice3point",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Use Revit Solution to scaffold or configure a multi-version Revit add-in."]
+  }
+}

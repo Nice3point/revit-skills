@@ -1,0 +1,20 @@
+{
+  "name": "revit-testing",
+  "version": "0.1.0",
+  "description": "Write automated Revit API tests with Nice3point.TUnit.Revit.",
+  "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
+  "homepage": "https://github.com/Nice3point/revit-skills",
+  "repository": "https://github.com/Nice3point/revit-skills",
+  "license": "MIT",
+  "keywords": ["revit", "testing", "tunit", "skills"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Revit Testing",
+    "shortDescription": "Test Revit API code with TUnit",
+    "longDescription": "Reusable workflows for TUnit-based Revit API tests, Revit-thread execution, and document fixtures.",
+    "developerName": "Nice3point",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Use Revit Testing to add a Revit API test with TUnit."]
+  }
+}

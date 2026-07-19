@@ -1,0 +1,38 @@
+name: Publish release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'plugins/*/plugin.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: revit-skills-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Publish release
+    runs-on: windows-2025
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Cache packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'Directory.Packages.props') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Publish release
+        working-directory: build
+        run: dotnet run -c Release -- release

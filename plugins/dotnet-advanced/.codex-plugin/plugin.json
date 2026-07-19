@@ -1,0 +1,20 @@
+{
+  "name": "dotnet-advanced",
+  "version": "0.1.0",
+  "description": "Design the architecture and runtime composition of modern .NET applications.",
+  "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
+  "homepage": "https://github.com/Nice3point/revit-skills",
+  "repository": "https://github.com/Nice3point/revit-skills",
+  "license": "MIT",
+  "keywords": ["dotnet", "dependency-injection", "logging", "skills"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Advanced .NET",
+    "shortDescription": "Design modern .NET applications",
+    "longDescription": "Reusable workflows for .NET dependency injection, hosting, options, source-generated logging, and type design.",
+    "developerName": "Nice3point",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Use Advanced .NET to configure dependency injection and options."]
+  }
+}

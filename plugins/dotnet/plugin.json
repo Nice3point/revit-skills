@@ -1,0 +1,20 @@
+{
+  "name": "dotnet",
+  "version": "0.1.0",
+  "description": "Write consistent, well-documented C# for .NET projects.",
+  "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
+  "homepage": "https://github.com/Nice3point/revit-skills",
+  "repository": "https://github.com/Nice3point/revit-skills",
+  "license": "MIT",
+  "keywords": ["dotnet", "csharp", "skills"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": ".NET Fundamentals",
+    "shortDescription": "Apply everyday .NET and C# practices",
+    "longDescription": "Reusable workflows for C# style, XML documentation, and technical writing.",
+    "developerName": "Nice3point",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Use .NET Fundamentals to improve the C# code."]
+  }
+}

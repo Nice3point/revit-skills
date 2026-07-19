@@ -1,0 +1,8 @@
+mode: ContinuousDelivery
+branches:
+  main:
+    mode: ContinuousDeployment
+    increment: Patch
+  develop:
+    label: beta
+    increment: Patch

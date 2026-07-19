@@ -1,0 +1,44 @@
+{
+  "name": "revit-skills",
+  "description": "Focused Agent Skills for building Autodesk Revit add-ins with Nice3point.Revit.* and .NET.",
+  "owner": {
+    "name": "Nice3point"
+  },
+  "plugins": [
+    {
+      "name": "revit-ui",
+      "source": "./plugins/revit-ui",
+      "description": "Build Revit add-in interfaces and user interactions with the Revit UI API."
+    },
+    {
+      "name": "revit-api",
+      "source": "./plugins/revit-api",
+      "description": "Build Revit model automation with the Revit API."
+    },
+    {
+      "name": "revit-solution",
+      "source": "./plugins/revit-solution",
+      "description": "Build and maintain Revit add-in projects with Nice3point.Revit.Sdk and Nice3point.Revit.Templates."
+    },
+    {
+      "name": "revit-testing",
+      "source": "./plugins/revit-testing",
+      "description": "Write automated Revit API tests with Nice3point.TUnit.Revit."
+    },
+    {
+      "name": "revit-benchmarking",
+      "source": "./plugins/revit-benchmarking",
+      "description": "Benchmark Revit API code inside Revit with Nice3point.BenchmarkDotNet.Revit."
+    },
+    {
+      "name": "dotnet",
+      "source": "./plugins/dotnet",
+      "description": "Write consistent, well-documented C# for .NET projects."
+    },
+    {
+      "name": "dotnet-advanced",
+      "source": "./plugins/dotnet-advanced",
+      "description": "Design the architecture and runtime composition of modern .NET applications."
+    }
+  ]
+}

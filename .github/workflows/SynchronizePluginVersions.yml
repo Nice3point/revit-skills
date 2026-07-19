@@ -1,0 +1,36 @@
+name: Synchronize plugin versions
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: plugin-version-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Synchronize plugin versions
+    runs-on: windows-2025
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Cache packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'Directory.Packages.props') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Synchronize plugin versions
+        working-directory: build
+        run: dotnet run -c Release -- sync
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

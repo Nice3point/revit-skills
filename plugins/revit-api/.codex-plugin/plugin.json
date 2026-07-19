@@ -1,0 +1,20 @@
+{
+  "name": "revit-api",
+  "version": "0.1.0",
+  "description": "Build Revit model automation with the Revit API.",
+  "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
+  "homepage": "https://github.com/Nice3point/revit-skills",
+  "repository": "https://github.com/Nice3point/revit-skills",
+  "license": "MIT",
+  "keywords": ["revit", "revit-api", "skills"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Revit API",
+    "shortDescription": "Work with the Revit API",
+    "longDescription": "Reusable workflows for working with the Revit API: model access, collectors, elements and parameters, failures, option handlers, extensions, and code structure.",
+    "developerName": "Nice3point",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Use the Revit API to work with the Revit model."]
+  }
+}
