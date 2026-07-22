@@ -33,7 +33,7 @@ Use an injected service when behavior depends on configuration, logging, I/O, a 
 
 - Keep the service API focused on one capability boundary.
 - Use a primary constructor for dependencies; do not add fields that only mirror them.
-- Add an interface when a consumer must substitute the implementation, choose among implementations, or depend on a stable boundary — not merely because the type is DI-registered.
+- Add an interface when a consumer must substitute the implementation, choose among implementations, or depend on a stable boundary; DI registration alone is not a reason.
 
 ## Hosted services
 

@@ -9,7 +9,8 @@ license: MIT
 # Source-Generated Logging
 
 Use the `LoggerMessage` source generator (part of `Microsoft.Extensions.Logging`) to declare log statements as partial methods.
-Generated methods allocate nothing when the level is disabled, validate the message template against the typed parameters at compile time, and keep structured fields queryable — unlike `logger.LogInformation($"...")`, which allocates on every call and flattens the arguments into a string.
+Generated methods allocate nothing when the level is disabled, validate the message template against the typed parameters at compile time, and keep structured fields queryable.
+`logger.LogInformation($"...")` allocates on every call and flattens the arguments into a string.
 
 ## When to use
 
@@ -21,7 +22,7 @@ Generated methods allocate nothing when the level is disabled, validate the mess
 
 ### Step 1: Mark the owning type partial
 
-Add `partial` to the class that declares the log methods so the generator can emit their bodies.
+Add `partial` to the class that declares the log methods; the generator emits their bodies.
 
 ```csharp
 public sealed partial class UserService(ILogger<UserService> logger)
@@ -43,7 +44,7 @@ private static partial void LogUserCreated(ILogger logger, Guid userId);
 ### Step 3: Log exceptions through the exception parameter
 
 Add an `Exception` parameter (any position after the logger).
-The generator binds it as the entry's exception instead of formatting it into the message text.
+The generator binds it as the entry's exception; it does not format it into the message text.
 
 ```csharp
 [LoggerMessage(LogLevel.Error, "Failed to create user {UserId}")]
@@ -52,7 +53,7 @@ private static partial void LogUserCreationFailed(ILogger logger, Exception exce
 
 ### Step 4: Add shared context with a scope
 
-When several entries share the same context, open a `BeginScope` rather than repeating the value in every template.
+When several entries share the same context, open a `BeginScope`; do not repeat the value in every template.
 
 ```csharp
 using var scope = logger.BeginScope(new Dictionary<string, object?>

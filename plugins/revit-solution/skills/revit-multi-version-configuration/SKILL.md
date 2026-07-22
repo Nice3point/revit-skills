@@ -31,15 +31,18 @@ The `Nice3point.Revit.Sdk` derives the framework and the cumulative `REVIT####` 
 <Configurations>$(Configurations);Release.R25;Release.R26;Release.R27</Configurations>
 ```
 
-Mirror the same `Debug.RNN`/`Release.RNN` set in the slnx/sln file.
+Mirror the same `Debug.RNN`/`Release.RNN` set in the .slnx/.sln file.
 
 ### Step 2: Add or remove a version
 
 Add or remove the matching `Debug.RNN` / `Release.RNN` in the solution and the project's `<Configurations>`.
-When ending maintenance for a year, removing its solution configurations is sufficient if the project-level configurations remain needed for another consuming solution.
-For a newly released year, first update the SDK and confirm its framework mapping; set `TargetFramework` explicitly only when the current SDK documentation says the year is not mapped.
+For a newly released year, first update the SDK; set `TargetFramework` explicitly only when the SDK is not released with the latest Revit version support or you are using the preview API package:
 
-### Step 3: Branch only on real API differences
+```xml
+<TargetFramework Condition="$(RevitVersion) == '2027'">net10.0-windows7.0</TargetFramework>
+```
+
+### Step 3: Add preprocessor directives for incompatible API
 
 Write shared code first.
 Add a `#if` branch only where the Revit API genuinely differs; keep both branches independently compilable.

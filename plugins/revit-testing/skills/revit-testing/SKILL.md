@@ -2,7 +2,7 @@
 name: revit-testing
 description: >
   Write, run, or review Autodesk Revit API tests that execute inside Revit with Nice3point.TUnit.Revit.
-  USE FOR: writing RevitApiTest classes whose bodies run on Revit's single thread via the RevitThreadExecutor, asserting observable model behavior with TUnit, and running the suite against a matching Revit install.
+  USE FOR: writing RevitApiTest classes whose bodies run on Revit's single thread via the RevitThreadExecutor.
   DO NOT USE FOR: supplying the documents, services, or data cases a test runs against (use revit-test-fixtures), scaffolding the test project (create it from the revit-tunit template), or tests that never call the Revit API.
 license: MIT
 ---
@@ -23,6 +23,7 @@ It applies to a project scaffolded from the `revit-tunit` template — with the 
 ## When not to use
 
 - Providing the document, service, or parameterized cases a test consumes — use `revit-test-fixtures`.
+- Scaffolding the test project itself — create it from the `revit-tunit` template.
 - The code under test never touches the Revit API — write a plain TUnit test with no `RevitApiTest` base and no executor.
 
 ## Workflow
@@ -56,8 +57,8 @@ public sealed class BoundingBoxExtensionsTests : RevitApiTest
 }
 ```
 
-`Assert.Multiple()` groups related checks so one failure does not hide the rest.
-TUnit assertions are awaited: `IsEqualTo(...).Within(tol)` for doubles, `IsTrue()`, `IsNotEmpty()`, `.All().Satisfy(...)` for collections, and `.Throws<TException>()` for failures.
+`Assert.Multiple()` groups related checks; one failure does not hide the rest.
+TUnit assertions are awaited: `IsEqualTo(...).Within(tol)` for doubles, `IsTrue()`/`IsNotEmpty()` for booleans and emptiness checks, `.All().Satisfy(...)` for collections, and `.Throws<TException>()` for failures.
 
 ### Step 2: Keep every Revit-touching member on the Revit thread
 
@@ -68,21 +69,22 @@ The assembly-level `[assembly: TestExecutor<RevitThreadExecutor>]` (in `TestsCon
 - Load Revit API types lazily — a field initializer runs at construction, before Revit is injected:
 
 ```csharp
-// BAD — runs before Revit exists
+// BAD — runs before Revit initialized.
 private readonly ElementId _levelId = new ElementId(BuiltInCategory.OST_Levels);
 
-// GOOD — resolved on first use, on the Revit thread
+// GOOD — resolved on first use, on the Revit thread.
 private ElementId LevelId => field ??= new ElementId(BuiltInCategory.OST_Levels);
 ```
 
+Calling the Revit API during test discovery causes an InvalidOperationException: "Attempted to write protected memory."
 Discovery happens before Revit is injected and off its thread: TUnit constructs the test class, evaluates every data source, and resolves every dependency-injection service at discovery.
 No constructor, field initializer, data-source member, or injected service may touch the Revit API at construction — defer that work to the test body or a `[Before]` hook that runs on the Revit thread.
 
 ### Step 3: Parameterize and supply fixtures
 
 Feed a small fixed set of primitive cases inline with `[Arguments]`; the test body builds the Revit objects.
-`[Arguments]`, method data sources, and custom data sources are basic TUnit features; this skill adds the Revit-thread constraints.
-For data-source choices beyond the Revit fixtures below, read TUnit's [Method Data Sources source](https://raw.githubusercontent.com/thomhurst/TUnit/main/docs/docs/writing-tests/method-data-source.md).
+For a seeded model, an opened sample file, an injected service, or the same test across many file kinds, use `revit-test-fixtures` — it routes each situation to the right fixture and data source.
+Test fixture is a basic TUnit feature; this skill adds the Revit-thread constraint only.
 
 ```csharp
 [Test]
@@ -102,7 +104,6 @@ public async Task NewXyz_Distance_MatchesLength(double x, double y, double z)
 ```
 
 A data source runs during TUnit discovery, **off the Revit thread**; it yields plain inputs (numbers, strings, file paths) and never a Revit object.
-For a seeded model, an opened sample file, an injected service, or the same test across many file kinds, use `revit-test-fixtures` — it routes each situation to the right fixture and data source.
 
 ### Step 4: Run against a matching Revit install
 
@@ -114,7 +115,7 @@ dotnet test -c Release.RNN
 
 `RNN` is the target Revit-year configuration, for example `Release.R26`.
 Use `dotnet run -c Release.RNN` for simpler command-line flag passing.
-A licensed Revit matching the selected configuration must be installed, because the tests run against a real Revit process.
+A licensed Revit matching the selected configuration must be installed; the tests run against a real Revit process.
 
 ## Validation
 

@@ -22,10 +22,9 @@ dotnet new revit-addin --name MyAddin --addin application --wpf --di hosting --l
 
 ## Choosing the add-in type
 
-Use `application` for a normal ribbon-driven add-in.
-The generated application creates the ribbon and registers the starter command.
-Use `command` when the manifest must register one command directly.
+Use `application` for a normal ribbon-driven add-in; the generated application creates the ribbon and registers the starter command.
 Use `dbApplication` when the entry point is a database application and does not need the Revit UI API or WPF output.
+Use `command` when the manifest must register one command directly (Revit adds a command to the built-in `Add-ins` tab); don't use it unless explicitly required.
 
 ## Validation
 

@@ -1,7 +1,7 @@
 ---
 name: revit-ribbon
 description: >
-  Build an Autodesk Revit ribbon with the Nice3point.Revit.Extensions fluent panel and button API instead of raw RibbonPanel and PushButtonData calls.
+  Build an Autodesk Revit ribbon with the Nice3point.Revit.Extensions fluent panel and button API, not raw RibbonPanel and PushButtonData calls.
   USE FOR: creating ribbon panels, push/pulldown/split buttons, stacked rows, icons, tooltips, shortcuts, and availability controllers in an application's OnStartup.
   DO NOT USE FOR: right-click context menu entries (use revit-context-menu).
 license: MIT
@@ -52,7 +52,7 @@ pulldown.AddPushButton<ExportCommand>("Export");
 ### Step 3: Stack small items vertically
 
 `AddStackPanel` packs one to three small items into a vertical stack (overflow flows into a new column).
-It carries its own `AddPushButton`/`AddPullDownButton`/`AddSplitButton`/`AddComboBox`/`AddTextBox`, plus `AddLabel` for a caption.
+It carries its own `AddPushButton`/`AddPullDownButton`/`AddSplitButton`/`AddComboBox`/`AddTextBox`, and `AddLabel` for a caption.
 
 ```csharp
 var stack = panel.AddStackPanel();
@@ -61,13 +61,13 @@ stack.AddLabel("Mode:");
 stack.AddComboBox();
 ```
 
-On the stack panel the pulldown and split overloads take `(buttonText, internalName)` — the reverse of `RibbonPanel.AddPullDownButton(internalName, buttonText)`.
+On the stack panel the pulldown and split overloads take `(buttonText, internalName)`.
 
 ### Step 4: Set icons, tooltips, availability, and shortcuts
 
-`SetImage`/`SetLargeImage` take a pack URI; when the file name contains `light`/`dark` the icon auto-swaps for the Revit theme (2024+).
-Add `SetToolTip`, `SetLongDescription` (which accepts `<p>` paragraphs), and `SetAvailabilityController<T>` to grey the button out when its command cannot run.
-Bind a keyboard shortcut with `AddShortcuts` (or `TryAddShortcuts`, which skips on conflict).
+`SetImage`/`SetLargeImage` take a pack URI; when the file path contains `light`/`dark` the icon auto-swaps for the Revit theme (2024+).
+Add `SetToolTip`, `SetLongDescription` (which accepts `<p>` paragraphs), and `SetAvailabilityController<T>`, which greys the button out when its command cannot run.
+Bind keyboard shortcuts with `AddShortcuts` (or `TryAddShortcuts`, which skips if other buttons use this shortcut); both support a `params` enumeration.
 
 ```csharp
 panel.AddPushButton<AnalyzeCommand>("Analyze")

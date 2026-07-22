@@ -9,72 +9,72 @@ Resolving an `ElementId` to a typed element (`wallId.ToElement<Wall>(document)`)
 
 ## BuiltInParameter converters
 
-| Extension     | Purpose                                  | Example                                                             |
-|---------------|------------------------------------------|---------------------------------------------------------------------|
-| `ToParameter` | BuiltInParameter → `Parameter` object    | `BuiltInParameter.WALL_TOP_OFFSET.ToParameter(document)`            |
-| `ToElementId` | BuiltInParameter → `ElementId`           | `BuiltInParameter.WALL_TOP_OFFSET.ToElementId()`                    |
-| `IsParameter` | Whether an id matches a BuiltInParameter | `parameterId.IsParameter(BuiltInParameter.WALL_BOTTOM_IS_ATTACHED)` |
+| Extension                                                          | Purpose                                  |
+|----------------------------------------------------------------------|-------------------------------------------|
+| `BuiltInParameter.WALL_TOP_OFFSET.ToParameter(document)`            | BuiltInParameter → `Parameter` object    |
+| `BuiltInParameter.WALL_TOP_OFFSET.ToElementId()`                    | BuiltInParameter → `ElementId`           |
+| `parameterId.IsParameter(BuiltInParameter.WALL_BOTTOM_IS_ATTACHED)` | Whether an id matches a BuiltInParameter |
 
 ## BuiltInCategory converters
 
-| Extension     | Purpose                                 | Example                                            |
-|---------------|-----------------------------------------|----------------------------------------------------|
-| `ToCategory`  | BuiltInCategory → `Category` object     | `BuiltInCategory.OST_Walls.ToCategory(document)`   |
-| `ToElementId` | BuiltInCategory → `ElementId`           | `BuiltInCategory.OST_Walls.ToElementId()`          |
-| `IsCategory`  | Whether an id matches a BuiltInCategory | `categoryId.IsCategory(BuiltInCategory.OST_Walls)` |
+| Extension                                          | Purpose                                 |
+|------------------------------------------------------|-------------------------------------------|
+| `BuiltInCategory.OST_Walls.ToCategory(document)`   | BuiltInCategory → `Category` object     |
+| `BuiltInCategory.OST_Walls.ToElementId()`          | BuiltInCategory → `ElementId`           |
+| `categoryId.IsCategory(BuiltInCategory.OST_Walls)` | Whether an id matches a BuiltInCategory |
 
 ## Color representations
 
 All return a representation of the `Color`; the return type matches the model named by the method.
 
-| Extension      | Purpose                | Example                |
-|----------------|------------------------|------------------------|
-| `ToHex`        | Hex string `#RRGGBB`   | `color.ToHex()`        |
-| `ToHexInteger` | Hex integer            | `color.ToHexInteger()` |
-| `ToRgb`        | RGB representation     | `color.ToRgb()`        |
-| `ToHsl`        | HSL representation     | `color.ToHsl()`        |
-| `ToHsv`        | HSV representation     | `color.ToHsv()`        |
-| `ToHsb`        | HSB representation     | `color.ToHsb()`        |
-| `ToHsi`        | HSI representation     | `color.ToHsi()`        |
-| `ToHwb`        | HWB representation     | `color.ToHwb()`        |
-| `ToCmyk`       | CMYK representation    | `color.ToCmyk()`       |
-| `ToNCol`       | NCol representation    | `color.ToNCol()`       |
-| `ToCielab`     | CIE LAB representation | `color.ToCielab()`     |
-| `ToCieXyz`     | CIE XYZ representation | `color.ToCieXyz()`     |
-| `ToFloat`      | Float representation   | `color.ToFloat()`      |
-| `ToDecimal`    | Decimal representation | `color.ToDecimal()`    |
+| Extension                | Purpose                |
+|---------------------------|-------------------------|
+| `color.ToHex()`         | Hex string `#RRGGBB`   |
+| `color.ToHexInteger()`  | Hex integer            |
+| `color.ToRgb()`         | RGB representation     |
+| `color.ToHsl()`         | HSL representation     |
+| `color.ToHsv()`         | HSV representation     |
+| `color.ToHsb()`         | HSB representation     |
+| `color.ToHsi()`         | HSI representation     |
+| `color.ToHwb()`         | HWB representation     |
+| `color.ToCmyk()`        | CMYK representation    |
+| `color.ToNCol()`        | NCol representation    |
+| `color.ToCielab()`      | CIE LAB representation |
+| `color.ToCieXyz()`      | CIE XYZ representation |
+| `color.ToFloat()`       | Float representation   |
+| `color.ToDecimal()`     | Decimal representation |
 
 ## Numeric and comparison
 
 Precision defaults to Revit's `1e-9` tolerance; pass a value to override.
 
-| Extension       | Purpose                                        | Example                          |
-|-----------------|------------------------------------------------|----------------------------------|
-| `Round`         | Round to a precision, trimming tolerance noise | `6.56170000000000000001.Round()` |
-| `IsAlmostEqual` | Compare two numbers within a tolerance         | `value.IsAlmostEqual(6.5617)`    |
+| Extension                              | Purpose                                        |
+|-------------------------------------------|--------------------------------------------------|
+| `6.56170000000000000001.Round()`       | Round to a precision, trimming tolerance noise |
+| `value.IsAlmostEqual(6.5617)`          | Compare two numbers within a tolerance         |
 
 ## String and path
 
-| Extension            | Purpose                                          | Example                           |
-|----------------------|--------------------------------------------------|-----------------------------------|
-| `IsNullOrEmpty`      | Whether the string is null or empty              | `name.IsNullOrEmpty()`            |
-| `IsNullOrWhiteSpace` | Whether the string is null, empty, or whitespace | `name.IsNullOrWhiteSpace()`       |
-| `AppendPath`         | Combine path segments                            | `"C:/Folder".AppendPath("AddIn")` |
+| Extension                            | Purpose                                          |
+|-----------------------------------------|-----------------------------------------------------|
+| `name.IsNullOrEmpty()`               | Whether the string is null or empty              |
+| `name.IsNullOrWhiteSpace()`          | Whether the string is null, empty, or whitespace |
+| `"C:/Folder".AppendPath("AddIn")`    | Combine path segments                            |
 
 ## Type and window
 
-| Extension | Purpose                               | Example                                       |
-|-----------|---------------------------------------|-----------------------------------------------|
-| `Cast<T>` | Cast an object to a type              | `element.Cast<Wall>()`                        |
-| `Show`    | Show a modeless window owned by Revit | `window.Show(uiApplication.MainWindowHandle)` |
+| Extension                                     | Purpose                               |
+|--------------------------------------------------|------------------------------------------|
+| `element.Cast<Wall>()`                        | Cast an object to a type              |
+| `window.Show(uiApplication.MainWindowHandle)` | Show a modeless window owned by Revit |
 
 ## Application capabilities (OptionalFunctionalityUtils)
 
-| Extension                 | Purpose                                     | Example                                   |
-|---------------------------|---------------------------------------------|-------------------------------------------|
-| `AsControlledApplication` | `Application` → `ControlledApplication`     | `application.AsControlledApplication()`   |
-| `AsControlledApplication` | `UIApplication` → `UIControlledApplication` | `uiApplication.AsControlledApplication()` |
-| `GetAllCloudRegions`      | Regions supported by the cloud service      | `application.GetAllCloudRegions()`        |
+| Extension                                  | Purpose                                     |
+|-----------------------------------------------|------------------------------------------------|
+| `application.AsControlledApplication()`    | `Application` → `ControlledApplication`     |
+| `uiApplication.AsControlledApplication()`  | `UIApplication` → `UIControlledApplication` |
+| `application.GetAllCloudRegions()`         | Regions supported by the cloud service      |
 
 Optional-module checks are boolean properties on `application`, each named `Is<Feature>Available`:
 

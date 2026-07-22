@@ -47,6 +47,5 @@ Keep Revit API types contained, own document and transaction lifetime explicitly
 | Pitfall                                                | Correct approach                                                 |
 |--------------------------------------------------------|------------------------------------------------------------------|
 | A Revit type on a message contract or serialized model | Convert to a plain model inside the Revit-aware boundary.        |
-| A document opened in one scope, closed in another      | Open and close in the same owner scope.                          |
 | A transaction spanning unrelated work                  | Keep transactions short and single-purpose.                      |
 | A local helper duplicating a Nice3point extension      | Use the existing extension; add a local one only when none fits. |

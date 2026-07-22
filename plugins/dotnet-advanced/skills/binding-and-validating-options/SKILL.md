@@ -9,7 +9,7 @@ license: MIT
 
 # Binding and Validating Options
 
-Represent a cohesive configuration section as an immutable options type, bound once and validated at startup so a misconfigured process fails fast instead of at first use.
+Represent a cohesive configuration section as an immutable options type, bound once and validated at startup; a misconfigured process fails fast, not at first use.
 
 ## When to use
 
@@ -56,7 +56,7 @@ builder.Services.AddOptions<DatabaseOptions>()
 
 ### Step 3: Add custom validation for cross-field rules
 
-When one field constrains another, add a `Validate` predicate or an `IValidateOptions<T>` implementation rather than encoding the rule in a consumer.
+When one field constrains another, add a `Validate` predicate or an `IValidateOptions<T>` implementation; do not encode the rule in a consumer.
 
 ```csharp
     .Validate(options => options.MinPoolSize <= options.MaxPoolSize, "MinPoolSize must not exceed MaxPoolSize");

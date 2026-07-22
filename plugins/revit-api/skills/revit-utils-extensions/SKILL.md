@@ -1,22 +1,17 @@
 ---
 name: revit-utils-extensions
 description: >
-  Reach for the Nice3point.Revit.Extensions fluent extensions instead of verbose Autodesk Revit *Utils static calls, manager getters, and hand-written enum/id conversions.
-  USE FOR: any time you reach for a SomethingUtils.DoThing(document, id, ...) static helper or a verbose manager getter, and any time you convert or format a Revit value — transforms, joins and cuts, extensible storage, units and labels, id/category/ForgeTypeId converters, solids and geometry, families, MEP and structure helpers, model interop, colors, and numeric or string helpers.
+  Replace verbose Autodesk Revit *Utils static calls, static managers, and hand-written enum/id conversions with Nice3point.Revit.Extensions fluent extensions.
+  USE FOR: any time you need to call a SomeUtils.Operation(…) or any other static Revit API helper, and any time you convert or format a Revit value.
   DO NOT USE FOR: querying the model for elements (use revit-element-collector), or reading and writing element parameters (use revit-element-and-parameter-access).
 license: MIT
 ---
 
 # Revit Utils Extensions
 
-`Nice3point.Revit.Extensions` turns the Revit API into fluent, receiver-first calls of two kinds.
-**Facades** re-express verbose `*Utils` static classes and `*Manager` getters as a call on the natural receiver — same behavior, read more clearly. Replace the raw call with the facade.
-**Conveniences** add what the raw API has no single call for — enum/id/color converters, unit and numeric helpers, safe casts. Use them directly; there is nothing to replace.
-A missing member means the `Nice3point.Revit.Extensions` package is not referenced.
-
 ## When to use
 
-- Reaching for any `SomeUtils.Operation(document, id, …)` static call or a verbose `*Manager` getter.
+- Reaching for any `SomeUtils.Operation()` static call or a verbose `*Manager` getter.
 - Converting a `BuiltInParameter`/`BuiltInCategory`/`ForgeTypeId`, formatting or parsing a unit, or reading a color as hex or RGB.
 
 ## When not to use
@@ -42,7 +37,7 @@ SolidUtils.SplitVolumes(solid); // raw
 solid.SplitVolumes(); // facade
 ```
 
-Many members are conveniences with no raw equivalent — use them directly rather than hand-writing the conversion:
+Many members are conveniences with no raw equivalent — use them directly; do not hand-write the conversion:
 
 ```csharp
 ElementId wallsId = BuiltInCategory.OST_Walls.ToElementId(); // enum -> id
@@ -52,8 +47,8 @@ string hex = color.ToHex(); // Color -> "#RRGGBB"
 
 ## References
 
-Each reference lists its domain's extensions in full — member, purpose, and a grounded example on the real receiver — with the raw
-`*Utils` class named in each section heading. Load the one that matches the task instead of guessing a signature.
+Each reference lists its domain's extensions in full — member, purpose, and a grounded example on the real receiver — with the raw `*Utils` class named in each section heading. 
+Load the one that matches the task; do not guess a signature.
 
 - [references/transforms-and-modeling.md](references/transforms-and-modeling.md) — **Load when:** moving, copying, joining, or cutting elements, or working with families, hosts, parts, assemblies, adaptive components, or masses.
 - [references/geometry.md](references/geometry.md) — **Load when:** building or querying solids, bounding boxes, curves, points, tessellation, or view geometry.
@@ -63,7 +58,7 @@ Each reference lists its domain's extensions in full — member, purpose, and a 
 - [references/disciplines-and-interop.md](references/disciplines-and-interop.md) — **Load when:** working with MEP, structure, or analytical elements, or with model paths, worksharing, coordination models, export, external references, or DirectContext3D.
 
 A newer Extensions package may expose members not shown here.
-If the Utils wrapper not found, read the package [README](https://raw.githubusercontent.com/Nice3point/RevitExtensions/refs/heads/main/README.md).
+If the Utils wrapper is not found, read the package [README](https://raw.githubusercontent.com/Nice3point/RevitExtensions/refs/heads/main/README.md).
 
 ## Validation
 
@@ -78,7 +73,6 @@ If the Utils wrapper not found, read the package [README](https://raw.githubuser
 |------------------------------------------------------|-----------------------------------------------------------------------------------|
 | `ElementTransformUtils.MoveElement(document, id, v)` | `element.Move(x, y, z)`.                                                          |
 | `LabelUtils.GetLabelFor(parameter)`                  | `parameter.ToLabel()`.                                                            |
-| `document.Format(spec, value, forEditing)`           | `Format` lives on `Units`: `document.GetUnits().Format(spec, value, forEditing)`. |
 | Assuming a facade changes behavior                   | Facades only re-express the raw API; semantics match.                             |
 | Hand-writing an id, color, or unit converter         | Use the built-in `ToElementId`/`ToHex`/`FromMillimeters` conveniences.            |
 | Extension not found                                  | The `Nice3point.Revit.Extensions` package is not referenced.                      |

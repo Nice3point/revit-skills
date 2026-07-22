@@ -1,8 +1,8 @@
 ---
 name: revit-addin-publishing
 description: >
-  Configure an Autodesk Revit add-in project so its build copies the add-in and .addin manifest to the local Revit or a distribution folder, using the Nice3point.Revit.Sdk publish targets.
-  USE FOR: setting up a project to copy built add-in files to the Revit add-ins folder or a distribution folder, bundling extra content into the output, and relying on per-version manifest patching.
+  Configure an Autodesk Revit add-in project to copy the add-in, .addin manifest to the local Revit or a `bin/publish` folder, using the Nice3point.Revit.Sdk publish targets.
+  USE FOR: setting up a project for publishing, bundling extra content into the output, and relying on per-version manifest patching.
   DO NOT USE FOR: launching and debugging the add-in from the IDE (use revit-addin-debugging), dependency isolation or repacking (use revit-dependency-isolation), or packaging a versioned App Store bundle (use revit-addin-bundle).
 license: MIT
 ---
@@ -10,9 +10,9 @@ license: MIT
 # Revit Add-in Publishing
 
 The `Nice3point.Revit.Sdk` targets copy the built add-in and its `.addin` manifest to one of two destinations and patch the manifest per Revit version.
-`DeployAddin` copies into the local Revit add-ins folder (`%AppData%\Autodesk\Revit\Addins\<version>`), so the running Revit loads the add-in on its next start; `PublishAddin` copies into `bin\publish` (like `dotnet publish`) for distribution.
+`DeployAddin` copies into the local Revit add-ins folder (`%AppData%\Autodesk\Revit\Addins\<version>`); the running Revit loads the add-in on its next start.
+`PublishAddin` copies into `bin\publish` (like `dotnet publish`) for distribution or the installer.
 Enable them only in the project that owns the `.addin` manifest.
-To launch and debug the deployed add-in from the IDE, use `revit-addin-debugging`.
 
 ## When to use
 
@@ -39,7 +39,7 @@ Override the targets with `AddinDeployDir` / `AddinPublishDir`.
 
 ### Step 3: Rely on manifest patching
 
-The SDK removes the `ManifestSettings` node for Revit versions older than 2026 during publish, so one `.addin` works across supported years (see `revit-dependency-isolation`).
+The SDK removes the `ManifestSettings` node for Revit versions older than 2027 during publish to support legacy Revit versions.
 
 ### Step 4: Verify
 

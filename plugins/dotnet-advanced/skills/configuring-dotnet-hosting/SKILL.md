@@ -21,7 +21,7 @@ Compose a host from small, named feature extensions on `IHostApplicationBuilder`
 
 ### Step 1: Make each capability a builder extension
 
-Write a generic extension over `IHostApplicationBuilder` so the same wiring composes into any host (worker, web, CLI).
+Write a generic extension over `IHostApplicationBuilder`; the same wiring composes into any host (worker, web, CLI).
 Return the builder.
 
 ```csharp
@@ -44,7 +44,7 @@ var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddServiceDefaults();
 builder.AddFeatureFlags();
-builder.Services.AddEmailSending();
+builder.Services.AddEmailSenders();
 
 var host = builder.Build();
 await host.RunAsync();

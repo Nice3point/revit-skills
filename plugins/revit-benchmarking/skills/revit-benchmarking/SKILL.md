@@ -11,7 +11,6 @@ license: MIT
 
 A Revit benchmark runs inside Revit and answers one production decision about a Revit API hot path.
 `Nice3point.BenchmarkDotNet.Revit` marshals the benchmark onto Revit's thread; running it needs a matching licensed Revit installation.
-Keep correctness checks in Revit tests, not in benchmarks.
 
 ## When to use
 
@@ -28,7 +27,7 @@ Keep correctness checks in Revit tests, not in benchmarks.
 
 Derive from `RevitApiBenchmark`.
 Open the model in `OnGlobalSetup` and close it in `OnGlobalCleanup` — the base binds `[GlobalSetup]`/`[GlobalCleanup]` and calls these overrides; never add those attributes yourself.
-Each `[Benchmark]` holds one compared operation and returns its result so the JIT cannot eliminate it; declare the alternatives as sibling `[Benchmark]` methods in the same class.
+Each `[Benchmark]` holds one compared operation and returns its result; a returned result keeps the JIT from eliminating it. Declare the alternatives as sibling `[Benchmark]` methods in the same class.
 
 A small application-level comparison needs no document:
 
@@ -49,7 +48,7 @@ public class XyzBenchmarks : RevitApiBenchmark
 }
 ```
 
-A benchmark that needs a seeded model opens it once in setup, keeping the seeding out of the measured method:
+A benchmark that needs a seeded model opens it once in setup; keep the seeding out of the measured method:
 
 ```csharp
 public class CollectorBenchmarks : RevitApiBenchmark
@@ -96,7 +95,7 @@ public class CollectorBenchmarks : RevitApiBenchmark
 ### Step 2: Configure the runner with the current build configuration
 
 BenchmarkDotNet builds in `Release` by default, which fails for Revit's multi-version configurations.
-Apply `WithCurrentConfiguration()` to the job so it builds the active `Release.RNN`.
+Apply `WithCurrentConfiguration()` to the job; it then builds the active `Release.RNN`.
 
 ```csharp
 var configuration = ManualConfig.Create(DefaultConfig.Instance)
@@ -108,24 +107,28 @@ BenchmarkRunner.Run<CollectorBenchmarks>(configuration);
 
 ### Step 3: Run and decide
 
-Build the selected `Release.RNN`, iterate with a narrow run, then measure on a quiet machine with the matching Revit installed.
+```shell
+dotnet run -c Release.RNN
+```
+
+`RNN` is the target Revit-year configuration, for example `Release.R26`; it must match the licensed Revit installed on the machine.
+Iterate with a dry run first, then measure the final comparison on a quiet machine.
 Read the Markdown report; compare time, allocation, and output correctness, and record why the chosen implementation applies to production.
-Delete a task-scoped benchmark once it has served the decision.
 
 ## Validation
 
 - [ ] The benchmark derives from `RevitApiBenchmark`.
 - [ ] The document is opened in `OnGlobalSetup` and closed in `OnGlobalCleanup`, outside the measured method.
 - [ ] The runner job uses `WithCurrentConfiguration()`.
-- [ ] The selected Revit configuration matches the installed runtime.
+- [ ] The selected `Release.RNN` configuration matches the installed Revit runtime.
 - [ ] The result drives a concrete implementation decision.
 
 ## Common Pitfalls
 
-| Pitfall                                                                   | Correct approach                                                                              |
-|---------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| Runner uses the default `Release` job                                     | Add `Job.Default.WithCurrentConfiguration()`.                                                 |
-| Seeding the model inside a `[Benchmark]` method                           | Do it in `OnGlobalSetup`.                                                                     |
-| `[GlobalSetup]`/`[GlobalCleanup]` added directly                          | Override `OnGlobalSetup`/`OnGlobalCleanup`; the base binds them.                              |
-| Discovery features like `[Params]`/`[ParamsAllValues]` using a Revit type | The domain reads them before Revit initializes and throws; use primitives or non-Revit types. |
-| `RevitApiBenchmark` not found                                             | The `Nice3point.BenchmarkDotNet.Revit` package is not referenced.                             |
+| Pitfall                                                                   | Correct approach                                                                                                      |
+|---------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| Runner uses the default `Release` job                                     | Add `Job.Default.WithCurrentConfiguration()`.                                                                         |
+| Seeding the model inside a `[Benchmark]` method                           | Do it in `OnGlobalSetup`.                                                                                             |
+| `[GlobalSetup]`/`[GlobalCleanup]` added directly                          | Override `OnGlobalSetup`/`OnGlobalCleanup`; the base binds them.                                                      |
+| Discovery features like `[Params]`/`[ParamsAllValues]` using a Revit type | BenchmarkDotNet reads them during discovery, before Revit initializes, and throws; use primitives or non-Revit types. |
+| `RevitApiBenchmark` not found                                             | The `Nice3point.BenchmarkDotNet.Revit` package is not referenced.                                                     |

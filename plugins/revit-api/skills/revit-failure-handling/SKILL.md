@@ -9,7 +9,7 @@ license: MIT
 
 # Revit Failure Handling
 
-`RevitApiContext.BeginFailureSuppressionScope` (from `Nice3point.Revit.Toolkit`) returns a disposable scope that resolves or cancels Revit failures without showing a user dialog.
+`RevitApiContext.BeginFailureSuppressionScope` returns a disposable scope that resolves or cancels Revit failures.
 Use it only for a known failure the operation can safely handle — never to make an unknown failure appear successful.
 
 ## When to use
@@ -19,17 +19,12 @@ Use it only for a known failure the operation can safely handle — never to mak
 
 ## When not to use
 
-- The interruption is a UI dialog rather than a failure — use `RevitContext.BeginDialogSuppressionScope`.
+- The interruption is a UI dialog, not a failure — use `RevitContext.BeginDialogSuppressionScope`.
 - The API is being called from outside the API context — dispatch the work through a Toolkit external event.
 
 ## Workflow
 
-### Step 1: Confirm the failure is expected
-
-Reproduce it with the smallest representative model, confirm it is a warning or recoverable error (not a real processing failure), and confirm that resolving or cancelling it preserves the required output.
-Keep the failure details in structured logs or test diagnostics.
-
-### Step 2: Bound the suppression scope
+### Step 1: Bound the suppression scope
 
 Wrap only the operation that owns the expected failure; leave unrelated work outside the scope.
 The scope hooks the application-level `FailuresProcessing` event; it covers both a transaction commit and a document open.
@@ -45,7 +40,7 @@ using (RevitApiContext.BeginFailureSuppressionScope())
 ```
 
 Opening a file can raise the same recoverable warnings.
-In an unattended or headless host (for example Autodesk Design Automation) no user can dismiss the dialog; open the document inside the scope:
+In an unattended or headless host (for example Autodesk Design Automation) no user can dismiss the warning; open the document inside the scope:
 
 ```csharp
 using (RevitApiContext.BeginFailureSuppressionScope())
@@ -54,12 +49,12 @@ using (RevitApiContext.BeginFailureSuppressionScope())
 }
 ```
 
-### Step 3: Choose resolve or cancel
+### Step 2: Choose resolve or cancel
 
 The default resolves resolvable failures.
-Pass `resolveErrors: false` when the caller must instead observe unresolved errors rather than have them auto-resolved.
+Pass `resolveErrors: false` when the caller must observe unresolved errors, not auto-resolve them.
 
-### Step 4: Verify
+### Step 3: Verify
 
 Assert the resulting document or artifact is valid, and confirm an unrelated failure still reaches the normal error boundary.
 
@@ -72,9 +67,9 @@ Assert the resulting document or artifact is valid, and confirm an unrelated fai
 
 ## Common Pitfalls
 
-| Pitfall                                       | Correct approach                                                      |
-|-----------------------------------------------|-----------------------------------------------------------------------|
-| Wrapping a whole pipeline to hide any failure | Scope suppression to the one operation that raises the known failure. |
-| Suppressing a UI dialog with a failure scope  | Use `RevitContext.BeginDialogSuppressionScope`.                       |
-| Auto-resolving errors the caller must see     | Pass `resolveErrors: false`.                                          |
-| `RevitApiContext` not found                   | The `Nice3point.Revit.Toolkit` package is not referenced.             |
+| Pitfall                                                  | Correct approach                                                      |
+|----------------------------------------------------------|-----------------------------------------------------------------------|
+| Wrapping a whole pipeline to hide any failure            | Scope suppression to the one operation that raises the known failure. |
+| Suppressing a UI dialog with a failure scope             | Use `RevitContext.BeginDialogSuppressionScope`.                       |
+| Auto-resolving errors the caller must process manually   | Pass `resolveErrors: false`.                                          |
+| `RevitApiContext` not found                              | The `Nice3point.Revit.Toolkit` package is not referenced.             |

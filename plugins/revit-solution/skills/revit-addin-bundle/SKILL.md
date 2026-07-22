@@ -26,16 +26,16 @@ Set the vendor fields in the `Bundle` section of `build/appsettings.json` (`Vend
 
 ```json
 "Bundle": {
-    "VendorName": "Contoso",
-    "VendorUrl": "https://contoso.example",
-    "VendorEmail": "support@contoso.example"
+"VendorName": "Acme Corporation",
+"VendorUrl": "https://acme.com",
+"VendorEmail": "support@acme.com"
 }
 ```
 
 ### Step 2: Resolve the version
 
 `GitVersion` derives the bundle's `AppVersion` from Git tags; a fixed `Version` in `build/appsettings.json` overrides it.
-Tag the commit before packing so the version is meaningful, and commit at least once — GitVersion needs history.
+Tag the commit before packing for a meaningful version, and commit at least once — GitVersion needs history.
 
 ### Step 3: Build the bundle
 
@@ -76,10 +76,10 @@ Confirm the bundle has a `Contents/<year>` folder for every supported version an
 
 ## Common Pitfalls
 
-| Pitfall                                              | Correct approach                                                                                                                                                                                                                                                                                                                |
-|------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Building before any Git commit                       | Commit first; GitVersion needs history.                                                                                                                                                                                                                                                                                         |
-| Hand-numbering versions                              | Tag the commit and let GitVersion derive the version.                                                                                                                                                                                                                                                                           |
-| Shipping a bundle without vendor metadata            | Set the `Bundle` fields in `build/appsettings.json`.                                                                                                                                                                                                                                                                            |
+| Pitfall                                              | Correct approach                                                                                                                                                                                          |
+|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Building before any Git commit                       | Commit first; GitVersion needs history.                                                                                                                                                                   |
+| Hand-numbering versions                              | Tag the commit and let GitVersion derive the version.                                                                                                                                                     |
+| Shipping a bundle without vendor metadata            | Set the `Bundle` fields in `build/appsettings.json`.                                                                                                                                                      |
 | Packing a solution scaffolded without bundle support | First create the solution with bundle support (`dotnet new revit-addin-sln --bundle`) and transfer the bundle infrastructure files from a throwaway `--bundle` solution (see `revit-template-migration`). |
-| A Revit year missing from the bundle                 | Pack builds every configured version; add the year to the configuration matrix (`revit-multi-version-configuration`).                                                                                                                                                                                                           |
+| A Revit year missing from the bundle                 | Pack builds every configured version; add the year to the configuration matrix (`revit-multi-version-configuration`).                                                                                     |

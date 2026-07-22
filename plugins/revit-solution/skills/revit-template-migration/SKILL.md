@@ -1,7 +1,7 @@
 ---
 name: revit-template-migration
 description: >
-  Upgrade a Nice3point.Revit.Templates project or solution by generating an equivalent target-version reference and applying its reviewed diff.
+  Upgrade a Nice3point.Revit.Templates project or solution to the latest template or SDK version.
   USE FOR: moving a scaffolded add-in, module, benchmark, test project, or solution to a newer template or SDK version, or adding template options to an existing scaffold.
   DO NOT USE FOR: creating a brand-new project (use scaffolding-revit-projects), or changing only the supported Revit-year matrix (use revit-multi-version-configuration).
 license: MIT
@@ -25,25 +25,20 @@ The generated output is the source of truth for the selected template version an
 
 ## Workflow
 
-### Step 1: Record the current template shape
-
-Use `scaffolding-revit-projects` to identify the current template short name and options.
-Record them with the installed template version and project or solution name.
-
-### Step 2: Generate an equivalent target reference
+### Step 1: Generate a target reference
 
 Install a new templates version.
-Create the same template type with the same name and options in an empty temporary directory.
+Create the same template type with the same name and options as your current project configured in an empty temporary directory.
 
 ```shell
 dotnet new install Nice3point.Revit.Templates
-dotnet new <template-short-name> --name <ProjectName> --output <reference-directory> <same-options>
+dotnet new <template-short-name> --help
+dotnet new <template-short-name> --name <ProjectName> --output <reference-directory> <options>
 ```
 
-Matching the name avoids namespace and generated-path noise.
-Matching options ensures every diff comes from the target template rather than a different project shape.
+Match the project/solution name to avoid namespace and generated-path noise.
 
-### Step 3: Review the generated diff
+### Step 2: Review the generated diff
 
 Compare the reference directory with the current project or solution.
 
@@ -55,13 +50,12 @@ Treat every difference as a review item.
 Take template-generated infrastructure and configuration changes that the current project needs.
 Keep project identity, business logic, and deliberate product-specific customization unless the target template requires a compatible rewrite.
 
-### Step 4: Apply the reviewed changes
+### Step 3: Apply the reviewed changes
 
 Update each project only from the matching generated template type.
-Keep `.addin`, deployment, launch, GUIDs, and dynamic-loading configuration in the manifest-owning add-in or application project.
-Do not copy those settings into a module, benchmark, or test project.
+Keep `.addin`, GUIDs, deployment logic and dynamic-loading configuration in the original project.
 
-### Step 5: Verify
+### Step 4: Verify
 
 Build every declared `Debug.RNN` and `Release.RNN` configuration.
 Run every generated pipeline path selected by the project: tests, installer, bundle, or release preparation.
@@ -76,9 +70,9 @@ Run every generated pipeline path selected by the project: tests, installer, bun
 
 ## Common Pitfalls
 
-| Pitfall | Correct approach |
-|---|---|
-| Generating the latest template instead of the target version | Install and generate the exact target version before comparing. |
-| Comparing different template options | Match every current option so the diff is meaningful. |
-| Copying a generated tree over the existing project | Transfer reviewed changes selectively and preserve project-owned code. |
-| Applying an application configuration to a module | Compare each project with its own template type. |
+| Pitfall                                                         | Correct approach                                                       |
+|-----------------------------------------------------------------|------------------------------------------------------------------------|
+| Generating the latest template when you need the target version | Install and generate the exact target version before comparing.        |
+| Comparing different template options                            | Match every current option for a meaningful diff.                      |
+| Copying a generated tree over the existing project              | Transfer reviewed changes selectively and preserve project-owned code. |
+| Applying an application configuration to a module               | Compare each project with its own template type.                       |

@@ -1,8 +1,8 @@
 ---
 name: revit-api-option-handlers
 description: >
-  Supply small Autodesk Revit API callback interfaces with Nice3point.Revit.Toolkit ready-made handlers instead of hand-rolled classes.
-  USE FOR: passing IFamilyLoadOptions, IDuplicateTypeNamesHandler, or ISaveSharedCoordinatesCallback to a Revit API call with the toolkit's ready-made handlers instead of hand-rolled classes.
+  Supply small Autodesk Revit API callback interfaces with Nice3point.Revit.Toolkit ready-made handlers, not hand-rolled classes.
+  USE FOR: passing IFamilyLoadOptions, IDuplicateTypeNamesHandler, or ISaveSharedCoordinatesCallback to a Revit API call.
   DO NOT USE FOR: constraining what a user can pick in an interactive selection, or building a dockable pane's UI element.
 license: MIT
 ---
@@ -10,7 +10,7 @@ license: MIT
 # Revit API Option Handlers
 
 Several Revit API calls demand a small callback interface.
-`Nice3point.Revit.Toolkit` ships ready implementations with a default behavior plus lambda or enum customization; you do not hand-roll a class each time.
+`Nice3point.Revit.Toolkit` ships ready implementations with a default behavior and lambda or enum customization; you do not hand-roll a class each time.
 
 ## When to use
 

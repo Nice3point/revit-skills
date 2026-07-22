@@ -102,7 +102,7 @@ public sealed class ElementInspectorTests(ElementInspector elementInspector) : R
 ## Compose with a per-test data source
 
 Dependency injection fills the **constructor**; a method data source still fills each **test parameter**.
-Put the DI attribute on the class and `[MethodDataSource]` / `[InstanceMethodDataSource]` on the method — for example, a service test that runs over sample paths:
+Put the DI attribute on the class and `[MethodDataSource]` / `[InstanceMethodDataSource]` (see `parameterized-fixtures`) on the method — for example, a service test that runs over sample paths:
 
 ```csharp
 [ServiceInjectionDataSource]

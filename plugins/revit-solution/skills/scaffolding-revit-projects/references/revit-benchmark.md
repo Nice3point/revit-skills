@@ -1,10 +1,10 @@
 # Revit Benchmark Template
 
-**Load when:** measuring Revit API code with BenchmarkDotNet inside Revit rather than building a product add-in or automated test suite.
+**Load when:** measuring Revit API code with BenchmarkDotNet inside Revit.
 
 `revit-benchmark` creates an executable benchmark project.
 It references `Nice3point.BenchmarkDotNet.Revit`, BenchmarkDotNet, and `Nice3point.Revit.Api.RevitAPI`.
-The generated `Program.cs` runs the starter benchmark with BenchmarkDotNet's current configuration.
+The generated `Program.cs` runs the starter benchmark for the specified configuration.
 
 ```shell
 dotnet new revit-benchmark --name MyBenchmarks
@@ -12,7 +12,7 @@ dotnet new revit-benchmark --name MyBenchmarks
 
 The template has no options.
 Keep setup and assertions focused on reliable measurement.
-Keep product functionality in a `revit-addin` project or modular application, then reference the code being measured as appropriate.
+Keep product functionality in a `revit-addin-module` project, then reference the code being measured as appropriate.
 
 ## Validation
 

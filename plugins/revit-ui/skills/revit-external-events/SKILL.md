@@ -10,7 +10,7 @@ license: MIT
 # Revit External Events
 
 The Revit API may only be touched inside its API context.
-`Nice3point.Revit.Toolkit` external events auto-initialize, so you can construct and `Raise` them from any thread without creating them inside the API context first.
+`Nice3point.Revit.Toolkit` external events auto-initialize; you can construct and `Raise` them from any thread without creating them inside the API context first.
 
 ## When to use
 
@@ -76,7 +76,7 @@ private readonly ExternalEvent<ElementId> _deleteElement = new((application, ele
 _deleteElement.Raise(elementId);
 ```
 
-Omit `UIApplication` when you do not need it (`new ExternalEvent(() => …)`, `new ExternalEvent<T>(arg => …)`) and read ambient state through `RevitContext` instead.
+Omit `UIApplication` when you do not need it (`new ExternalEvent(() => …)`, `new ExternalEvent<T>(arg => …)`) and read ambient state through `RevitContext`.
 Await completion with `AsyncExternalEvent`/`AsyncExternalEvent<T>` (`await …RaiseAsync()`), and return a value with `AsyncRequestExternalEvent<TResult>`/`<T, TResult>` (`var result = await …RaiseAsync(arg)`).
 
 ### Step 4: Allow direct invocation only for dual-context operations

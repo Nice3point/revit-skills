@@ -21,14 +21,14 @@ Register a service in the composition that owns its lifetime, grouped with the c
 
 ### Step 1: Register with the owning capability
 
-Group the registration in a feature extension method that returns `IServiceCollection` for fluent chaining, rather than scattering `AddX` calls across the composition root.
+Group the registration in a feature extension method that returns `IServiceCollection` for fluent chaining; do not scatter `AddX` calls across the composition root.
 
 ```csharp
 public static class EmailServiceCollectionExtensions
 {
     extension(IServiceCollection services)
     {
-        public IServiceCollection AddEmailSending()
+        public IServiceCollection AddEmailSenders()
         {
             services.AddSingleton<IEmailSender, SmtpEmailSender>();
 
@@ -41,7 +41,7 @@ public static class EmailServiceCollectionExtensions
 ### Step 2: Choose the lifetime from state and concurrency
 
 - **Singleton** — thread-safe, process-wide state, or a resource owned for the process lifetime.
-- **Scoped** — one instance per operation, when the host opens a scope per Window, operation, endpoint.
+- **Scoped** — one instance per operation; the host opens a scope per window, request, or endpoint.
 - **Transient** — lightweight, stateless, constructed per consumer.
 
 Never inject a scoped service into a singleton, and never make a service singleton when it holds per-operation mutable state.
@@ -53,7 +53,7 @@ Register a hosted service separately from its ordinary contract when both resolv
 
 ### Step 4: Scan when registrations are conventional
 
-Use Scrutor's `Scan` to register many types by convention instead of listing each, when they share a marker interface or naming pattern.
+Use Scrutor's `Scan` to register many types by convention, not by listing each, when they share a marker interface or naming pattern.
 
 ```csharp
 services.Scan(scan => scan
@@ -68,7 +68,7 @@ services.Scan(scan => scan
 Move every registration group — a set of related `AddX` calls or a Scrutor `Scan` — into its capability's extension method, and let the host composition root call only those methods.
 Registration detail never lives at the place the host is configured.
 
-Declare the extension with a C# 14 extension block so the `IServiceCollection` receiver is named once for the whole capability:
+Declare the extension with a C# 14 extension block; the `IServiceCollection` receiver is named once for the whole capability:
 
 ```csharp
 public static class EmailServiceCollectionExtensions

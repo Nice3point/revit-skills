@@ -4,13 +4,13 @@
 
 Write the tests once in an abstract base parameterized by constructor arguments, then declare one sealed subclass per configuration.
 Because the path set now depends on constructor state, it is an **instance** member driven by `[InstanceMethodDataSource]`, and each subclass re-runs the inherited tests with `[InheritsTests]`.
-Requires the `Nice3point.TUnit.Revit` and `Nice3point.Revit.Injector` packages.
+Requires the `Nice3point.TUnit.Revit` package.
 
 ## `[InstanceMethodDataSource]` versus `[MethodDataSource]`
 
 `[MethodDataSource]` reads a **static** member, evaluated before any instance exists, so it cannot see per-subclass configuration.
 `[InstanceMethodDataSource]` constructs the instance first, then reads the member — so a `DocumentPaths` computed from the constructor's `extension` and `directory` resolves to the right set for each subclass.
-Use the instance variant whenever the case set depends on constructor-injected state; use the static variant only for a truly fixed set (see `sample-files`).
+Use the instance variant whenever the case set depends on constructor-injected state.
 
 ## Base class parameterized by constructor
 
@@ -120,3 +120,5 @@ public sealed class ProjectFolderSampleTests() : DocumentSampleTests(".rvt", "./
 - Combine this with a dependency-injection data source to have the constructor also receive services under test — see `dependency-injection`; the DI attribute goes on each concrete subclass, and `[InstanceMethodDataSource]` still fills the per-test parameter.
 - A subclass whose directory is empty produces no cases and is skipped — see `skipping`.
 - Keep the base class abstract; only sealed subclasses are discovered as test classes.
+- Guard version-specific API behind `#if REVIT####_OR_GREATER` inside the test body when a sample assertion differs across Revit versions.
+- One document per test keeps sample tests isolated; never reuse a document opened by another test.

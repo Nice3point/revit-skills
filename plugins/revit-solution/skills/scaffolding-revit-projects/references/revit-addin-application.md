@@ -1,6 +1,6 @@
 # Revit AddIn Application Template
 
-**Load when:** creating the deployable host for a modular add-in that has one or more `revit-addin-module` projects.
+**Load when:** creating the host for a modular add-in that has one or more `revit-addin-module` projects.
 
 `revit-addin-application` is not a standalone feature project.
 It owns the `.addin` manifest, Revit entry point, deployment settings, launch configuration, and ribbon registration.

@@ -1,7 +1,7 @@
 # Repository Instructions
 
 This repository publishes independent Agent Skills plugins from `plugins/`.
-Each plugin installs on its own into Claude Code or Codex.
+Each plugin installs on its own into Coding Agent.
 Authoring, editing, and validating `SKILL.md` files is the main work here.
 Treat every skill as a production asset, and apply the rules below whenever you create or change one.
 
@@ -16,16 +16,16 @@ plugins/<plugin>/
     references/                    overflow docs (optional, ≤1 level deep)
     scripts/  assets/              optional bundled files
 .claude-plugin/marketplace.json    Claude Code marketplace
+.cursor-plugin/marketplace.json    Cursor marketplace
 .agents/plugins/marketplace.json   Codex marketplace
 ```
 
 ## Non-negotiables
 
 - Keep `plugins/<plugin>/plugin.json` byte-for-byte identical to `plugins/<plugin>/.codex-plugin/plugin.json`.
-- Keep both marketplace manifests aligned with the plugin directories.
+- Keep marketplace manifests aligned with the plugin directories.
 - Marketplace versions come from `GitVersion.yml`; never hand-edit the `version` field in a manifest.
 - Run `dotnet run --project build -c Release` after any change to a manifest, marketplace, or skill, and confirm it passes.
-- Never add credentials, private details, or steps that need proprietary tooling.
 - Never copy text from another repository; rewrite in this repo's style.
 
 ## Authoring a skill
@@ -46,13 +46,13 @@ license: MIT
 
 Use kebab-case optimized for keyword overlap with how a developer phrases the task.
 Verb-first (`configuring-…`), gerund (`writing-…`), and topic-noun (`revit-ribbon`) forms are all fine.
-Keep the technology prefix (`revit-…`, `dotnet-…`) to stake a namespace.
+Keep the technology prefix (`revit-…`, `dotnet-…`); the prefix stakes a namespace.
 
 ### Description is the router
 
 The runtime loads a skill by reading only its `description`.
 Write one lead sentence of what the skill produces, then `USE FOR:` triggers, then an optional `DO NOT USE FOR:` clause.
-Keep it high-level: state outcomes and intents, never method-name lists, because APIs drift and a stale list misroutes the agent.
+Keep it high-level: state outcomes and intents, never method-name lists. APIs drift, a stale list misroutes the agent.
 
 ### Granularity
 
@@ -79,17 +79,16 @@ Add a `// BAD` → `// GOOD` contrast only where it teaches.
 
 1. **Teach the current best way, not API history.** State the good API positively; never document that an old API is `[Obsolete]`, legacy, or deprecated unless steering the agent away from it is a genuine pitfall.
 2. **Exclude only real collisions.** A `DO NOT USE FOR` or `When not to use` entry is valid only when a competent agent would otherwise wrongly pick this skill.
-    Never exclude a concern that co-applies, since a foundational skill runs alongside focused ones.
-3. **Do not cap the toolset.** When the real option set is large, give the principle plus a few examples and signal it is open with `…`, rather than an exhaustive-looking list the agent treats as complete.
+    Never exclude a concern that co-applies; a foundational skill runs alongside focused ones.
+3. **Do not cap the toolset.** When the real option set is large, give the principle plus a few examples and signal it is open with `…`, never an exhaustive-looking list the agent treats as complete.
 4. **Stay internally consistent.** Keep the frontmatter, body, validation, examples, and pitfalls in agreement.
 5. **Ground every snippet in real source.** Verify each type, method, property, and argument order against the library or repo, and invent nothing.
-6. **Name the dependency package** so a missing member reads as "the package is not referenced" (for example, requires `Nice3point.Revit.Extensions`).
-7. **State the true scope.** Do not over-qualify with "production" when a rule applies to every case.
-8. **Keep the structure.** Give each skill section headers, numbered steps for any procedure, and at least one fenced code block unless it is a pure rules or checklist skill.
+6. **Name the dependency package.** A missing member reads as "the package is not referenced" (for example, requires `Nice3point.Revit.Extensions`).
+7. **Keep the structure.** Give each skill section headers, numbered steps for any procedure, and at least one fenced code block unless it is a pure rules or checklist skill.
 
 ## Plugin self-containment
 
-Each plugin installs alone, so a skill must never depend on a skill in another plugin.
+Each plugin installs alone; a skill must never depend on a skill in another plugin.
 
 - Reference a sibling skill in the same plugin by its bare skill name (`use revit-ribbon`).
 - Reference a capability in another plugin by its concrete API or concept, never by skill name (`use RevitContext.BeginDialogSuppressionScope`, not `use revit-context-access`).
@@ -111,9 +110,9 @@ Each plugin installs alone, so a skill must never depend on a skill in another p
 | Field / asset                        | Limit                                                                                                                           |
 |--------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
 | `name`                               | 1–64 chars, lowercase alphanumeric and hyphens, no leading, trailing, or doubled hyphen, equals the folder name                 |
-| `description`                        | 1–1024 chars, meaningful rather than a stub                                                                                     |
+| `description`                        | 1–1024 chars, meaningful, not a stub                                                                                            |
 | Body length                          | ≤500 lines; move overflow into `references/` behind a `**Load when:** …` trigger                                                |
-| Skill size                           | ~800–2,500 tokens is the sweet spot; avoid over 5,000, which degrades performance — split instead                               |
+| Skill size                           | ~800–2,500 tokens is the sweet spot; over 5,000 degrades performance — split                                                    |
 | `references/`, `scripts/`, `assets/` | at most one directory deep, each bundled file ≤5 MB                                                                             |
 | Per plugin                           | Keep the combined skill descriptions modest; the runtime skill menu truncates near 15,000 chars and silently hides later skills |
 

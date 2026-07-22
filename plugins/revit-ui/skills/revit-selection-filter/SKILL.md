@@ -1,7 +1,7 @@
 ---
 name: revit-selection-filter
 description: >
-  Filter which elements and references a user can pick in Autodesk Revit with the Nice3point.Revit.Toolkit SelectionConfiguration instead of a hand-rolled ISelectionFilter.
+  Filter which elements and references a user can pick in Autodesk Revit UI with the Nice3point.Revit.Toolkit SelectionConfiguration, not a hand-rolled ISelectionFilter.
   USE FOR: constraining an interactive Selection.PickObject/PickObjects with a fluent Allow.Element / Allow.Reference filter.
   DO NOT USE FOR: headless API callbacks such as family load or duplicate-type options (use Toolkit option handlers like FamilyLoadOptions).
 license: MIT
@@ -9,13 +9,17 @@ license: MIT
 
 # Revit Selection Filter
 
-`Selection.PickObject` takes an `ISelectionFilter` to decide what the user may pick.
+`Selection.PickObject` takes an `ISelectionFilter` that decides what the user may pick.
 `SelectionConfiguration` (from `Nice3point.Revit.Toolkit`) builds that filter from two lambdas; you do not hand-roll a class.
-It drives an interactive pick and needs the Revit UI (`RevitAPIUI`).
+It drives an interactive pick and needs the Revit UI.
 
 ## When to use
 
 - Restricting an interactive pick to a category, type, or geometry kind.
+
+## When not to use
+
+- Constraining a headless API callback such as family load or duplicate-type options — use a Toolkit option handler like `FamilyLoadOptions`.
 
 ## Workflow
 
@@ -26,7 +30,7 @@ Set either or both — each returns the configuration and they chain — then pa
 
 ```csharp
 var configuration = new SelectionConfiguration()
-    .Allow.Element(element => element.Category.Id.AreEquals(BuiltInCategory.OST_Walls))
+    .Allow.Element(element => element.Category.Id.IsCategory(BuiltInCategory.OST_Walls))
     .Allow.Reference((reference, position) => false);
 
 var picked = uiDocument.Selection.PickObject(ObjectType.Element, configuration.Filter);

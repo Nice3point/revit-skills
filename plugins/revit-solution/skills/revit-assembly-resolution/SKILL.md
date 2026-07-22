@@ -1,16 +1,16 @@
 ---
 name: revit-assembly-resolution
 description: >
-  Redirect Autodesk Revit add-in assembly resolution to a plugin folder with Nice3point.Revit.Toolkit ResolveHelper.
+  Redirect Autodesk Revit add-in assembly resolution to a plugin folder with Nice3point.Revit.Toolkit.
   USE FOR: fixing a FileNotFoundException when loading a WPF window or third-party dependency Revit cannot resolve, or pinning which folder a bounded load resolves from.
-  DO NOT USE FOR: entry points derived from the Toolkit base classes (ExternalCommand, ExternalApplication, ExternalDBApplication), which open a resolve scope automatically, or preventing two add-ins' dependency versions from colliding process-wide (use revit-dependency-isolation).
+  DO NOT USE FOR: entry points derived from the Toolkit base classes (ExternalCommand, ExternalApplication, ExternalDBApplication), or preventing two add-ins' dependency versions from colliding process-wide (use revit-dependency-isolation).
 license: MIT
 ---
 
 # Revit Assembly Resolution
 
 Revit does not probe an add-in's folder for dependencies; loading a window or third-party assembly can throw `FileNotFoundException`.
-`ResolveHelper.BeginAssemblyResolveScope` (from `Nice3point.Revit.Toolkit`) redirects resolution to a type-adjacent or explicit folder for the scope's lifetime.
+`ResolveHelper` (from `Nice3point.Revit.Toolkit`) redirects resolution to a type-adjacent or explicit folder for the scope's lifetime.
 Scopes nest — the innermost is searched first.
 
 ## When to use
@@ -20,7 +20,7 @@ Scopes nest — the innermost is searched first.
 
 ## When not to use
 
-- Inside an entry point derived from the Toolkit base classes (`ExternalCommand`, `AsyncExternalCommand`, `ExternalApplication`, `ExternalDBApplication`) — they already open a resolve scope, making a manual one redundant.
+- Inside an entry point derived from the Toolkit base classes (`ExternalCommand`, `AsyncExternalCommand`, `ExternalApplication`, `ExternalDBApplication`) — they already open a resolve scope; a manual one is redundant.
 - Preventing two add-ins from loading conflicting versions of the same dependency process-wide — that is `revit-dependency-isolation`.
 
 ## Workflow
@@ -36,7 +36,7 @@ using (ResolveHelper.BeginAssemblyResolveScope<Application>())
 ```
 
 The generic and `typeof(...)` overloads probe the folder of the given type's assembly.
-Pass an explicit directory instead when the dependencies live elsewhere — a shared or external libraries folder:
+Pass an explicit directory when the dependencies live elsewhere — a shared or external libraries folder:
 
 ```csharp
 using (ResolveHelper.BeginAssemblyResolveScope(@"C:\Libraries"))
@@ -56,7 +56,7 @@ Confirm the dependency loads without a resolution error, and that resolution beh
 ## Validation
 
 - [ ] The scope wraps the specific load that fails to resolve.
-- [ ] Entry points rely on the base classes instead of a manual scope.
+- [ ] Entry points rely on the base classes, not a manual scope.
 - [ ] The scope disposes, restoring normal resolution.
 
 ## Common Pitfalls

@@ -1,7 +1,7 @@
 ---
 name: revit-command-and-application
 description: >
-  Build Autodesk Revit add-in entry points with Nice3point.Revit.Toolkit base classes instead of raw IExternalCommand/IExternalApplication interfaces.
+  Build Autodesk Revit add-in entry points with Nice3point.Revit.Toolkit base classes, not raw IExternalCommand/IExternalApplication interfaces.
   USE FOR: authoring an external command or application with a simplified Execute()/OnStartup() override, optional OnShutdown() override, ready context properties, and automatic dependency resolution.
   DO NOT USE FOR: dispatching API work from code that runs outside the Revit API context (use revit-external-events).
 license: MIT
@@ -26,7 +26,7 @@ They replace the raw interface boilerplate (the full `Execute(commandData, ref m
 
 ### Step 1: Derive an external command
 
-Override `Execute()`; reach the context through the inherited `Application` instead of unpacking `commandData`.
+Override `Execute()`; reach the context through the inherited `Application`, not by unpacking `commandData`.
 
 ```csharp
 [Transaction(TransactionMode.Manual)]
@@ -39,13 +39,13 @@ public class DeleteWallsCommand : ExternalCommand
 }
 ```
 
-`ExternalCommand` exposes high-level `Application`, `View`, `JournalData`, and `ElementSet` properties.
+`ExternalCommand` exposes high-level `Application`, `View`, `JournalData`, and `ElementSet` properties that IExternalCommand provides.
 `Result` defaults to `Succeeded`; set `Result` and `ErrorMessage` only when the command must return a canceled or failed outcome.
 
 ### Step 2: Derive an external application
 
 ```csharp
-public class AddinApplication : ExternalApplication
+public class Application : ExternalApplication
 {
     public override void OnStartup()
     {
@@ -65,10 +65,9 @@ Derive from `AsyncExternalCommand` and override `ExecuteAsync()`, or from `Async
 The sealed base pumps the message loop on Revit's main thread; `await` keeps the UI responsive while the continuation still runs in the API context — no external event needed.
 
 ```csharp
-[Transaction(TransactionMode.Manual)]
-public class ExportViewsCommand : AsyncExternalCommand
+public class Application : AsyncExternalApplication
 {
-    public override async Task ExecuteAsync()
+    public override async Task OnStartupAsync()
     {
         var settings = await LoadSettingsAsync(); // long-running work; the UI stays responsive
         CreateRibbon(settings);

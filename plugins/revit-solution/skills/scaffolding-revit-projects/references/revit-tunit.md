@@ -1,6 +1,6 @@
 # Revit Test (TUnit) Template
 
-**Load when:** creating automated tests that need Revit API access inside the Revit process.
+**Load when:** creating automated tests that need Revit API access.
 
 `revit-tunit` creates an executable test project.
 It references `Nice3point.TUnit.Revit`, TUnit, `Nice3point.Revit.Api.RevitAPI`, and Polyfill.
@@ -12,7 +12,7 @@ dotnet new revit-tunit --name MyAddin.Tests
 
 The template has no options.
 Keep tests in a dedicated project.
-When the repository was created with `revit-addin-sln --includeTests`, place the project under `tests` so the generated build pipeline discovers and runs it.
+When the repository was created with `revit-addin-sln --includeTests`, place the project under the `tests` folder.
 
 ## Validation
 

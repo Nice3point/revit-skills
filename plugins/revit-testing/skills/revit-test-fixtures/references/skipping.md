@@ -4,13 +4,13 @@
 
 A skipped test reports honestly that its precondition was missing; a failed test hides real regressions behind environment noise.
 Pick the narrowest guard that fits.
-Requires the `Nice3point.TUnit.Revit` and `Nice3point.Revit.Injector` packages.
+Requires the `Nice3point.TUnit.Revit` package.
 
 ## Empty data source — no cases, nothing to fail
 
 When a sample folder is missing, return an empty set from the data source.
 No cases are generated, so the parameterized tests are simply absent from the run — no guard code in the body.
-This is the default for sample-file fixtures (see `sample-files` and `parameterized-fixtures`):
+This is the default for sample-file fixtures (see `parameterized-fixtures`):
 
 ```csharp
 public string[] DocumentPaths { get; } = Directory.Exists(samplesPath)
@@ -69,7 +69,7 @@ public async Task Cities_English_HasExpectedName()
 ## Global guard across the assembly
 
 To apply one rule to the whole suite, use a static `[BeforeEvery(Test)]` hook.
-For instance, skip any test whose name names a localization other than the current one:
+For instance, skip any test whose name mentions a localization other than the current one:
 
 ```csharp
 public sealed class LocalizationSkipConfiguration : RevitApiTest

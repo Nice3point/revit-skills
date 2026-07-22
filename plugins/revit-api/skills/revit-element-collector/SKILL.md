@@ -1,7 +1,7 @@
 ---
 name: revit-element-collector
 description: >
-  Query the Revit model with the Nice3point.Revit.Extensions fluent FilteredElementCollector wrappers, use Revit's parameter filters instead of loading elements and filtering with LINQ.
+  Query the Revit model with the Nice3point.Revit.Extensions fluent FilteredElementCollector wrappers; filter with Revit's parameter filters, not by loading elements and filtering with LINQ.
   USE FOR: writing or reviewing element queries that filter by class, category, or parameter value and return the first match, a count, or the full set.
   DO NOT USE FOR: reading or setting parameters on an element you already hold (use revit-element-and-parameter-access).
 license: MIT
@@ -10,7 +10,8 @@ license: MIT
 # Revit Element Collector
 
 Query the model through the fluent `FilteredElementCollector` wrappers in `Nice3point.Revit.Extensions`.
-They wrap the raw Revit collector API into a single readable chain, and keep filtering inside Revit's native database engine — which evaluates filters before elements are expanded into memory — instead of materializing every element and filtering with LINQ.
+They wrap the raw Revit collector API into a single readable chain and keep filtering inside Revit's native database engine, which evaluates filters before elements expand into memory.
+Filtering the collector output with LINQ materializes every element first.
 
 ## When to use
 
@@ -24,6 +25,9 @@ They wrap the raw Revit collector API into a single readable chain, and keep fil
 - You need a specialized `ElementFilter` the extensions do not expose — fall back to a raw `FilteredElementCollector` with that filter.
 
 ## Workflow
+
+Always prefer the built-in methods of `FilteredElementCollector` extensions over using LINQ. 
+LINQ materializes and marshals every element into the .NET process's memory and does not filter at the database level; use it only if the built-in methods are insufficient for filtering.
 
 ### Step 1: Open a collector from the document
 
@@ -71,7 +75,7 @@ Comparisons include `Equals`, `IsGreaterThan`/`IsGreaterThanOrEqualTo`, `IsLessT
 
 ### Step 4: Terminate with the fast native path
 
-Use the extension terminators instead of LINQ — they call Revit's native fast implementations (`Count` uses `GetElementCount()`).
+Use the extension terminators, not LINQ; they call Revit's native fast implementations (`Count()` uses the fast `GetElementCount()` implementation).
 
 ```csharp
 var firstRoom = document.CollectElements().OfClass<SpatialElement>().FirstOrDefault();
@@ -89,16 +93,16 @@ var hasLevels = document.CollectElements().OfClass<Level>().Any();
 
 - [ ] The collector comes from `document.CollectElements(...)`, not a hand-written `new FilteredElementCollector(...)`.
 - [ ] Class and category filters use the generic/multi-argument extensions.
-- [ ] Parameter conditions use `WhereParameter(...)`, keeping filtering at the database level.
+- [ ] Parameter conditions use `WhereParameter(...)`, filtering at the database level.
 - [ ] Single-result and count queries use `First`/`FirstOrDefault`/`Count`/`Any`, not LINQ.
 - [ ] A quick filter (class/category) precedes a slow filter (parameter) to shrink the candidate set.
 
 ## Common Pitfalls
 
-| Pitfall                                                                      | Correct approach                                                            |
-|------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| Pitfall                                                                            | Correct approach                                                            |
+|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | `.Where(element => element.get_Parameter(...).AsDouble() > x)` after the collector | `WhereParameter(param).IsGreaterThan(x, epsilon)` — a native rule.          |
-| `collector.ToElements().Count` / `.Any()` (LINQ over the list)               | `collector.Count()` / `collector.Any()` — native fast paths.                |
-| Comparing `double` parameters without an epsilon                             | Use the `IsGreaterThan(value, epsilon)` overload.                           |
-| `CollectElements` or `WhereParameter` not found                              | The `Nice3point.Revit.Extensions` package is not referenced in the project. |
-| Reusing one collector after a terminator                                     | Start a fresh `CollectElements()` per query; terminators stop the iterator. |
+| `collector.ToElements().Count` / `.Any()` (LINQ over the list)                     | `collector.Count()` / `collector.Any()` — native fast paths.                |
+| Comparing `double` parameters without an epsilon                                   | Use the `IsGreaterThan(value, epsilon)` overload.                           |
+| `CollectElements` or `WhereParameter` not found                                    | The `Nice3point.Revit.Extensions` package is not referenced in the project. |
+| Reusing one collector after a terminator                                           | Start a fresh `CollectElements()` per query; terminators stop the iterator. |

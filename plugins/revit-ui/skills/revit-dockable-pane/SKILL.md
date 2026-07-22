@@ -2,7 +2,7 @@
 name: revit-dockable-pane
 description: >
   Register a WPF dockable pane in the Autodesk Revit UI with Nice3point.Revit.Toolkit DockablePaneProvider.
-  USE FOR: registering a dockable pane and its initial dock state during application startup with the fluent Register().SetConfiguration() API.
+  USE FOR: registering a dockable pane and its initial dock state during application startup with the fluent API.
 license: MIT
 ---
 
@@ -21,7 +21,7 @@ Register the pane once during application startup.
 
 ```csharp
 DockablePaneProvider
-    .Register(application, paneId, "Analysis")
+    .Register(uiControlledApplication, paneId, "Analysis")
     .SetConfiguration(data =>
     {
         data.FrameworkElement = new AnalysisPaneView();
@@ -33,9 +33,20 @@ DockablePaneProvider
     });
 ```
 
+where `paneId` is a `Guid` or `DockablePaneId` value.
+
+`.Register(uiControlledApplication, paneId, "Analysis")` can be replaced with:
+
+```csharp
+DockablePaneProvider
+    .Register(uiControlledApplication)
+    .SetId(paneId) // or SetId(dockablePaneId)
+    .SetTitle("Analysis");
+```
+
 ### Step 2: Resolve the view from DI when needed
 
-To build the pane's element from a container instead of `new`-ing it, set `data.FrameworkElementCreator` to a `FrameworkElementCreator<T>` backed by the service provider (from `Nice3point.Revit.Toolkit`):
+For a pane element built from a DI container, set `data.FrameworkElementCreator` to a `FrameworkElementCreator<T>` backed by the service provider (from `Nice3point.Revit.Toolkit`):
 
 ```csharp
 data.FrameworkElementCreator = new FrameworkElementCreator<AnalysisPaneView>(serviceProvider);

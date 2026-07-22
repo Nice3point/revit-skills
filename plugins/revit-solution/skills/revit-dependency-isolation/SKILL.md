@@ -1,7 +1,7 @@
 ---
 name: revit-dependency-isolation
 description: >
-  Prevent Autodesk Revit add-in dependency conflicts with AssemblyLoadContext isolation (Revit 2026+) or ILRepack repacking (legacy).
+  Prevent Autodesk Revit add-in dependency conflicts with AssemblyLoadContext isolation (Revit 2027+) or ILRepack repacking (legacy).
   USE FOR: resolving crashes caused by two add-ins loading different versions of the same dependency, by isolating your add-in's assemblies.
   DO NOT USE FOR: resolving a missing dependency at load time (use revit-assembly-resolution).
 license: MIT
@@ -10,13 +10,13 @@ license: MIT
 # Revit Dependency Isolation
 
 Add-ins share one process; two add-ins using different versions of the same dependency crash Revit.
-Revit 2026+ isolates each add-in in its own `AssemblyLoadContext`; earlier versions need dependencies repacked into the add-in assembly.
+Revit 2027+ isolates each add-in in its own `AssemblyLoadContext`; earlier versions need dependencies repacked into the add-in assembly.
 The `Nice3point.Revit.Sdk` provides both.
 
 ## When to use
 
 - A dependency version conflict with another add-in crashes Revit.
-- Choosing between isolation (2026+) and repacking (legacy) for a distributable add-in.
+- Choosing between isolation (2027+) and repacking (legacy) for a distributable add-in.
 
 ## When not to use
 
@@ -24,9 +24,9 @@ The `Nice3point.Revit.Sdk` provides both.
 
 ## Workflow
 
-### Step 1: Isolate on Revit 2026+
+### Step 1: Isolate on Revit 2027+
 
-Revit 2026+ isolation is declared in the `.addin` manifest, not in the `.csproj`.
+Revit 2027+ isolation is declared in the `.addin` manifest.
 Add a `ManifestSettings` block that gives the add-in its own load context:
 
 ```xml
@@ -37,22 +37,22 @@ Add a `ManifestSettings` block that gives the add-in its own load context:
 ```
 
 `UseRevitContext=False` loads the add-in in its own `AssemblyLoadContext` named by `ContextName`; it can then use any dependency version without colliding with other add-ins.
-Adding `ManifestSettings` on Revit versions older than 2026 crashes Revit — the SDK strips the node during publish for older years (see `revit-addin-publishing`).
+Adding `ManifestSettings` on Revit versions older than 2027 crashes Revit — the SDK strips the node during publish for older years (see `revit-addin-publishing`).
 
-This is separate from `<EnableDynamicLoading>true</EnableDynamicLoading>` — a stock .NET SDK property every modern add-in sets so its dependencies are emitted to the output folder.
+This is separate from `<EnableDynamicLoading>true</EnableDynamicLoading>` — a stock .NET SDK property every modern add-in sets; it emits the add-in's dependencies to the output folder.
 That property is a prerequisite for loading dependencies at all, not the isolation mechanism (see `revit-sdk-project-configuration`).
 
-### Step 2: Repack on legacy (pre-2026)
+### Step 2: Repack for legacy Revit (pre-2027)
 
-For .NET Framework add-ins without isolation, merge dependencies into the add-in with ILRepack.
+Revit 2026 add-ins and lower without isolation, merge dependencies into the add-in with ILRepack.
 
 ```xml
-<IsRepackable Condition="'$(RevitVersion)' &lt; '2026'">true</IsRepackable>
+<IsRepackable Condition="'$(RevitVersion)' &lt; '2027'">true</IsRepackable>
 <RepackBinariesExcludes>$(AssemblyName).UI.dll;System*.dll</RepackBinariesExcludes>
 ```
 
 Repacking requires the `ILRepack` package.
-Prefer isolation on 2026+ over repacking.
+Prefer isolation on 2027+ over repacking.
 
 ### Step 3: Verify
 
@@ -60,15 +60,15 @@ Load the add-in alongside another that uses a different version of the same depe
 
 ## Validation
 
-- [ ] Revit 2026+ add-ins isolate with the `.addin` `ManifestSettings` block (not `EnableDynamicLoading`, which is a separate prerequisite).
+- [ ] Revit 2027+ add-ins isolate with the `.addin` `ManifestSettings` block (not `EnableDynamicLoading`, which is a separate prerequisite).
 - [ ] Legacy add-ins use `IsRepackable` with an appropriate excludes list.
-- [ ] `ManifestSettings` is not shipped raw to Revit versions older than 2026 (the SDK patches it on publish).
+- [ ] `ManifestSettings` is not shipped raw to Revit versions older than 2027 (the SDK patches it on publish).
 
 ## Common Pitfalls
 
 | Pitfall                                                 | Correct approach                                                                                     |
 |---------------------------------------------------------|------------------------------------------------------------------------------------------------------|
-| `ManifestSettings` shipped to Revit < 2026              | Let the SDK patch the manifest on publish; keep the block for 2026+.                                 |
+| `ManifestSettings` shipped to Revit < 2027              | Let the SDK patch the manifest on publish; keep the block for 2027+.                                 |
 | Treating `EnableDynamicLoading` as the isolation switch | It only emits dependencies to the output folder; isolate with the manifest `ManifestSettings` block. |
-| Repacking a .NET Core add-in                            | Use isolation on 2026+ instead of ILRepack.                                                          |
+| Repacking a .NET Core add-in                            | Use isolation on 2027+, not ILRepack.                                                                |
 | Repacking the UI or `System.*` assemblies               | Exclude them via `RepackBinariesExcludes`.                                                           |
