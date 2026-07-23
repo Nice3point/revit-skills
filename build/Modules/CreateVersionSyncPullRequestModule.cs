@@ -41,6 +41,19 @@ public sealed class CreateVersionSyncPullRequestModule(IOptions<ReleaseOptions> 
 
     private static async Task CommitAndPushAsync(IModuleContext context, ReleaseOptions options, CancellationToken cancellationToken)
     {
+        await context.Git().Commands.Branch(
+            new GitBranchOptions
+            {
+                Delete = true,
+                Force = true,
+                Arguments = [options.VersionSyncBranch]
+            },
+            new CommandExecutionOptions
+            {
+                ThrowOnNonZeroExitCode = false
+            },
+            token: cancellationToken);
+
         await context.Git().Commands.Checkout(
             new GitCheckoutOptions(options.VersionSyncBranch, create: true),
             token: cancellationToken);
