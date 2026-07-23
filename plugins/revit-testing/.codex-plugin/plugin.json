@@ -1,6 +1,6 @@
 {
   "name": "revit-testing",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Write automated Revit API tests with Nice3point.TUnit.Revit.",
   "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
   "homepage": "https://github.com/Nice3point/revit-skills",

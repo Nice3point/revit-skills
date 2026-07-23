@@ -1,6 +1,6 @@
 {
   "name": "revit-solution",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Build and maintain Revit add-in projects with Nice3point.Revit.Sdk and Nice3point.Revit.Templates.",
   "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
   "homepage": "https://github.com/Nice3point/revit-skills",
