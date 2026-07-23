@@ -33,7 +33,7 @@ A local file (`HintPath`) reference ties the build to one installed version at o
 
 The `$(RevitVersion).*` wildcard resolves the assembly set for the active configuration.
 `$(RevitVersion)` is supplied by the `Nice3point.Revit.Sdk`, which derives it from the build configuration (for example `Release.R27` → `2027`) — see `revit-sdk-project-configuration`.
-The `$(RevitVersion).*` wildcard can be used for built-in API dependencies, they almost never have critical changes within a major version; 
+The `$(RevitVersion).*` wildcard can be used for built-in API dependencies, they almost never have critical changes within a major version;
 for all other dependencies, always use the exact package version to avoid breaking when the package is updated.
 With central package management, pin the version in `Directory.Packages.props`.
 
@@ -66,9 +66,9 @@ Restore and build on a machine (or CI) with no Revit installed.
 
 ## Common Pitfalls
 
-| Pitfall                                            | Correct approach                                       |
-|----------------------------------------------------|--------------------------------------------------------|
-| `<HintPath>` to an installed Revit DLL             | Use `Nice3point.Revit.Api.*` with `$(RevitVersion).*`. |
-| A fixed API version that breaks other years        | Use the `$(RevitVersion).*` wildcard.                  |
-| An external NuGet package targets a floating version | Use the exact package version.                       |
-| Copying a Revit DLL into the repo                  | Reference the NuGet package.                           |
+| Pitfall                                              | Correct approach                                       |
+|------------------------------------------------------|--------------------------------------------------------|
+| `<HintPath>` to an installed Revit DLL               | Use `Nice3point.Revit.Api.*` with `$(RevitVersion).*`. |
+| A fixed API version that breaks other years          | Use the `$(RevitVersion).*` wildcard.                  |
+| An external NuGet package targets a floating version | Use the exact package version.                         |
+| Copying a Revit DLL into the repo                    | Reference the NuGet package.                           |
