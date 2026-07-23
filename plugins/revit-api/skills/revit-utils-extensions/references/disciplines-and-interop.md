@@ -1,6 +1,6 @@
 # Disciplines and interoperability
 
-MEP, structure, and analytical helpers, plus model paths, worksharing, coordination models, export, external references, and DirectContext3D.
+MEP, structure, and analytical helpers, with model paths, worksharing, coordination models, export, external references, and DirectContext3D.
 Each `## Heading (RawClass)` names the raw Revit static this domain replaces; call the extension on the receiver shown instead.
 A member missing from your build means the installed `Nice3point.Revit.Extensions` version predates it.
 

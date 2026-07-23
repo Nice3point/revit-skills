@@ -38,7 +38,7 @@ From `$(RevitVersion)` the SDK sets everything you would otherwise hand-write pe
 - The `TargetFramework` for each Revit version, from the official framework mappings Autodesk provides.
 - `LangVersion=latest`, `Nullable=enable`, `ImplicitUsings=true`, `ImplicitRevitUsings=true`.
 - `AppendTargetFrameworkToOutputPath=false` for a flat output path when the add-in works on a single framework version.
-- Per-configuration `Optimize`, `DebugSymbols`, and `DebugType` (`portable` for `Debug.*`, `none` for `Release.*`), plus the `DEBUG`/`RELEASE` constants.
+- Per-configuration `Optimize`, `DebugSymbols`, and `DebugType` (`portable` for `Debug.*`, `none` for `Release.*`), and the `DEBUG`/`RELEASE` constants.
 - The `REVIT####` and `REVIT####_OR_GREATER` compilation symbols for multi-version branching (see `revit-multi-version-configuration`).
 
 Leave all of these to the SDK.

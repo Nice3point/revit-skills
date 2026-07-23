@@ -80,7 +80,7 @@ Add a `// BAD` → `// GOOD` contrast only where it teaches.
 1. **Teach the current best way, not API history.** State the good API positively; never document that an old API is `[Obsolete]`, legacy, or deprecated unless steering the agent away from it is a genuine pitfall.
 2. **Exclude only real collisions.** A `DO NOT USE FOR` or `When not to use` entry is valid only when a competent agent would otherwise wrongly pick this skill.
     Never exclude a concern that co-applies; a foundational skill runs alongside focused ones.
-3. **Do not cap the toolset.** When the real option set is large, give the principle plus a few examples and signal it is open with `…`, never an exhaustive-looking list the agent treats as complete.
+3. **Do not cap the toolset.** When the real option set is large, give the principle and a few examples, and signal it is open with `…`, never an exhaustive-looking list the agent treats as complete.
 4. **Stay internally consistent.** Keep the frontmatter, body, validation, examples, and pitfalls in agreement.
 5. **Ground every snippet in real source.** Verify each type, method, property, and argument order against the library or repo, and invent nothing.
 6. **Name the dependency package.** A missing member reads as "the package is not referenced" (for example, requires `Nice3point.Revit.Extensions`).
@@ -126,7 +126,7 @@ Each plugin installs alone; a skill must never depend on a skill in another plug
 
 Per skill:
 
-- [ ] `name` equals the folder and is valid kebab-case; `description` is a lead sentence plus `USE FOR:` with no method-name list; `license: MIT` is present.
+- [ ] `name` equals the folder and is valid kebab-case; `description` is a lead sentence and `USE FOR:` with no method-name list; `license: MIT` is present.
 - [ ] The skill teaches the current API only, excludes only real collisions, does not cap the toolset, and stays internally consistent.
 - [ ] Every snippet is grounded in real source, the dependency package is named, and wrapper framing appears where relevant.
 - [ ] The body is ≤500 lines and in the detailed token range, with overflow in `references/` behind a `Load when:` trigger.

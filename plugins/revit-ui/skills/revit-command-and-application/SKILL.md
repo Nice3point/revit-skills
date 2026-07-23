@@ -10,7 +10,7 @@ license: MIT
 # Revit Command and Application
 
 Derive add-in entry points from the `Nice3point.Revit.Toolkit` base classes.
-They replace the raw interface boilerplate (the full `Execute(commandData, ref message, elements)` signature, manual assembly resolution) with a simplified override plus ready-made context properties.
+They replace the raw interface boilerplate (the full `Execute(commandData, ref message, elements)` signature, manual assembly resolution) with a simplified override and ready-made context properties.
 
 ## When to use
 
