@@ -14,14 +14,14 @@ using Octokit;
 namespace Build.Modules;
 
 /// <summary>
-///     Stamps changed plugin versions, commits them to the synchronization branch, and opens the corresponding pull request.
+///     Bump changed plugin versions, commits them to the synchronization branch, and opens the corresponding pull request.
 /// </summary>
 [DependsOn<SynchronizePluginVersionsModule>]
 [SkipIfNoGitHubToken]
 public sealed class CreateVersionSyncPullRequestModule(IOptions<ReleaseOptions> releaseOptions) : Module
 {
-    private const string CommitMessage = "Stamp plugin versions";
-    private const string PullRequestBody = "Automated GitVersion synchronization for changed marketplace content.";
+    private const string CommitMessage = "[Marketplace] Bump plugin versions";
+    private const string PullRequestBody = "Update marketplace version.";
 
     protected override async Task ExecuteModuleAsync(IModuleContext context, CancellationToken cancellationToken)
     {
@@ -42,10 +42,7 @@ public sealed class CreateVersionSyncPullRequestModule(IOptions<ReleaseOptions> 
     private static async Task CommitAndPushAsync(IModuleContext context, ReleaseOptions options, CancellationToken cancellationToken)
     {
         await context.Git().Commands.Checkout(
-            new GitCheckoutOptions(options.VersionSyncBranch, create: true)
-            {
-                Force = true
-            },
+            new GitCheckoutOptions(options.VersionSyncBranch, create: true),
             token: cancellationToken);
 
         await context.Git().Commands.Config(
