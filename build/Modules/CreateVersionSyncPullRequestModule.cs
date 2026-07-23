@@ -8,6 +8,7 @@ using ModularPipelines.Git.Options;
 using ModularPipelines.GitHub.Attributes;
 using ModularPipelines.GitHub.Extensions;
 using ModularPipelines.Modules;
+using ModularPipelines.Options;
 using Octokit;
 
 namespace Build.Modules;
@@ -64,7 +65,11 @@ public sealed class CreateVersionSyncPullRequestModule(IOptions<ReleaseOptions> 
         await context.Git().Commands.Add(
             new GitAddOptions
             {
-                Arguments = ["plugins/*/plugin.json", "plugins/*/.codex-plugin/plugin.json"]
+                Arguments = ["plugins/*/plugin.json", "plugins/*/.codex-plugin/plugin.json"],
+            },
+            new CommandExecutionOptions
+            {
+                WorkingDirectory = context.Git().RootDirectory
             },
             token: cancellationToken);
 
