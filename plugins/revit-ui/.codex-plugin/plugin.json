@@ -1,6 +1,6 @@
 {
   "name": "revit-ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Build Revit add-in interfaces and user interactions with the Revit UI API.",
   "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
   "homepage": "https://github.com/Nice3point/revit-skills",

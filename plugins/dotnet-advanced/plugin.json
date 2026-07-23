@@ -1,6 +1,6 @@
 {
   "name": "dotnet-advanced",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Design the architecture and runtime composition of modern .NET applications.",
   "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
   "homepage": "https://github.com/Nice3point/revit-skills",
