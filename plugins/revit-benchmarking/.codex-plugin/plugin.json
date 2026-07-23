@@ -1,6 +1,6 @@
 {
   "name": "revit-benchmarking",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Benchmark Revit API code inside Revit with Nice3point.BenchmarkDotNet.Revit.",
   "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
   "homepage": "https://github.com/Nice3point/revit-skills",
