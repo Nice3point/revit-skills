@@ -82,6 +82,13 @@ Write in a strict, technical style: no explanatory scaffolding, no didactic comm
 - Throw the most specific exception type; never throw `Exception`, `SystemException`, or `ApplicationException` directly.
 - Rethrow with `throw;`; never `throw exception;`.
 
+## Extensions methods and properties
+
+- An extension method is declared inside an `extension` block, never with a `this` parameter.
+- A registration extension is named for its net effect on the container: `Add*` when something resolves after the call that did not before, `Configure*` when the call only supplies settings. Split a registration by phase, never by verb.
+- The file suffix of an extension class follows the host phase, never the verb of the method inside. `*Registration.cs` holds everything that runs before `Build()`, whether the method reads `Add*` or `Configure*`. `*Endpoints.cs` holds everything that runs after it, the `Map*` calls on `WebApplication` and `IEndpointRouteBuilder`. A class that carries both phases is split into two files.
+- `*Configuration.cs` names a type that configures something — an `IConfigureOptions<T>` or an equivalent configurator — and never an extension class. `*Extensions.cs` names ordinary extension methods over a domain or framework type, and an Aspire resource decorator returning `IResourceBuilder<T>` keeps the `With*` verb.
+
 ## Performance
 
 - Do not use deep optimization if it affects code readability.
