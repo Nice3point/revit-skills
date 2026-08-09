@@ -2,7 +2,7 @@
 name: revit-utils-extensions
 description: >
   Replace verbose Autodesk Revit *Utils static calls, static managers, and hand-written enum/id conversions with Nice3point.Revit.Extensions fluent extensions.
-  USE FOR: any time you need to call a SomeUtils.Operation(…) or any other static Revit API helper, and any time you convert or format a Revit value.
+  USE FOR: any time you need to call a SomeUtils.Operation(…) or any other static Revit API helper, any time you convert or format a Revit value, and any time you iterate a Revit array, set, or map.
   DO NOT USE FOR: querying the model for elements (use revit-element-collector), or reading and writing element parameters (use revit-element-and-parameter-access).
 license: MIT
 ---
@@ -13,6 +13,7 @@ license: MIT
 
 - Reaching for any `SomeUtils.Operation()` static call or a verbose `*Manager` getter.
 - Converting a `BuiltInParameter`/`BuiltInCategory`/`ForgeTypeId`, formatting or parsing a unit, or reading a color as hex or RGB.
+- Iterating a Revit array, set, or map, or looking a value up in one.
 
 ## When not to use
 
@@ -54,6 +55,7 @@ Load the one that matches the task; do not guess a signature.
 - [references/geometry.md](references/geometry.md) — **Load when:** building or querying solids, bounding boxes, curves, points, tessellation, or view geometry.
 - [references/units-labels-forge.md](references/units-labels-forge.md) — **Load when:** converting or formatting units, producing user-visible labels, or inspecting a `ForgeTypeId` spec, unit, or parameter.
 - [references/converters-and-helpers.md](references/converters-and-helpers.md) — **Load when:** converting an enum to an id or object, reading a color representation, or reaching for numeric, string, cast, or application-capability helpers.
+- [references/collections-and-maps.md](references/collections-and-maps.md) — **Load when:** iterating a Revit array, set, or map, or looking a value up in a map.
 - [references/document-and-storage.md](references/document-and-storage.md) — **Load when:** reading the document version, getting a manager, working with global or project parameters, filtering parameters, or using extensible storage.
 - [references/disciplines-and-interop.md](references/disciplines-and-interop.md) — **Load when:** working with MEP, structure, or analytical elements, or with model paths, worksharing, coordination models, export, external references, or DirectContext3D.
 
@@ -75,4 +77,6 @@ If the Utils wrapper is not found, read the package [README](https://raw.githubu
 | `LabelUtils.GetLabelFor(parameter)`                  | `parameter.ToLabel()`.                                                            |
 | Assuming a facade changes behavior                   | Facades only re-express the raw API; semantics match.                             |
 | Hand-writing an id, color, or unit converter         | Use the built-in `ToElementId`/`ToHex`/`FromMillimeters` conveniences.            |
+| `solid.Faces.Cast<Face>()`                           | `solid.Faces.EnumerateValues()`.                                                  |
+| A `ForwardIterator()` loop to read map keys          | `map.EnumerateEntries()` / `EnumerateKeys()` / `TryGetValue(key, out var value)`. |
 | Extension not found                                  | The `Nice3point.Revit.Extensions` package is not referenced.                      |
