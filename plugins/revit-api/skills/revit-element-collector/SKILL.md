@@ -50,6 +50,10 @@ var openings = document.CollectElements()
     .OfCategories(BuiltInCategory.OST_Walls, BuiltInCategory.OST_Floors)
     .Instances() // only instances; use .Types() for element types
     .ToElements();
+
+var annotated = document.CollectElements()
+    .WithExtensibleStorage(schemaGuid) // elements carrying add-in data
+    .ToElements();
 ```
 
 ### Step 3: Filter by parameter with native rules, not LINQ

@@ -52,3 +52,7 @@ A member missing from your build means the installed `Nice3point.Revit.Extension
 
 - `element.SaveEntity(schema, "data", "schemaField")`;
 - `element.LoadEntity<string>(schema, "schemaField")`;
+- `element.SaveEntity(schema, 0.5, "thicknessField", UnitTypeId.Meters)` — a field built with a spec;
+- `element.LoadEntity<double>(schema, "thicknessField", UnitTypeId.Meters)`;
+
+Extensible storage covered by `revit-extensible-storage`.
