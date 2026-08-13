@@ -52,10 +52,10 @@ public sealed class CreateVersionSyncPullRequestModule(IOptions<ReleaseOptions> 
             {
                 ThrowOnNonZeroExitCode = false
             },
-            token: cancellationToken);
+            cancellationToken);
 
         await context.Git().Commands.Checkout(
-            new GitCheckoutOptions(options.VersionSyncBranch, create: true),
+            new GitCheckoutOptions(options.VersionSyncBranch, true),
             token: cancellationToken);
 
         await context.Git().Commands.Config(
@@ -75,13 +75,13 @@ public sealed class CreateVersionSyncPullRequestModule(IOptions<ReleaseOptions> 
         await context.Git().Commands.Add(
             new GitAddOptions
             {
-                Arguments = ["plugins/*/plugin.json", "plugins/*/.codex-plugin/plugin.json"],
+                Arguments = ["plugins/*/plugin.json", "plugins/*/.codex-plugin/plugin.json"]
             },
             new CommandExecutionOptions
             {
                 WorkingDirectory = context.Git().RootDirectory
             },
-            token: cancellationToken);
+            cancellationToken);
 
         await context.Git().Commands.Commit(
             new GitCommitOptions

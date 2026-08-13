@@ -46,10 +46,16 @@ public sealed partial class ValidateMarketplaceModule : SyncModule
         var manifestPath = Path.Combine(directory, "plugin.json");
         var codexManifestPath = Path.Combine(directory, ".codex-plugin", "plugin.json");
         var manifestText = ReadFile(root, manifestPath, errors);
-        if (manifestText is null) return;
+        if (manifestText is null)
+        {
+            return;
+        }
 
         var codexManifestText = ReadFile(root, codexManifestPath, errors);
-        if (codexManifestText is null) return;
+        if (codexManifestText is null)
+        {
+            return;
+        }
 
         if (!string.Equals(manifestText, codexManifestText, StringComparison.Ordinal))
         {
@@ -57,7 +63,10 @@ public sealed partial class ValidateMarketplaceModule : SyncModule
         }
 
         var manifest = ParseObject(root, manifestPath, errors);
-        if (manifest is null) return;
+        if (manifest is null)
+        {
+            return;
+        }
 
         if (!string.Equals(GetString(manifest, "name"), plugin, StringComparison.Ordinal))
         {
@@ -113,7 +122,10 @@ public sealed partial class ValidateMarketplaceModule : SyncModule
         {
             var skillName = Path.GetFileName(skillDirectory);
             var skillPath = Path.Combine(skillDirectory, "SKILL.md");
-            if (!File.Exists(skillPath)) continue;
+            if (!File.Exists(skillPath))
+            {
+                continue;
+            }
 
             var lines = File.ReadAllLines(skillPath);
             if (lines.Length == 0 || lines[0] != "---")
@@ -216,7 +228,10 @@ public sealed partial class ValidateMarketplaceModule : SyncModule
         try
         {
             var document = JsonNode.Parse(File.ReadAllText(path));
-            if (document is JsonObject objectDocument) return objectDocument;
+            if (document is JsonObject objectDocument)
+            {
+                return objectDocument;
+            }
 
             errors.Add($"{Path.GetRelativePath(root, path)}: expected a JSON object");
             return null;

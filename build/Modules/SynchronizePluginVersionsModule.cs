@@ -41,7 +41,10 @@ public sealed partial class SynchronizePluginVersionsModule : Module<Synchronize
         versionProperty.IsMatch(content).ShouldBeTrue($"{path} must contain a version property");
         var updated = versionProperty.Replace(content, match => $"{match.Groups[1].Value}{version}{match.Groups[2].Value}", 1);
 
-        if (string.Equals(updated, content, StringComparison.Ordinal)) return false;
+        if (string.Equals(updated, content, StringComparison.Ordinal))
+        {
+            return false;
+        }
 
         await File.WriteAllTextAsync(path, updated, cancellationToken);
         return true;

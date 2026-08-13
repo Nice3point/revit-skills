@@ -46,7 +46,10 @@ public sealed class ResolveVersioningModule : Module<ResolveVersioningResult>
             });
 
         var previousTag = describeResult.StandardOutput.Trim();
-        if (!string.IsNullOrWhiteSpace(previousTag)) return previousTag;
+        if (!string.IsNullOrWhiteSpace(previousTag))
+        {
+            return previousTag;
+        }
 
         var revisionResult = await context.Git().Commands.RevList(
             new GitRevListOptions

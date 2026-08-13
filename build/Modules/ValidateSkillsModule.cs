@@ -52,7 +52,10 @@ public sealed partial class ValidateSkillsModule : SyncModule
         foreach (var pluginDirectory in Directory.GetDirectories(pluginsRoot))
         {
             var skillsDirectory = Path.Combine(pluginDirectory, "skills");
-            if (!Directory.Exists(skillsDirectory)) continue;
+            if (!Directory.Exists(skillsDirectory))
+            {
+                continue;
+            }
 
             var plugin = Path.GetFileName(pluginDirectory);
             foreach (var skillDirectory in Directory.GetDirectories(skillsDirectory))
@@ -154,15 +157,37 @@ public sealed partial class ValidateSkillsModule : SyncModule
         foreach (Match match in FileLinkRegex().Matches(body))
         {
             var target = match.Groups[1].Value;
-            if (target.StartsWith("http", StringComparison.OrdinalIgnoreCase)) continue;
-            if (target.StartsWith("//", StringComparison.Ordinal)) continue;
-            if (target.StartsWith('#')) continue;
+            if (target.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (target.StartsWith("//", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            if (target.StartsWith('#'))
+            {
+                continue;
+            }
 
             var path = target;
             var fragment = path.IndexOf('#');
-            if (fragment >= 0) path = path[..fragment];
-            if (path.StartsWith("./", StringComparison.Ordinal)) path = path[2..];
-            if (path.Length == 0) continue;
+            if (fragment >= 0)
+            {
+                path = path[..fragment];
+            }
+
+            if (path.StartsWith("./", StringComparison.Ordinal))
+            {
+                path = path[2..];
+            }
+
+            if (path.Length == 0)
+            {
+                continue;
+            }
 
             if (path.StartsWith('/'))
             {
@@ -222,7 +247,11 @@ public sealed partial class ValidateSkillsModule : SyncModule
             var text = File.ReadAllText(file);
             foreach (var (otherSkill, otherPlugin) in skillPlugins)
             {
-                if (otherSkill == skillName || otherPlugin == ownPlugin) continue;
+                if (otherSkill == skillName || otherPlugin == ownPlugin)
+                {
+                    continue;
+                }
+
                 if (Regex.IsMatch(text, $@"(?<![\w-]){Regex.Escape(otherSkill)}(?![\w-])"))
                 {
                     errors.Add($"{location}: references '{otherSkill}' from plugin '{otherPlugin}' — name the concrete API instead (plugins install independently)");
@@ -236,7 +265,10 @@ public sealed partial class ValidateSkillsModule : SyncModule
         foreach (var assetDirectory in AssetDirectories)
         {
             var directory = Path.Combine(skillDirectory, assetDirectory);
-            if (!Directory.Exists(directory)) continue;
+            if (!Directory.Exists(directory))
+            {
+                continue;
+            }
 
             foreach (var file in Directory.GetFiles(directory, "*", SearchOption.AllDirectories))
             {
@@ -257,8 +289,16 @@ public sealed partial class ValidateSkillsModule : SyncModule
 
     private static bool IsLocalHost(string url)
     {
-        if (url.Contains("//localhost", StringComparison.OrdinalIgnoreCase)) return true;
-        if (url.Contains("//127.0.0.1", StringComparison.Ordinal)) return true;
+        if (url.Contains("//localhost", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (url.Contains("//127.0.0.1", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
         return false;
     }
 
@@ -281,17 +321,30 @@ public sealed partial class ValidateSkillsModule : SyncModule
             }
         }
 
-        if (index < 0) return string.Empty;
+        if (index < 0)
+        {
+            return string.Empty;
+        }
 
         var inline = frontmatter[index]["description:".Length..].Trim();
-        if (inline.Length > 0 && inline is not (">" or "|" or ">-" or "|-")) return inline;
+        if (inline.Length > 0 && inline is not (">" or "|" or ">-" or "|-"))
+        {
+            return inline;
+        }
 
         var folded = new List<string>();
         for (var i = index + 1; i < frontmatter.Count; i++)
         {
             var line = frontmatter[i];
-            if (line.Length > 0 && !char.IsWhiteSpace(line[0])) break; // next top-level key
-            if (line.Trim().Length > 0) folded.Add(line.Trim());
+            if (line.Length > 0 && !char.IsWhiteSpace(line[0]))
+            {
+                break; // next top-level key
+            }
+
+            if (line.Trim().Length > 0)
+            {
+                folded.Add(line.Trim());
+            }
         }
 
         return string.Join(" ", folded);
