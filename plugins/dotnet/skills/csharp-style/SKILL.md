@@ -16,23 +16,17 @@ Write in a strict, technical style: no explanatory scaffolding, no didactic comm
 
 - Give every identifier its full domain meaning; never use a single-character or abbreviated name.
 - Suffix a method returning `Task` or `Task<T>` with `Async`.
-- Write every method with a block body, never an expression-bodied method (`=>`); an expression body is fine only for a trivial property or indexer accessor.
-- Expose data through properties; never public or protected fields.
-- State access modifiers explicitly; seal a class unless it is designed for inheritance.
-- Use file-scoped namespaces; declare one top-level type per file.
-- Collect common namespaces into global usings.
+- Follow .editorconfig rules
 
 ## Language features
 
 - Use the `var` keyword to declare variables.
 - Use the newest language features, patterns, types.
 - Use `nameof` instead of a string literal for a member or parameter name.
-- Use target-typed `new()` when the type is clear from the context.
 - Use raw string literals (`"""`) for multi-line or quote-heavy text, and interpolation elsewhere.
 - Use primary constructors to capture dependencies and simple state.
 - Use `required` members instead of a constructor whose only job is to force initialization.
 - Use range and index operators (`^`, `..`) for slicing.
-- Use `static` local functions and lambdas to avoid unintended captures.
 - Use `is null` or `is not null` for null checks; never the empty property pattern `is { }` as a null check.
 - Use separate `if` blocks for `if-return` conditions; don't list all the conditions within a single `if` block.
 - Use pattern matching, collection expressions, switch expressions.
@@ -60,7 +54,7 @@ Write in a strict, technical style: no explanatory scaffolding, no didactic comm
 - Express contracts with annotations from the JetBrains and `System.Diagnostics.CodeAnalysis` sets — both are large; reach for whichever fits, not a fixed few.
 - Use `[Pure]` if the method doesn't make any observable state changes.
 - Use `[NotNullWhen]` on `Try`-style methods with an `out` nullable result.
-- Use `[PublicAPI]` to mark publicly available APIs that should not be removed and therefore should never be reported as unused.
+- Use `[PublicAPI]` to mark publicly available APIs/DTOs that should not be removed and therefore should never be reported as unused.
 - Use `[UsedImplicitly]` to mark a symbol as used implicitly (via reflection, in an external library, and so on).
 - Use `[MustUseReturnValue]`, `[MemberNotNull]`, `[DoesNotReturnIf]`, `[StringSyntax]` and others if applicable.
 
