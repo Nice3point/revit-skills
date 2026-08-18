@@ -3,7 +3,7 @@ namespace Build.Options;
 /// <summary>
 ///     Plugin release options.
 /// </summary>
-[Serializable]
+[PublicAPI]
 public sealed record ReleaseOptions
 {
     /// <summary>

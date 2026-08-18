@@ -1,9 +1,15 @@
 <Project>
 
+    <!-- Global build configuration -->
     <PropertyGroup>
         <Nullable>enable</Nullable>
         <ImplicitUsings>true</ImplicitUsings>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
+
+    <!-- Global usings -->
+    <ItemGroup>
+        <Using Include="JetBrains.Annotations"/>
+    </ItemGroup>
 
 </Project>
