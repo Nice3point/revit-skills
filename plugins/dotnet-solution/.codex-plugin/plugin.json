@@ -1,6 +1,6 @@
 {
   "name": "dotnet-solution",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Structure a .NET repository's solution, projects, and build configuration.",
   "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
   "homepage": "https://github.com/Nice3point/revit-skills",
