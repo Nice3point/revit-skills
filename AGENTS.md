@@ -11,7 +11,7 @@ Treat every skill as a production asset, and apply the rules below whenever you 
 plugins/<plugin>/
   plugin.json                      Claude-compatible plugin manifest
   .codex-plugin/plugin.json        Codex manifest — byte-for-byte identical to plugin.json
-  skills/<skill-name>/    
+  skills/<skill-name>/
     SKILL.md                       one focused workflow
     references/                    overflow docs (optional, ≤1 level deep)
     scripts/  assets/              optional bundled files
@@ -26,6 +26,7 @@ plugins/<plugin>/
 - Keep marketplace manifests aligned with the plugin directories.
 - Marketplace versions come from `GitVersion.yml`; never hand-edit the `version` field in a manifest.
 - Run `dotnet run --project build -c Release` after any change to a manifest, marketplace, or skill, and confirm it passes.
+- Write every skill body, reference, and repository document under the `technical-writing` skill in `plugins/dotnet/skills/technical-writing/`.
 - Never copy text from another repository; rewrite in this repo's style.
 
 ## Authoring a skill
@@ -96,13 +97,8 @@ Each plugin installs alone; a skill must never depend on a skill in another plug
 
 ## Writing style
 
-- Open with the fact the reader needs.
-- Cut anything an agent can infer from the heading, signature, or surrounding text.
-- Describe observable behavior and contracts, not the current implementation.
-- Keep one idea per sentence, and write one sentence per line.
 - Use numbered steps for procedures and checklists for requirements.
 - Define a term on first use.
-- State a negative only when a competent agent would otherwise make a plausible, harmful assumption.
 - Wrap the frontmatter `description` by whole sentences, and put one space before an inline `//` comment.
 
 ## Structural limits (hard)
@@ -130,6 +126,7 @@ Per skill:
 - [ ] The skill teaches the current API only, excludes only real collisions, does not cap the toolset, and stays internally consistent.
 - [ ] Every snippet is grounded in real source, the dependency package is named, and wrapper framing appears where relevant.
 - [ ] The body is ≤500 lines and in the detailed token range, with overflow in `references/` behind a `Load when:` trigger.
+- [ ] The prose passes the `technical-writing` review checklist: present indicative, one sentence per line, and no purpose, result, or cause clause.
 - [ ] No cross-plugin skill-name reference remains, and every sibling reference resolves within the plugin.
 
 Repository-wide:

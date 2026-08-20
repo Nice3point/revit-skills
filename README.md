@@ -16,6 +16,7 @@ This repository contains focused [Agent Skills](https://agentskills.io) for buil
 | [revit-benchmarking](plugins/revit-benchmarking/) | Benchmark Revit API code inside Revit with `Nice3point.BenchmarkDotNet.Revit`.                         |
 | [dotnet](plugins/dotnet/)                         | Write consistent, well-documented C# for .NET projects.                                                |
 | [dotnet-advanced](plugins/dotnet-advanced/)       | Design the architecture and runtime composition of modern .NET applications.                           |
+| [dotnet-solution](plugins/dotnet-solution/)       | Structure a .NET repository's solution, projects, and build configuration.                             |
 
 ## Installation
 

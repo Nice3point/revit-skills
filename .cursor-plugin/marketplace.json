@@ -41,6 +41,11 @@
       "name": "dotnet-advanced",
       "source": "./plugins/dotnet-advanced",
       "description": "Design the architecture and runtime composition of modern .NET applications."
+    },
+    {
+      "name": "dotnet-solution",
+      "source": "./plugins/dotnet-solution",
+      "description": "Structure a .NET repository's solution, projects, and build configuration."
     }
   ]
 }

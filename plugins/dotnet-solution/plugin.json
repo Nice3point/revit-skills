@@ -1,0 +1,20 @@
+{
+  "name": "dotnet-solution",
+  "version": "0.3.1",
+  "description": "Structure a .NET repository's solution, projects, and build configuration.",
+  "author": { "name": "Nice3point", "url": "https://github.com/Nice3point" },
+  "homepage": "https://github.com/Nice3point/revit-skills",
+  "repository": "https://github.com/Nice3point/revit-skills",
+  "license": "MIT",
+  "keywords": ["dotnet", "solution", "msbuild", "skills"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": ".NET Solution",
+    "shortDescription": "Structure .NET solutions and projects",
+    "longDescription": "Reusable workflows for the solution folder tree, project placement, build configuration mapping, and solution filters.",
+    "developerName": "Nice3point",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Use .NET Solution to organize the solution tree."]
+  }
+}
