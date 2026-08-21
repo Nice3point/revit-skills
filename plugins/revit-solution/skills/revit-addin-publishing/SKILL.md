@@ -34,7 +34,7 @@ Override the targets with `AddinDeployDir` / `AddinPublishDir`.
 ### Step 2: Include extra content
 
 ```xml
-<Content Include="Families\**" PublishDirectory="Families" CopyToPublishDirectory="PreserveNewest"/>
+<Content Include="Families\**" PublishDirectory="Families" CopyToPublishDirectory="PreserveNewest" />
 ```
 
 ### Step 3: Rely on manifest patching
@@ -53,8 +53,8 @@ Build, and confirm the add-in and manifest land in the deploy or publish folder 
 
 ## Common Pitfalls
 
-| Pitfall                                                     | Correct approach                                                |
-|-------------------------------------------------------------|-----------------------------------------------------------------|
-| Enabling deploy in a class-library project with no `.addin` | Enable it only in the manifest-owning project.                  |
-| Copying families with a raw `<None>` item                   | Use `<Content … PublishDirectory=… CopyToPublishDirectory=…/>`. |
-| Hand-editing the manifest per Revit version                 | Let the SDK patch `ManifestSettings` on publish.                |
+| Pitfall                                                     | Correct approach                                                 |
+|-------------------------------------------------------------|------------------------------------------------------------------|
+| Enabling deploy in a class-library project with no `.addin` | Enable it only in the manifest-owning project.                   |
+| Copying families with a raw `<None>` item                   | Use `<Content … PublishDirectory=… CopyToPublishDirectory=… />`. |
+| Hand-editing the manifest per Revit version                 | Let the SDK patch `ManifestSettings` on publish.                 |

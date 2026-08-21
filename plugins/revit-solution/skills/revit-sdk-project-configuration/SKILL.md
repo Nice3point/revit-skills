@@ -46,7 +46,7 @@ Leave all of these to the SDK.
 ### Step 4: Control implicit Revit usings
 
 Based on the referenced assemblies, the SDK adds global usings for `Autodesk.Revit.DB`, `JetBrains.Annotations`, `Nice3point.Revit.Toolkit`, `Nice3point.Revit.Extensions`, and the CommunityToolkit MVVM namespaces; a typical file needs no `using` block.
-Turn them all off with `<ImplicitRevitUsings>false</ImplicitRevitUsings>`, or drop a single one with `<Using Remove="Autodesk.Revit.DB"/>`.
+Turn them all off with `<ImplicitRevitUsings>false</ImplicitRevitUsings>`, or drop a single one with `<Using Remove="Autodesk.Revit.DB" />`.
 
 ### Step 5: Set the few properties in a root add-in project
 

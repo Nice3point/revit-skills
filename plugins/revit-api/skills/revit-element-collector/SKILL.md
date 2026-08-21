@@ -26,7 +26,7 @@ Filtering the collector output with LINQ materializes every element first.
 
 ## Workflow
 
-Always prefer the built-in methods of `FilteredElementCollector` extensions over using LINQ. 
+Always prefer the built-in methods of `FilteredElementCollector` extensions over using LINQ.
 LINQ materializes and marshals every element into the .NET process's memory and does not filter at the database level; use it only if the built-in methods are insufficient for filtering.
 
 ### Step 1: Open a collector from the document

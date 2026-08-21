@@ -56,10 +56,10 @@ public sealed class ElementInspectorTests(ElementInspector elementInspector) : R
 
         using var transaction = new Transaction(_document, "Seed model");
         transaction.Start();
-        
+
         var level = Level.Create(_document, 0);
         _wall = Wall.Create(_document, Line.CreateBound(new XYZ(0, 0, 0), new XYZ(10, 0, 0)), level.Id, false);
-        
+
         transaction.Commit();
     }
 

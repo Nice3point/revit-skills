@@ -80,32 +80,31 @@ A subfolder holding one or two projects adds a level without adding a division.
 The `.slnx` format is XML, and the .NET SDK reads it directly.
 
 ```xml
-
 <Solution>
-    <Configurations>
-        <BuildType Name="Debug"/>
-        <BuildType Name="Release"/>
-    </Configurations>
-    <Folder Name="/Solution Items/">
-        <File Path="Directory.Build.props"/>
-        <File Path="global.json"/>
-    </Folder>
-    <Folder Name="/Design System/">
-        <Project Path="source/Contoso.Controls/Contoso.Controls.csproj"/>
-    </Folder>
-    <Folder Name="/Installer/">
-        <Project Path="install/Contoso.Installer/Contoso.Installer.csproj"/>
-    </Folder>
-    <Folder Name="/Playground/">
-        <Project Path="playground/Contoso.Playground/Contoso.Playground.csproj"/>
-    </Folder>
-    <Folder Name="/Playground/Emulators/">
-        <Project Path="playground/Contoso.Playground.Storage/Contoso.Playground.Storage.csproj"/>
-    </Folder>
-    <Folder Name="/Tests/">
-        <Project Path="tests/Contoso.Tests.Unit/Contoso.Tests.Unit.csproj"/>
-    </Folder>
-    <Project Path="source/Contoso.Extensions/Contoso.Extensions.csproj"/>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+  </Folder>
+  <Folder Name="/Design System/">
+    <Project Path="source/Contoso.Controls/Contoso.Controls.csproj" />
+  </Folder>
+  <Folder Name="/Installer/">
+    <Project Path="install/Contoso.Installer/Contoso.Installer.csproj" />
+  </Folder>
+  <Folder Name="/Playground/">
+    <Project Path="playground/Contoso.Playground/Contoso.Playground.csproj" />
+  </Folder>
+  <Folder Name="/Playground/Emulators/">
+    <Project Path="playground/Contoso.Playground.Storage/Contoso.Playground.Storage.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/Contoso.Tests.Unit/Contoso.Tests.Unit.csproj" />
+  </Folder>
+  <Project Path="source/Contoso.Extensions/Contoso.Extensions.csproj" />
 </Solution>
 ```
 
@@ -121,15 +120,14 @@ A project builds in every solution configuration unless told otherwise.
 Map and exclude explicitly:
 
 ```xml
-
 <Project Path="playground/Contoso.Playground/Contoso.Playground.csproj">
-    <BuildType Solution="Release.Preview|*" Project="Release"/>
-    <Build Solution="Release.Preview|*" Project="false"/>
+  <BuildType Solution="Release.Preview|*" Project="Release" />
+  <Build Solution="Release.Preview|*" Project="false" />
 </Project>
 ```
 
-- `<BuildType Solution="…" Project="…"/>` maps one solution configuration onto the project configuration to build.
-- `<Build Project="false"/>` excludes the project from every configuration; adding `Solution="…"` narrows the exclusion to one.
+- `<BuildType Solution="…" Project="…" />` maps one solution configuration onto the project configuration to build.
+- `<Build Project="false" />` excludes the project from every configuration; adding `Solution="…"` narrows the exclusion to one.
 
 When a solution carries configurations beyond `Debug` and `Release` — one per target platform, framework, or host version — classify every project once.
 
@@ -163,6 +161,6 @@ A project outside the matrix that lacks the exclusion compiles once per configur
 | One folder holding both a shared library and a deliverable's own views | Name the shared folder for its subject; a deliverable's views stay with it             |
 | Test or sandbox project filed inside the deliverable's folder          | Keep the non-shipping tier in its own top-level folder                                 |
 | A shared-fate folder kept after its set is gone                        | Flatten the surviving folder up one level                                              |
-| Sandbox or tool project with no `<Build … Project="false"/>`           | Exclude it from every configuration it produces no result in                           |
+| Sandbox or tool project with no `<Build … Project="false" />`          | Exclude it from every configuration it produces no result in                           |
 | Folder named for a class of file, such as `Services`                   | Name what the folder is about                                                          |
 | Mixed `\` and `/` in `Path` attributes                                 | Normalize to `/`; mixed separators come from editing the file on two operating systems |

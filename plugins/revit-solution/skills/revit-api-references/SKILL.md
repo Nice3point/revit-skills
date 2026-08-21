@@ -22,13 +22,12 @@ A local file (`HintPath`) reference ties the build to one installed version at o
 ### Step 1: Reference the API package
 
 ```xml
+<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
+<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
 
-<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*"/>
-<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*"/>
-
-<PackageReference Include="Nice3point.Revit.Extensions" Version="2025.0.0" Condition="$(RevitVersion) == '2025'"/>
-<PackageReference Include="Nice3point.Revit.Extensions" Version="2026.0.0" Condition="$(RevitVersion) == '2026'"/>
-<PackageReference Include="Nice3point.Revit.Extensions" Version="2027.0.0" Condition="$(RevitVersion) == '2027'"/>
+<PackageReference Include="Nice3point.Revit.Extensions" Version="2025.0.0" Condition="$(RevitVersion) == '2025'" />
+<PackageReference Include="Nice3point.Revit.Extensions" Version="2026.0.0" Condition="$(RevitVersion) == '2026'" />
+<PackageReference Include="Nice3point.Revit.Extensions" Version="2027.0.0" Condition="$(RevitVersion) == '2027'" />
 ```
 
 The `$(RevitVersion).*` wildcard resolves the assembly set for the active configuration.

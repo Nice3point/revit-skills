@@ -48,7 +48,7 @@ string hex = color.ToHex(); // Color -> "#RRGGBB"
 
 ## References
 
-Each reference lists its domain's extensions in full — member, purpose, and a grounded example on the real receiver — with the raw `*Utils` class named in each section heading. 
+Each reference lists its domain's extensions in full — member, purpose, and a grounded example on the real receiver — with the raw `*Utils` class named in each section heading.
 Load the one that matches the task; do not guess a signature.
 
 - [references/transforms-and-modeling.md](references/transforms-and-modeling.md) — **Load when:** moving, copying, joining, or cutting elements, or working with families, hosts, parts, assemblies, adaptive components, or masses.

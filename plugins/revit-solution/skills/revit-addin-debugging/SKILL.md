@@ -27,7 +27,6 @@ Deploy the add-in first (`revit-addin-publishing`); the launched Revit loads the
 ### Step 1: Enable launch
 
 ```xml
-
 <LaunchRevit>true</LaunchRevit>
 ```
 
@@ -37,7 +36,6 @@ Enable it in the manifest-owning project alongside `DeployAddin`; each build dep
 ### Step 2: Override the target when the defaults are wrong
 
 ```xml
-
 <StartProgram>D:\Autodesk\Revit $(RevitVersion)\Revit.exe</StartProgram>
 <StartArguments>/language CHS</StartArguments>
 ```
