@@ -25,6 +25,7 @@ The conventions match the .NET libraries.
 - Put the text on its own line between the opening and closing tag, indented four spaces past the `///` marker; keep the one-line form for a single short clause.
 - Indent a nested tag one level further, and leave a `<code>` block at the indentation its rendered output needs.
 - Write one sentence per tag and end it with a period; a second sentence belongs in `<remarks>`.
+- Ignore the line length; the text of a tag stays on one line however long it runs, and no line is wrapped by hand.
 - State the contract; never restate the name or the parameter list in words.
 - Describe observable behavior, not the current implementation.
 - Describe the member as it stands, not the change that produced it; the caller reading the doc never saw the previous version.
