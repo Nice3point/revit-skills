@@ -40,6 +40,8 @@ Open with the fact the reader needs, describe observable behavior, and cut anyth
   The reader has the page as it stands, with no previous version, diff, or request to compare against.
 - Cut every purpose, result, cause, and comparison clause: `so`, `that makes`, `which makes`, `because`, `rather than`.
   A clause carrying a fact the reader needs becomes its own sentence.
+- Name an operation with the term its own domain defines.
+  Attribute no intent, no perception, and no motion to a component: it does not ask, answer, want, know, or decide, and a value does not travel.
 
 ## Examples
 
@@ -51,6 +53,18 @@ This page describes external events. We added them because the API is not reacha
 An external event carries a unit of work into the Revit API context.
 A caller constructs the event and raises it from any thread, and Revit invokes the handler inside the API context.
 An external event opens no transaction; the handler opens its own.
+```
+
+```markdown
+<!-- BAD -->
+The view model asks the repository for the open document and answers the command with the result.
+The binding wants a source that is not null, and the validator decides whether the entry is valid.
+An event travels to every subscriber.
+
+<!-- GOOD -->
+The view model requests the open document from the repository and returns the result to the command.
+The binding requires a source that is not null, and the validator reports whether the entry is valid.
+An event reaches every subscriber.
 ```
 
 A comment on a declaration names the role that declaration holds in the whole system, or the invariant behind a value.
@@ -90,6 +104,7 @@ instances = environment == "production" ? 2 : 1
 - [ ] The first sentence of a section carries information the heading does not.
 - [ ] Every comment states what its file cannot, and none restates the name, the value, or the block below it.
 - [ ] Every commented declaration is one a reader would otherwise misread, and the rest carry no comment.
+- [ ] No component asks, answers, wants, knows, or decides, and no value travels; every operation carries the term its domain defines.
 
 ## Common Pitfalls
 
@@ -102,6 +117,7 @@ instances = environment == "production" ? 2 : 1
 | Documenting how the code works today                           | Document the observable contract.                       |
 | Narrating the edit ("renamed X to Y because…")                 | State what the code now is.                             |
 | A rationale clause ("… so …", "… that makes …", "rather than") | State each fact in its own present-indicative sentence. |
+| A component that asks, answers, wants, knows, or decides       | Name the operation its domain defines.                  |
 | A paragraph promising work still to come                       | Leave a `// TODO:` in the code at the place it belongs. |
 | A paragraph hard-wrapped at 80 or 120 characters               | One sentence, one line, whatever its length.            |
 | A comment naming the key it stands above                       | State the constraint the key carries.                   |
