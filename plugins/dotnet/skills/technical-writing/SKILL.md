@@ -30,6 +30,8 @@ Open with the fact the reader needs, describe observable behavior, and cut anyth
 - Use a table where several items share the same set of attributes.
 - State a negative only where a competent reader would otherwise make a plausible, harmful assumption.
 - Link the maintained list of identifiers, endpoints, or values; never copy it.
+- State no count and no enumeration the neighbouring source already carries: the rows of a table, the members of a list below, the files a directory holds.
+  The reader takes them from the source, and a restatement falls out of date on the change that adds one.
 - Avoid corporate language, filler, meta-preambles, and trailing `including…` examples.
 - Comment the intent, the constraint, or the invariant a file cannot state itself; add none where the file already states it.
   A declaration carries its own meaning through its name, and a comment stands only where a competent reader draws a wrong conclusion without one.
@@ -84,6 +86,7 @@ instances = environment == "production" ? 2 : 1
 - [ ] Prose follows one-sentence-per-line formatting, and no line is wrapped at a column limit.
 - [ ] Every sentence states a fact in the present indicative, and none narrates the change or argues why.
 - [ ] No list of constants, endpoints, or options is copied where the authoritative source can be linked.
+- [ ] No sentence states a count or an enumeration the neighbouring source carries.
 - [ ] The first sentence of a section carries information the heading does not.
 - [ ] Every comment states what its file cannot, and none restates the name, the value, or the block below it.
 - [ ] Every commented declaration is one a reader would otherwise misread, and the rest carry no comment.
@@ -94,6 +97,7 @@ instances = environment == "production" ? 2 : 1
 |----------------------------------------------------------------|---------------------------------------------------------|
 | A preamble before the point ("This section describes…")        | Lead with the fact the reader needs.                    |
 | Copying a list of constants or endpoints into prose            | Link the authoritative source.                          |
+| A count or an enumeration the source beside it carries         | Point at the source; the reader reads it there.         |
 | Restating the heading in the first sentence                    | Add new information.                                    |
 | Documenting how the code works today                           | Document the observable contract.                       |
 | Narrating the edit ("renamed X to Y because…")                 | State what the code now is.                             |
