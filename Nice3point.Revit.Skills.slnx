@@ -6,7 +6,7 @@
     <File Path="global.json"/>
     <File Path="README.md"/>
   </Folder>
-  <Folder Name="/Automation/">
+  <Folder Name="/Build/">
     <Project Path="build/Build.csproj"/>
   </Folder>
 </Solution>
