@@ -11,7 +11,7 @@ license: MIT
 
 An Autodesk App Store add-in ships as a `.bundle` — a `PackageContents.xml` with a `Contents/<year>` folder for each supported Revit version.
 A solution scaffolded from the templates with bundle support carries a ModularPipelines `build` project whose `pack` command assembles the bundle from every version's publish output and stamps it with a version.
-This skill configures and runs that packaging; a solution created without bundle support needs the bundle wiring added first (see Common Pitfalls).
+A solution created without bundle support needs the bundle wiring added first (see Common Pitfalls).
 
 ## When to use
 

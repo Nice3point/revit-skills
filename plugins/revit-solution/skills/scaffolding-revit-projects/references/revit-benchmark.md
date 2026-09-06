@@ -17,4 +17,4 @@ Keep product functionality in a `revit-addin-module` project, then reference the
 ## Validation
 
 - [ ] The project builds for the selected `Debug.RNN` or `Release.RNN` configuration.
-- [ ] Benchmark code measures Revit API work rather than application startup or unrelated test setup.
+- [ ] Benchmark code measures Revit API work; application startup and unrelated test setup stay outside the measurement.

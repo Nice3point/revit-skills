@@ -2,7 +2,7 @@
 name: revit-utils-extensions
 description: >
   Replace verbose Autodesk Revit *Utils static calls, static managers, and hand-written enum/id conversions with Nice3point.Revit.Extensions fluent extensions.
-  USE FOR: any time you need to call a SomeUtils.Operation(…) or any other static Revit API helper, any time you convert or format a Revit value, and any time you iterate a Revit array, set, or map.
+  USE FOR: any call to a SomeUtils.Operation(…) or any other static Revit API helper, any conversion or formatting of a Revit value, and any iteration of a Revit array, set, or map.
   DO NOT USE FOR: querying the model for elements (use revit-element-collector), or reading and writing element parameters (use revit-element-and-parameter-access).
 license: MIT
 ---
@@ -18,7 +18,7 @@ license: MIT
 ## When not to use
 
 - Finding a set of elements in the model — use `revit-element-collector`.
-- Reading or writing a parameter on an element you already hold — use `revit-element-and-parameter-access`.
+- Reading or writing a parameter on an element already in hand — use `revit-element-and-parameter-access`.
 
 ## Recognize and replace
 

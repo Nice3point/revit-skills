@@ -3,13 +3,16 @@
 **Load when:** the same test body must run across several file kinds or sample directories (families, projects, or a project folder) without duplicating the tests.
 
 Write the tests once in an abstract base parameterized by constructor arguments, then declare one sealed subclass per configuration.
-Because the path set now depends on constructor state, it is an **instance** member driven by `[InstanceMethodDataSource]`, and each subclass re-runs the inherited tests with `[InheritsTests]`.
+The path set depends on constructor state, and an **instance** member driven by `[InstanceMethodDataSource]` carries it.
+Each subclass re-runs the inherited tests with `[InheritsTests]`.
 Requires the `Nice3point.TUnit.Revit` package.
 
 ## `[InstanceMethodDataSource]` versus `[MethodDataSource]`
 
-`[MethodDataSource]` reads a **static** member, evaluated before any instance exists, so it cannot see per-subclass configuration.
-`[InstanceMethodDataSource]` constructs the instance first, then reads the member — so a `DocumentPaths` computed from the constructor's `extension` and `directory` resolves to the right set for each subclass.
+`[MethodDataSource]` reads a **static** member, evaluated before any instance exists.
+A static member has no access to per-subclass configuration.
+`[InstanceMethodDataSource]` constructs the instance first, then reads the member.
+A `DocumentPaths` computed from the constructor's `extension` and `directory` resolves to the right set for each subclass.
 Use the instance variant whenever the case set depends on constructor-injected state.
 
 ## Base class parameterized by constructor
@@ -27,7 +30,7 @@ public abstract class DocumentSampleFixture : RevitApiTest
             : [];
     }
 
-    // Instance member: value depends on the constructor, so tests use [InstanceMethodDataSource].
+    // Instance member: the value depends on the constructor, and tests read it with [InstanceMethodDataSource].
     public string[] DocumentPaths { get; }
     public Document? Document { get; private set; }
 
@@ -61,7 +64,8 @@ public abstract class DocumentSampleFixture : RevitApiTest
 ## Put the shared test below the fixture
 
 The fixture opens and closes documents only.
-Put `[Test]` and `[InstanceMethodDataSource]` in a separate abstract test class so the fixture remains reusable for tests with different assertions.
+Put `[Test]` and `[InstanceMethodDataSource]` in a separate abstract test class.
+The fixture remains reusable for tests with different assertions.
 
 ```csharp
 public abstract class DocumentSampleTests(string extension, string? samplesDirectory = null) : DocumentSampleFixture(extension, samplesDirectory)
@@ -86,8 +90,9 @@ public abstract class DocumentSampleTests(string extension, string? samplesDirec
 
 ## One subclass per configuration
 
-Each subclass fixes its extension and directory and carries `[InheritsTests]` so the base tests run again under its configuration.
-A subclass may add tests that only make sense for its kind.
+Each subclass fixes its extension and directory and carries `[InheritsTests]`.
+The base tests run again under its configuration.
+A subclass may add tests that apply only to its kind.
 
 ```csharp
 [InheritsTests]
@@ -117,7 +122,8 @@ public sealed class ProjectFolderSampleTests() : DocumentSampleTests(".rvt", "./
 
 ## Notes
 
-- Combine this with a dependency-injection data source to have the constructor also receive services under test — see `dependency-injection`; the DI attribute goes on each concrete subclass, and `[InstanceMethodDataSource]` still fills the per-test parameter.
+- Combine this with a dependency-injection data source — see `dependency-injection` — and the constructor also receives the services under test.
+  The DI attribute goes on each concrete subclass, and `[InstanceMethodDataSource]` still fills the per-test parameter.
 - A subclass whose directory is empty produces no cases and is skipped — see `skipping`.
 - Keep the base class abstract; only sealed subclasses are discovered as test classes.
 - Guard version-specific API behind `#if REVIT####_OR_GREATER` inside the test body when a sample assertion differs across Revit versions.

@@ -2,7 +2,7 @@
 name: revit-dependency-isolation
 description: >
   Prevent Autodesk Revit add-in dependency conflicts with AssemblyLoadContext isolation (Revit 2027+) or ILRepack repacking (legacy).
-  USE FOR: resolving crashes caused by two add-ins loading different versions of the same dependency, by isolating your add-in's assemblies.
+  USE FOR: resolving crashes caused by two add-ins loading different versions of the same dependency, by isolating the add-in's assemblies.
   DO NOT USE FOR: resolving a missing dependency at load time (use revit-assembly-resolution).
 license: MIT
 ---
@@ -20,7 +20,7 @@ The `Nice3point.Revit.Sdk` provides both.
 
 ## When not to use
 
-- A single dependency simply fails to load (a `FileNotFoundException`) — use `revit-assembly-resolution`.
+- A single dependency fails to load (a `FileNotFoundException`) — use `revit-assembly-resolution`.
 
 ## Workflow
 
@@ -44,7 +44,8 @@ That property is a prerequisite for loading dependencies at all, not the isolati
 
 ### Step 2: Repack for legacy Revit (pre-2027)
 
-Revit 2026 add-ins and lower without isolation, merge dependencies into the add-in with ILRepack.
+Revit 2026 and earlier provide no load-context isolation.
+Merge the dependencies into the add-in assembly with ILRepack.
 
 ```xml
 <IsRepackable Condition="'$(RevitVersion)' &lt; '2027'">true</IsRepackable>

@@ -9,7 +9,7 @@ license: MIT
 
 # Revit SDK Project Configuration
 
-The `Nice3point.Revit.Sdk` MSBuild SDK derives Revit-project defaults from the active build configuration; you do not hand-write per-configuration build settings.
+The `Nice3point.Revit.Sdk` MSBuild SDK derives Revit-project defaults from the active build configuration; the project file carries no hand-written per-configuration settings.
 
 ## When to use
 
@@ -33,15 +33,13 @@ A configuration with no resolvable version fails the build with a clear error; s
 
 ### Step 3: Let the SDK derive the framework and build defaults
 
-From `$(RevitVersion)` the SDK sets everything you would otherwise hand-write per project and per configuration:
+From `$(RevitVersion)` the SDK sets the defaults otherwise hand-written per project and per configuration:
 
 - The `TargetFramework` for each Revit version, from the official framework mappings Autodesk provides.
 - `LangVersion=latest`, `Nullable=enable`, `ImplicitUsings=true`, `ImplicitRevitUsings=true`.
 - `AppendTargetFrameworkToOutputPath=false` for a flat output path when the add-in works on a single framework version.
 - Per-configuration `Optimize`, `DebugSymbols`, and `DebugType` (`portable` for `Debug.*`, `none` for `Release.*`), and the `DEBUG`/`RELEASE` constants.
 - The `REVIT####` and `REVIT####_OR_GREATER` compilation symbols for multi-version branching (see `revit-multi-version-configuration`).
-
-Leave all of these to the SDK.
 
 ### Step 4: Control implicit Revit usings
 
@@ -50,7 +48,7 @@ Turn them all off with `<ImplicitRevitUsings>false</ImplicitRevitUsings>`, or dr
 
 ### Step 5: Set the few properties in a root add-in project
 
-The SDK does not author your `.addin` manifest — it copies and version-patches the one you write (see `revit-addin-publishing`).
+The SDK does not author the `.addin` manifest — it copies and version-patches the one the project provides (see `revit-addin-publishing`).
 The .NET SDK then emits the runtime config and copies NuGet dependencies to the output folder, where Revit can load them:
 
 ```xml

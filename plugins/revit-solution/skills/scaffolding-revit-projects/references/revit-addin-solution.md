@@ -24,7 +24,8 @@ The `build` project uses ModularPipelines to compile each declared release confi
 
 ## Initialize and build
 
-Initialize Git and make the first commit before running the build because ModularPipelines requires it.
+Initialize Git and make the first commit before running the build.
+ModularPipelines requires repository history.
 
 ```shell
 git init

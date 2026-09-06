@@ -11,12 +11,13 @@ license: MIT
 
 A fixture is everything a test runs against: the document, the services it calls, and the cases it repeats over.
 Choosing the wrong one is the usual cause of tests that pass alone but fail together, or that silently test nothing.
-Match the situation to one reference below and open only that one.
 
-Two invariants hold across every variant:
+These invariants hold across every variant:
 
 1. **Create and close documents on the Revit thread.** Any hook that opens, seeds, or closes a document carries `[HookExecutor<RevitThreadExecutor>]`, and every opened or created document is closed in teardown.
-2. **Discovery runs before Revit exists.** TUnit evaluates every data source, constructs the test class, and resolves every injected service during discovery, off the Revit thread — they yield only primitives (numbers, strings, file paths) and never call the Revit API at construction. The test body turns those primitives into Revit objects on the Revit thread.
+2. **Discovery runs before Revit exists.** TUnit evaluates every data source, constructs the test class, and resolves every injected service during discovery, off the Revit thread.
+   They yield only primitives (numbers, strings, file paths) and never call the Revit API at construction.
+   The test body turns those primitives into Revit objects on the Revit thread.
 
 ```csharp
 public static string[] DocumentPaths => Directory.EnumerateFiles(directory, "*.rvt").ToArray(); // primitives, off-thread
@@ -38,7 +39,7 @@ public void CloseDocument()
 
 Match the required state to one reference and open only that reference.
 
-- [references/seeded-document.md](references/seeded-document.md) — **Load when:** you need a fresh, exact, mutable model that the test authors in code.
+- [references/seeded-document.md](references/seeded-document.md) — **Load when:** the test needs a fresh, exact, mutable model that it authors in code.
 - [references/parameterized-fixtures.md](references/parameterized-fixtures.md) — **Load when:** a fixed set of `.rvt`/`.rfa` files, or one test body must run for several sample directories, through `[InstanceMethodDataSource]` and `[InheritsTests]`.
 - [references/dependency-injection.md](references/dependency-injection.md) — **Load when:** the test class receives its service under test from a DI container.
 - [references/skipping.md](references/skipping.md) — **Load when:** a sample folder or Revit localization may be absent and the affected test must skip cleanly.
@@ -46,13 +47,15 @@ Match the required state to one reference and open only that reference.
 ## Selecting a data source
 
 `[Arguments]`, `[MethodDataSource]`, and `[InstanceMethodDataSource]` are basic TUnit data-driven-test features.
-This skill only selects them for Revit fixtures and adds the Revit-thread boundary.
-For other TUnit approaches, including class, matrix, combined, and custom data sources, read TUnit's [Method Data Sources source](https://raw.githubusercontent.com/thomhurst/TUnit/main/docs/docs/writing-tests/method-data-source.md).
+A Revit fixture picks among them under the Revit-thread boundary.
+For other TUnit data sources, read TUnit's [Method Data Sources source](https://raw.githubusercontent.com/thomhurst/TUnit/main/docs/docs/writing-tests/method-data-source.md).
 
 - **`[Arguments]`** — a small fixed set of inline primitive cases.
 - **`[MethodDataSource(nameof(Member))]`** — a **static** member whose value is fixed at discovery: a computed set of numbers or a static list of sample paths.
-- **`[InstanceMethodDataSource(nameof(Member))]`** — an **instance** member whose value depends on constructor state: a base class parameterized by extension or directory, or a set built from injected configuration. See `parameterized-fixtures`.
-- **A dependency-injection data-source attribute** — a custom TUnit data source that fills test-class constructor parameters from a DI container. See `dependency-injection`.
+- **`[InstanceMethodDataSource(nameof(Member))]`** — an **instance** member whose value depends on constructor state: a base class parameterized by extension or directory, or a set built from injected configuration.
+  See `parameterized-fixtures`.
+- **A dependency-injection data-source attribute** — a custom TUnit data source that fills test-class constructor parameters from a DI container.
+  See `dependency-injection`.
 
 ## Validation
 

@@ -3,7 +3,7 @@
 Extensions on solids, bounding boxes, curves, points, and view geometry.
 Each `## Heading (RawClass)` names the raw Revit static this domain replaces; call the extension on the receiver shown instead.
 Headings with no raw class add behavior the raw API has no single call for.
-A member missing from your build means the installed `Nice3point.Revit.Extensions` version predates it.
+A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
 ## Line distance
 

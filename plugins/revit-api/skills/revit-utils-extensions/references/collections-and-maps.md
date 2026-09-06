@@ -2,11 +2,11 @@
 
 Enumerating the Revit API's native arrays, sets, and maps with the element type carried into the sequence.
 Each `## Heading (RawClass)` names the raw member this domain replaces; call the extension on the collection instead.
-A member missing from your build means the installed `Nice3point.Revit.Extensions` version predates it.
+A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
 ## Arrays and sets (Cast&lt;T&gt;)
 
-`EnumerateValues()` is available on every Revit array and set holding elements of a single type, 51 of them.
+`EnumerateValues()` is available on every Revit array and set holding elements of a single type.
 
 ```csharp
 foreach (var face in solid.Faces.EnumerateValues())
@@ -48,7 +48,7 @@ if (element.ParametersMap.TryGetValue("Comments", out var comments))
 }
 ```
 
-A Revit map keeps the key of the current entry on its iterator and the value on `Current`, and a `foreach` never sees the key.
+A Revit map keeps the key of the current entry on its iterator and the value on `Current`, and a `foreach` reaches only the value.
 Reading the keys through the raw API takes a hand-written loop that holds a native handle until it is disposed.
 
 ```csharp

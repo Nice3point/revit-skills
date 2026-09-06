@@ -13,11 +13,11 @@ Every Revit API call must run on the single thread that initialized Revit.
 `Nice3point.TUnit.Revit` marshals each test and hook onto that thread through the `RevitThreadExecutor`; the test body reads like ordinary API code.
 It builds on TUnit and Microsoft.Testing.Platform; running the tests needs a matching licensed Revit installation.
 
-It applies to a project scaffolded from the `revit-tunit` template — with the project structure and the assembly-level `RevitThreadExecutor` already configured — and covers writing tests inside it, not setting the project up.
+A project scaffolded from the `revit-tunit` template already carries the project structure and the assembly-level `RevitThreadExecutor`.
 
 ## When to use
 
-- Writing or reviewing a test for your own logic or helpers that call the Revit API.
+- Writing or reviewing a test for project logic or helpers that call the Revit API.
 - Asserting that an operation produced the expected model, file, or value.
 
 ## When not to use
@@ -84,7 +84,7 @@ No constructor, field initializer, data-source member, or injected service may t
 
 Feed a small fixed set of primitive cases inline with `[Arguments]`; the test body builds the Revit objects.
 For a seeded model, an opened sample file, an injected service, or the same test across many file kinds, use `revit-test-fixtures` — it routes each situation to the right fixture and data source.
-Test fixture is a basic TUnit feature; this skill adds the Revit-thread constraint only.
+A test fixture is a basic TUnit feature, and the Revit thread is the only constraint Revit adds to it.
 
 ```csharp
 [Test]

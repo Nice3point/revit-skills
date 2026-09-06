@@ -19,7 +19,7 @@ The layout below mirrors EF Core: a schema definition plays the part of an entit
 
 - Storing add-in data that has no parameter equivalent, per document or per element.
 - Adding a field to a schema that already shipped, or reading data written by an earlier version.
-- Finding the elements that carry your data.
+- Finding the elements that carry the add-in data.
 
 ## When not to use
 
@@ -107,7 +107,8 @@ Registering a schema at startup slows document open and save.
 ### Step 4: Wrap the carrier in a context
 
 A document-wide record belongs on a `DataStorage` element, an invisible element that exists to hold entities.
-One `DataStorage` per subject lets a workshared user edit one set of data without borrowing the elements that hold the rest.
+One `DataStorage` element carries one subject.
+In a workshared model, editing a subject borrows only the storage element of that subject.
 Data that describes a single element belongs on that element instead — take it as a constructor argument and skip the lookup.
 
 Reads need no transaction, writes do.

@@ -10,11 +10,11 @@ license: MIT
 # Revit Add-in Debugging
 
 The `Nice3point.Revit.Sdk` makes the IDE's start-debugging action launch Revit and attach the debugger, without a `launchSettings.json`.
-Deploy the add-in first (`revit-addin-publishing`); the launched Revit loads the build you are debugging.
+Deploy the add-in first (`revit-addin-publishing`); the launched Revit loads the deployed build.
 
 ## When to use
 
-- Setting up a project where a debug session starts the right Revit version and breaks in your add-in.
+- Setting up a project where a debug session starts the right Revit version and breaks in the add-in.
 - Pointing the launcher at a non-default Revit install or start arguments.
 - Keeping iterative debugging and Hot Reload responsive.
 

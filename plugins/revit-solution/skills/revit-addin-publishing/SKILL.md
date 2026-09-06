@@ -39,7 +39,7 @@ Override the targets with `AddinDeployDir` / `AddinPublishDir`.
 
 ### Step 3: Rely on manifest patching
 
-The SDK removes the `ManifestSettings` node for Revit versions older than 2027 during publish to support legacy Revit versions.
+The SDK removes the `ManifestSettings` node for Revit versions older than 2027 during publish.
 
 ### Step 4: Verify
 

@@ -32,8 +32,9 @@ A local file (`HintPath`) reference ties the build to one installed version at o
 
 The `$(RevitVersion).*` wildcard resolves the assembly set for the active configuration.
 `$(RevitVersion)` is supplied by the `Nice3point.Revit.Sdk`, which derives it from the build configuration (for example `Release.R27` → `2027`) — see `revit-sdk-project-configuration`.
-The `$(RevitVersion).*` wildcard can be used for built-in API dependencies, they almost never have critical changes within a major version;
-for all other dependencies, always use the exact package version to avoid breaking when the package is updated.
+The `$(RevitVersion).*` wildcard fits the built-in API dependencies; they almost never carry critical changes within a major version.
+Every other dependency takes an exact package version.
+A floating version on such a dependency breaks the build when the package is updated.
 With central package management, pin the version in `Directory.Packages.props`.
 
 ### Step 2: Never reference a local Revit DLL

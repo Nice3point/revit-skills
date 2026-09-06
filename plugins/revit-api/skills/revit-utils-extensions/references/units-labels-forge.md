@@ -2,9 +2,10 @@
 
 Unit conversion and formatting, user-visible labels, and ForgeTypeId inspection.
 Each `## Heading (RawClass)` names the raw Revit static this domain replaces; call the extension on the receiver shown instead.
-A member missing from your build means the installed `Nice3point.Revit.Extensions` version predates it.
+A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
-Revit stores lengths in feet and angles in radians. Convert at the boundary where a value enters or leaves the model.
+Revit stores lengths in feet and angles in radians.
+Convert at the boundary where a value enters or leaves the model.
 
 ## Unit conversion (UnitUtils)
 
@@ -30,8 +31,8 @@ Both extensions are members of `Units` — get it with `document.GetUnits()`.
 
 ## Labels (LabelUtils)
 
-`ToLabel` accepts most enums and type identifiers (`BuiltInCategory`, `BuiltInParameter`, `BuiltInParameterGroup`, `SpecTypeId`, `UnitTypeId`, `ParameterType`, `FailureSeverity`,
-`StructuralSectionShape`, …) and returns the user-visible name. It takes an optional `LanguageType`.
+`ToLabel` accepts most enums and type identifiers (`BuiltInCategory`, `BuiltInParameter`, `BuiltInParameterGroup`, `SpecTypeId`, `UnitTypeId`, `ParameterType`, `FailureSeverity`, `StructuralSectionShape`, …) and returns the user-visible name.
+It takes an optional `LanguageType`.
 
 - `BuiltInParameter.WALL_TOP_OFFSET.ToLabel()`;
 - `BuiltInParameter.WALL_TOP_OFFSET.ToLabel(LanguageType.Russian)`;

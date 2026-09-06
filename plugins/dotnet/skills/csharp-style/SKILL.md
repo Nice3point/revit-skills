@@ -2,7 +2,7 @@
 name: csharp-style
 description: >
   Write or review C# code.
-  USE FOR: any C# you write or review.
+  USE FOR: writing or reviewing any C# code.
   DO NOT USE FOR: prose, markdown, or wiki text (use technical-writing), or XML doc comment content (use writing-xml-doc-comments).
 license: MIT
 ---
@@ -47,15 +47,16 @@ Write in a strict, technical style: no explanatory scaffolding, no didactic comm
 ## Nullability
 
 - Use nullable types; keep public and internal contracts null-safe.
-- Use `= null!` suppression if you are 100% sure the value can't be null.
+- Use `= null!` suppression only where the value is never null.
 
 ## Annotations
 
 - Express contracts with annotations from the JetBrains and `System.Diagnostics.CodeAnalysis` sets — both are large; reach for whichever fits, not a fixed few.
 - Use `[Pure]` if the method doesn't make any observable state changes.
 - Use `[NotNullWhen]` on `Try`-style methods with an `out` nullable result.
-- Use `[PublicAPI]` to mark publicly available APIs/DTOs that should not be removed and therefore should never be reported as unused.
-- Use `[UsedImplicitly]` to mark a symbol as used implicitly (via reflection, in an external library, and so on).
+- Use `[PublicAPI]` to mark a publicly available API or DTO that must not be removed.
+  The annotation keeps the symbol out of the unused-symbol report.
+- Use `[UsedImplicitly]` to mark a symbol as used implicitly.
 - Use `[MustUseReturnValue]`, `[MemberNotNull]`, `[DoesNotReturnIf]`, `[StringSyntax]` and others if applicable.
 
 ## Asynchronous code
@@ -79,18 +80,25 @@ Write in a strict, technical style: no explanatory scaffolding, no didactic comm
 ## Extensions methods and properties
 
 - An extension method is declared inside an `extension` block, never with a `this` parameter.
-- A registration extension is named for its net effect on the container: `Add*` when something resolves after the call that did not before, `Configure*` when the call only supplies settings. Split a registration by phase, never by verb.
-- The file suffix of an extension class follows the host phase, never the verb of the method inside. `*Registration.cs` holds everything that runs before `Build()`, whether the method reads `Add*` or `Configure*`. `*Endpoints.cs` holds everything that runs after it, the `Map*` calls on `WebApplication` and `IEndpointRouteBuilder`. A class that carries both phases is split into two files.
-- `*Configuration.cs` names a type that configures something — an `IConfigureOptions<T>` or an equivalent configurator — and never an extension class. `*Extensions.cs` names ordinary extension methods over a domain or framework type, and an Aspire resource decorator returning `IResourceBuilder<T>` keeps the `With*` verb.
+- A registration extension is named for its net effect on the container: `Add*` when something resolves after the call that did not before, `Configure*` when the call only supplies settings.
+  Split a registration by phase, never by verb.
+- The file suffix of an extension class follows the host phase, never the verb of the method inside.
+  `*Registration.cs` holds everything that runs before `Build()`, whether the method reads `Add*` or `Configure*`.
+  `*Endpoints.cs` holds everything that runs after it, the `Map*` calls on `WebApplication` and `IEndpointRouteBuilder`.
+  A class that carries both phases is split into two files.
+- `*Configuration.cs` names a type that configures something — an `IConfigureOptions<T>` or an equivalent configurator — and never an extension class.
+  `*Extensions.cs` names ordinary extension methods over a domain or framework type, and an Aspire resource decorator returning `IResourceBuilder<T>` keeps the `With*` verb.
 
 ## Performance
 
 - Do not use deep optimization if it affects code readability.
 - Use `Span` if it avoids allocations without significant code changes.
-- Use `struct` for internal value types on a hot path to avoid allocations; keep them inside the owning type and don't expose them across a public boundary.
+- Use `struct` for internal value types on a hot path; keep them inside the owning type and don't expose them across a public boundary.
+  A value type allocates nothing.
 - Dispose owned streams and pooled resources.
 - Unsubscribe from events depending on the object lifetime.
-- Use source-generated types to avoid extra allocations or reflection overhead.
+- Use source-generated types in place of their reflection-based equivalents.
+  A generated type carries no extra allocation and no reflection overhead.
 
 ## Comments
 

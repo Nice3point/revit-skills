@@ -10,7 +10,8 @@ license: MIT
 # Revit API Option Handlers
 
 Several Revit API calls demand a small callback interface.
-`Nice3point.Revit.Toolkit` ships ready implementations with a default behavior and lambda or enum customization; you do not hand-roll a class each time.
+`Nice3point.Revit.Toolkit` ships ready implementations with a default behavior and lambda or enum customization.
+A hand-rolled implementation of the interface is unnecessary.
 
 ## When to use
 
@@ -37,7 +38,7 @@ options.SetDuplicateTypeNamesHandler(new DuplicateTypeNamesHandler(DuplicateType
 options.SetDuplicateTypeNamesHandler(new DuplicateTypeNamesHandler(args => DuplicateTypeAction.Abort)); // decide per call
 ```
 
-The default constructor keeps the destination types; pass a `DuplicateTypeAction` for a fixed action, or a lambda to decide per call from the `args`.
+The default constructor keeps the destination types; pass a `DuplicateTypeAction` for a fixed action, or a lambda that returns the action per call from the `args`.
 
 ### Step 3: Save shared coordinates callback
 
@@ -51,7 +52,7 @@ linkType.Unload(new SaveSharedCoordinatesCallback(link => //decide per link
 }));
 ```
 
-The default constructor saves the links; pass a `SaveModifiedLinksOptions` value for a fixed choice, or a lambda to decide per link.
+The default constructor saves the links; pass a `SaveModifiedLinksOptions` value for a fixed choice, or a lambda that returns the option per link.
 
 ### Step 4: Verify
 

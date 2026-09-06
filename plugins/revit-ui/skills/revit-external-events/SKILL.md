@@ -10,7 +10,7 @@ license: MIT
 # Revit External Events
 
 The Revit API may only be touched inside its API context.
-`Nice3point.Revit.Toolkit` external events auto-initialize; you can construct and `Raise` them from any thread without creating them inside the API context first.
+`Nice3point.Revit.Toolkit` external events auto-initialize; a caller constructs an event and raises it from any thread without creating it inside the API context first.
 
 ## When to use
 
@@ -33,7 +33,7 @@ The Revit API may only be touched inside its API context.
 ### Step 2: Prefer the [ExternalEvent] generator
 
 Mark every containing type `partial` and annotate a handler method with `[ExternalEvent]`.
-The generator emits the event member from the method signature and names it after the method — `<Method>Event` for the synchronous form and `<Method>AsyncEvent` for the awaitable one — and you raise the work through that generated property.
+The generator emits the event member from the method signature and names it after the method — `<Method>Event` for the synchronous form and `<Method>AsyncEvent` for the awaitable one — and the caller raises the work through that generated property.
 Keep the transaction inside the method.
 
 ```csharp
@@ -76,7 +76,7 @@ private readonly ExternalEvent<ElementId> _deleteElement = new((application, ele
 _deleteElement.Raise(elementId);
 ```
 
-Omit `UIApplication` when you do not need it (`new ExternalEvent(() => …)`, `new ExternalEvent<T>(arg => …)`) and read ambient state through `RevitContext`.
+Omit `UIApplication` where the handler does not use it (`new ExternalEvent(() => …)`, `new ExternalEvent<T>(arg => …)`) and read ambient state through `RevitContext`.
 Await completion with `AsyncExternalEvent`/`AsyncExternalEvent<T>` (`await …RaiseAsync()`), and return a value with `AsyncRequestExternalEvent<TResult>`/`<T, TResult>` (`var result = await …RaiseAsync(arg)`).
 
 ### Step 4: Allow direct invocation only for dual-context operations

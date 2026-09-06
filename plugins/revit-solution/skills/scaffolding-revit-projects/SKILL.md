@@ -12,12 +12,13 @@ license: MIT
 The `Nice3point.Revit.Templates` package provides `dotnet new` templates for Revit add-ins, solutions, benchmarks, and tests, already wired to `Nice3point.Revit.Sdk`.
 Choose the project topology before generating files.
 Choosing the wrong project shape causes either a monolithic add-in or a modular add-in without a host.
-Open only the reference for the template being considered.
 
-Two rules apply to every generated project:
+These rules apply to every generated project:
 
-1. **Template options define the project shape.** Generate a fresh project with the needed options; do not add generated infrastructure by hand.
-2. **A `Debug.RNN` or `Release.RNN` configuration targets one Revit year.** Replace `NN` with the final two digits of that year; for example, `Debug.R27` targets Revit 2027.
+1. **Template options define the project shape.**
+   Generate a fresh project with the needed options; do not add generated infrastructure by hand.
+2. **A `Debug.RNN` or `Release.RNN` configuration targets one Revit year.**
+   Replace `NN` with the final two digits of that year; for example, `Debug.R27` targets Revit 2027.
 
 ## When to use
 

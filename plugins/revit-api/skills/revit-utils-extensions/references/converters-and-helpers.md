@@ -3,7 +3,7 @@
 Enum/id/category converters, color representations, numeric and string helpers, and application capability checks.
 Most members here add behavior the raw API has no single call for — use them directly; there is nothing to replace.
 Where a `## Heading (RawClass)` names a raw static, prefer the extension over that call.
-A member missing from your build means the installed `Nice3point.Revit.Extensions` version predates it.
+A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
 Resolving an `ElementId` to a typed element (`wallId.ToElement<Wall>(document)`) belongs to `revit-element-and-parameter-access`.
 

@@ -3,26 +3,27 @@ name: revit-element-collector
 description: >
   Query the Revit model with the Nice3point.Revit.Extensions fluent FilteredElementCollector wrappers; filter with Revit's parameter filters, not by loading elements and filtering with LINQ.
   USE FOR: writing or reviewing element queries that filter by class, category, or parameter value and return the first match, a count, or the full set.
-  DO NOT USE FOR: reading or setting parameters on an element you already hold (use revit-element-and-parameter-access).
+  DO NOT USE FOR: reading or setting parameters on an element already in hand (use revit-element-and-parameter-access).
 license: MIT
 ---
 
 # Revit Element Collector
 
 Query the model through the fluent `FilteredElementCollector` wrappers in `Nice3point.Revit.Extensions`.
-They wrap the raw Revit collector API into a single readable chain and keep filtering inside Revit's native database engine, which evaluates filters before elements expand into memory.
+They wrap the raw Revit collector API into a single readable chain and keep filtering inside Revit's native database engine.
+The database engine evaluates the filters before elements expand into memory.
 Filtering the collector output with LINQ materializes every element first.
 
 ## When to use
 
 - Retrieving elements, types, or instances by class, category, or parameter value.
 - Reviewing code that writes `new FilteredElementCollector(document)` by hand or filters collector output with `.Where(...)`.
-- Fetching just the first match or a count without loading the whole result set.
+- Fetching the first match or a count without loading the whole result set.
 
 ## When not to use
 
-- You already hold the element and only need to read or set its parameters — use `revit-element-and-parameter-access`.
-- You need a specialized `ElementFilter` the extensions do not expose — fall back to a raw `FilteredElementCollector` with that filter.
+- Reading or setting parameters on an element already in hand — use `revit-element-and-parameter-access`.
+- Applying a specialized `ElementFilter` the extensions do not expose — fall back to a raw `FilteredElementCollector` with that filter.
 
 ## Workflow
 

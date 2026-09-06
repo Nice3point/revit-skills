@@ -2,14 +2,14 @@
 name: revit-benchmarking
 description: >
   Design, write, run, or review BenchmarkDotNet measurements that run inside Autodesk Revit with Nice3point.BenchmarkDotNet.Revit.
-  USE FOR: comparing viable Revit API implementations or measuring a Revit hot path, including the runner's WithCurrentConfiguration requirement and the OnGlobalSetup/OnGlobalCleanup document lifecycle.
+  USE FOR: comparing viable Revit API implementations, measuring a Revit hot path, applying the runner's WithCurrentConfiguration requirement, and handling the OnGlobalSetup/OnGlobalCleanup document lifecycle.
   DO NOT USE FOR: benchmarking .NET code that does not call the Revit API.
 license: MIT
 ---
 
 # Revit Benchmarking
 
-A Revit benchmark runs inside Revit and answers one production decision about a Revit API hot path.
+A Revit benchmark runs inside Revit and supplies the evidence for one production decision about a Revit API hot path.
 `Nice3point.BenchmarkDotNet.Revit` marshals the benchmark onto Revit's thread; running it needs a matching licensed Revit installation.
 
 ## When to use
@@ -26,8 +26,9 @@ A Revit benchmark runs inside Revit and answers one production decision about a 
 ### Step 1: Write the benchmark class
 
 Derive from `RevitApiBenchmark`.
-Open the model in `OnGlobalSetup` and close it in `OnGlobalCleanup` — the base binds `[GlobalSetup]`/`[GlobalCleanup]` and calls these overrides; never add those attributes yourself.
-Each `[Benchmark]` holds one compared operation and returns its result; a returned result keeps the JIT from eliminating it. Declare the alternatives as sibling `[Benchmark]` methods in the same class.
+Open the model in `OnGlobalSetup` and close it in `OnGlobalCleanup` — the base binds `[GlobalSetup]`/`[GlobalCleanup]` and calls these overrides; never add those attributes directly.
+Each `[Benchmark]` holds one compared operation and returns its result; a returned result keeps the JIT from eliminating it.
+Declare the alternatives as sibling `[Benchmark]` methods in the same class.
 
 A small application-level comparison needs no document:
 
@@ -94,7 +95,8 @@ public class CollectorBenchmarks : RevitApiBenchmark
 
 ### Step 2: Configure the runner with the current build configuration
 
-BenchmarkDotNet builds in `Release` by default, which fails for Revit's multi-version configurations.
+BenchmarkDotNet builds in `Release` by default.
+The build fails for Revit's multi-version configurations.
 Apply `WithCurrentConfiguration()` to the job; it then builds the active `Release.RNN`.
 
 ```csharp

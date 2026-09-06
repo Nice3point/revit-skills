@@ -36,7 +36,7 @@ Mirror the same `Debug.RNN`/`Release.RNN` set in the .slnx/.sln file.
 ### Step 2: Add or remove a version
 
 Add or remove the matching `Debug.RNN` / `Release.RNN` in the solution and the project's `<Configurations>`.
-For a newly released year, first update the SDK; set `TargetFramework` explicitly only when the SDK is not released with the latest Revit version support or you are using the preview API package:
+For a newly released year, first update the SDK; set `TargetFramework` explicitly only when the SDK is not released with the latest Revit version support or the project uses the preview API package:
 
 ```xml
 <TargetFramework Condition="$(RevitVersion) == '2027'">net10.0-windows7.0</TargetFramework>

@@ -3,7 +3,7 @@
 Editing and modeling extensions on elements, families, hosts, parts, assemblies, and masses.
 Each `## Heading (RawClass)` names the raw Revit static this domain replaces; call the extension on the receiver shown instead.
 Members with a heading and no raw class in parentheses add behavior the raw API has no single call for.
-A member missing from your build means the installed `Nice3point.Revit.Extensions` version predates it.
+A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
 Most element methods also have an `ElementId` overload that takes the `document` first — for example `elementId.Move(document, 1, 1, 0)` alongside `element.Move(1, 1, 0)`.
 

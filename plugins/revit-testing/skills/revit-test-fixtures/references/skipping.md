@@ -1,15 +1,17 @@
 # Skipping Unavailable Fixtures
 
-**Load when:** a sample set, folder, or Revit localization may be absent on the running machine, and the affected tests should skip rather than fail.
+**Load when:** a sample set, folder, or Revit localization may be absent on the running machine, and the affected tests must skip, not fail.
 
-A skipped test reports honestly that its precondition was missing; a failed test hides real regressions behind environment noise.
+A skipped test carries the missing precondition as its reason.
+A failed test on the same condition is indistinguishable from a real regression.
 Pick the narrowest guard that fits.
 Requires the `Nice3point.TUnit.Revit` package.
 
 ## Empty data source — no cases, nothing to fail
 
 When a sample folder is missing, return an empty set from the data source.
-No cases are generated, so the parameterized tests are simply absent from the run — no guard code in the body.
+No cases are generated, and the parameterized tests are absent from the run.
+The test body needs no guard code.
 This is the default for sample-file fixtures (see `parameterized-fixtures`):
 
 ```csharp
@@ -34,12 +36,13 @@ public void SkipWhenNotEnglish()
 }
 ```
 
-`Skip.Test(...)` also works inside a test body when only one case is conditional — for example, skipping when a sample happens to carry no matching elements.
+`Skip.Test(...)` also works inside a test body when only one case is conditional — for example, a sample that carries no matching elements.
 
 ## Attribute-driven skip
 
 When the same condition guards many tests, encode it once as a `SkipAttribute` subclass and tag the tests.
-The condition is read from the injected Revit environment, so it needs no running document.
+The condition is read from the injected Revit environment.
+The check needs no running document.
 
 ```csharp
 public sealed class EnglishOnlyAttribute() : SkipAttribute("Only supported on the English localization")
@@ -97,4 +100,6 @@ public sealed class LocalizationSkipConfiguration : RevitApiTest
 
 - Prefer the empty-data-source approach for missing files; reserve `Skip.Test` for conditions discovered at run time.
 - `RevitEnvironment.Language` reflects the language the injector started Revit with; an empty value means the default (English).
-- A skip is not a pass — keep the assertion after the guard so the test still verifies behavior when it does run.
+- A skip is not a pass.
+  Keep the assertion after the guard.
+  A test that runs past the guard verifies behavior.

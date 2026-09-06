@@ -2,7 +2,7 @@
 
 Field types, units, containers, and nested entities.
 A schema holds at most 256 fields, and a name runs 1 to 247 characters.
-`SchemaBuilder.AcceptableName(name)` answers for a name built at runtime.
+`SchemaBuilder.AcceptableName(name)` checks a name built at runtime.
 
 ## Simple fields
 
@@ -35,13 +35,13 @@ var thickness = wall.LoadEntity<double>(schema, "Thickness", UnitTypeId.Meters);
 ```
 
 An incompatible unit fails the call.
-`field.GetSpecTypeId()` reports the declared spec, `field.CompatibleUnit(unitTypeId)` tests a unit before use, and `fieldBuilder.NeedsUnits()` tells whether the type demands one at all.
+`field.GetSpecTypeId()` reports the declared spec, `field.CompatibleUnit(unitTypeId)` tests a unit before use, and `fieldBuilder.NeedsUnits()` reports whether the type requires a unit at all.
 
 The unit overloads of `SaveEntity` and `LoadEntity` require `Nice3point.Revit.Extensions` built for Revit 2021 or newer.
 
 ## Arrays
 
-`AddArrayField(name, valueType)` accepts the same value types as a simple field, and the value travels as `IList<T>`.
+`AddArrayField(name, valueType)` accepts the same value types as a simple field, and the value is passed and returned as `IList<T>`.
 
 ```csharp
 builder.AddArrayField("Revisions", typeof(string));
@@ -59,11 +59,11 @@ The generic argument is inferred from the static type, and Revit rejects a `List
 
 ## Maps
 
-`AddMapField(name, keyType, valueType)` stores an ordered key-value map, and the value travels as `IDictionary<TKey, TValue>`.
+`AddMapField(name, keyType, valueType)` stores an ordered key-value map, and the value is passed and returned as `IDictionary<TKey, TValue>`.
 
 Keys accept `bool`, `byte`, `short`, `int`, `long`, `string`, `Guid`, and `ElementId`.
 Floating-point and entity keys are unsupported.
-Round-off makes floating-point comparison unstable, and an entity carries no comparison operator.
+Floating-point comparison is unstable under round-off, and an entity carries no comparison operator.
 Values accept everything a simple field accepts.
 
 ```csharp
@@ -110,7 +110,7 @@ An invalid entity written into such a field deletes the nested value.
 - `schema.GetField(name)` — one field, or `null`;
 - `field.ValueType`, `field.KeyType`, `field.ContainerType` — the declared shape;
 - `field.SubSchema`, `field.SubSchemaGUID` — the nested schema;
-- `element.GetEntitySchemaGuids()` — every schema that stored data on this element, including other vendors';
+- `element.GetEntitySchemaGuids()` — every schema that stored data on this element, whatever vendor owns it;
 - `Schema.ListSchemas()` — every schema registered in the session.
 
 `Schema`, `Field`, and `Entity` expose more of their definition than the members above; reach for whichever one the task needs.

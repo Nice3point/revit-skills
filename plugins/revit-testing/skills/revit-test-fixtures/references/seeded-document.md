@@ -1,15 +1,17 @@
 # Seeded Document
 
-**Load when:** a test needs a fresh, controlled model whose exact contents you author in code.
+**Load when:** a test needs a fresh, controlled model whose exact contents the test authors in code.
 
-Build the model in memory per test so every test starts from a known state and nothing leaks between tests.
+Build the model in memory per test.
+Every test starts from a known state, and nothing leaks between tests.
 Requires the `Nice3point.TUnit.Revit` package.
 
 ## Fresh document per test
 
 Create the document in `[Before(Test)]`, seed it inside a transaction, and close it in `[After(Test)]`.
 Both hooks run on the Revit thread via `[HookExecutor<RevitThreadExecutor>]`.
-Store the seeded elements you assert against so the test reads intent, not rediscovery.
+Store the seeded elements the assertions run against.
+The test body then states intent, not rediscovery.
 
 ```csharp
 public sealed class WallModelTests : RevitApiTest
@@ -87,12 +89,15 @@ public sealed class WallModelTests : RevitApiTest
 ## Read-only tests share one document
 
 When every test only reads the model, seed it once in `[Before(Class)]` and close it in `[After(Class)]`.
-This is faster, and safe precisely because no test mutates shared state.
+This is faster.
+It stays safe only while no test mutates shared state.
 Switch back to `[Before(Test)]` the moment a test writes.
 
 ## Notes
 
-- Each test runs on a fresh instance of the class, so the `_document` and seeded-element fields never leak between tests.
+- Each test runs on a fresh instance of the class.
+  The `_document` and seeded-element fields never leak between tests.
 - `Application.NewProjectDocument(UnitSystem.Metric)` returns an unsaved in-memory document; `Close(false)` discards it without a save prompt.
-- Field initializers run at construction, before Revit is injected, so build seeded state inside the hook, not in a field initializer.
+- Field initializers run at construction, before Revit is injected.
+  Build seeded state inside the hook, not in a field initializer.
 - Parameterize the seed with inline `[Arguments]` (primitives only) when a few variants of the same model are needed.

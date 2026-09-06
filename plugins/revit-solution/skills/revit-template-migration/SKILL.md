@@ -28,7 +28,7 @@ The generated output is the source of truth for the selected template version an
 ### Step 1: Generate a target reference
 
 Install a new templates version.
-Create the same template type with the same name and options as your current project configured in an empty temporary directory.
+Create the same template type in an empty temporary directory, with the name and options the current project carries.
 
 ```shell
 dotnet new install Nice3point.Revit.Templates
@@ -36,7 +36,8 @@ dotnet new <template-short-name> --help
 dotnet new <template-short-name> --name <ProjectName> --output <reference-directory> <options>
 ```
 
-Match the project/solution name to avoid namespace and generated-path noise.
+Match the project/solution name.
+A different name shifts namespaces and generated paths across the diff.
 
 ### Step 2: Review the generated diff
 
@@ -72,7 +73,7 @@ Run every generated pipeline path selected by the project: tests, installer, bun
 
 | Pitfall                                                         | Correct approach                                                       |
 |-----------------------------------------------------------------|------------------------------------------------------------------------|
-| Generating the latest template when you need the target version | Install and generate the exact target version before comparing.        |
+| Generating the latest template when the target version is older | Install and generate the exact target version before comparing.        |
 | Comparing different template options                            | Match every current option for a meaningful diff.                      |
 | Copying a generated tree over the existing project              | Transfer reviewed changes selectively and preserve project-owned code. |
 | Applying an application configuration to a module               | Compare each project with its own template type.                       |

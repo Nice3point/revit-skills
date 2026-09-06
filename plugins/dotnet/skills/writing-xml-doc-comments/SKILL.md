@@ -85,7 +85,7 @@ An `extension` block carries a `<param>` for its receiver, placed on the block; 
 
 ## Inherited documentation
 
-- Put `<inheritdoc />` on an override and on an implicit interface implementation, including `ToString`, `Dispose`, and a property that satisfies an interface.
+- Put `<inheritdoc />` on an override and on an implicit interface implementation.
 - Add `<remarks>` under `<inheritdoc />` when the implementation adds a caller-visible constraint the base contract does not state.
 - Use `<inheritdoc cref="…" />` when the source is not the immediate base member.
 - Leave an explicit interface implementation undocumented; the interface holds the documentation.

@@ -9,8 +9,8 @@ license: MIT
 
 # Revit Selection Filter
 
-`Selection.PickObject` takes an `ISelectionFilter` that decides what the user may pick.
-`SelectionConfiguration` (from `Nice3point.Revit.Toolkit`) builds that filter from two lambdas; you do not hand-roll a class.
+`Selection.PickObject` takes an `ISelectionFilter` that constrains what the user may pick.
+`SelectionConfiguration` (from `Nice3point.Revit.Toolkit`) builds that filter from two lambdas; no hand-rolled class is needed.
 It drives an interactive pick and needs the Revit UI.
 
 ## When to use

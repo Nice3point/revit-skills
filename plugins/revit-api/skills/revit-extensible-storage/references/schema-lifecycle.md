@@ -1,6 +1,6 @@
 # Schema lifecycle
 
-Identity, versioning, access, and the cost of the data you store.
+Identity, versioning, access, and the cost of the stored data.
 
 ## Identity lives in the GUID
 
@@ -46,7 +46,7 @@ public ProjectData Load()
 ```
 
 Migrate on an explicit user action or on first write, never inside a `DocumentOpened` or `DocumentSaved` handler.
-In a workshared model such a handler borrows elements behind the user's back.
+In a workshared model such a handler borrows elements without a user action.
 Erase the old schema from a document only once its data has been carried over.
 
 ## Access levels
@@ -57,7 +57,7 @@ Read and write levels are set independently, each one `Public`, `Vendor`, or `Ap
 A vendor id is 4 to 253 characters of letters, digits, and a small set of punctuation, matched case-insensitively.
 `SchemaBuilder.VendorIdIsValid(id)` checks one before use.
 
-Public read with vendor write is the usual choice: any add-in may read the data, only yours may change it.
+Public read with vendor write is the usual choice: any add-in may read the data, and only an add-in of the owning vendor may change it.
 
 Write access is verified when the entity is stored, not when a field is set.
 The failure appears at `SetEntity`:
@@ -65,7 +65,7 @@ The failure appears at `SetEntity`:
 > Writing of Entities of this Schema is not allowed to the current add-in.
 
 It means the running add-in's vendor id does not match the schema's — commonly a Design Automation bundle registered under a different id.
-`schema.ReadAccessGranted()` and `schema.WriteAccessGranted()` answer the same question before the write.
+`schema.ReadAccessGranted()` and `schema.WriteAccessGranted()` check the same access before the write.
 
 ## Worksharing and element lifetime
 
@@ -81,5 +81,5 @@ Split data into fields, arrays, and maps.
 One large serialized string slows save, open, and synchronize.
 Many `ElementId` values in a single entity are the expensive case.
 
-Extensible Storage does not travel to the Autodesk viewer.
+Extensible Storage does not reach the Autodesk viewer.
 The SVF conversion pipeline loads no add-ins and reads no schema.

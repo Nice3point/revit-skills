@@ -33,7 +33,8 @@ Keep Revit API types contained, own document and transaction lifetime explicitly
 
 - Prefer the `Nice3point.Revit.Extensions` fluent wrappers over raw Revit calls (`revit-element-and-parameter-access`, `revit-element-collector`, `revit-utils-extensions`).
 - Prefer `Nice3point.Revit.Toolkit` context, options, and callbacks over recreating their contracts.
-- Keep a local extension small, deterministic, and explicit about cost; do not hide a collector, mutation, or file operation behind an innocuous name. Cover a non-trivial local extension with a Revit test.
+- Keep a local extension small, deterministic, and explicit about cost; do not hide a collector, mutation, or file operation behind an innocuous name.
+- Cover a non-trivial local extension with a Revit test.
 
 ## Validation
 

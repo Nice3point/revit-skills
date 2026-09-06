@@ -70,7 +70,7 @@ Writes require an open transaction.
 
 - [ ] `ElementId` is resolved with `ToElement<T>`, not `GetElement(id) as T`.
 - [ ] Parameters are found with `FindParameter`, and optional ones are null-checked.
-- [ ] Stored lengths are converted at the boundary with `ToMillimeters`/`FromMeters` etc.
+- [ ] Stored lengths are converted at the boundary with the unit conversion extensions.
 - [ ] Writes happen inside a transaction.
 
 ## Common Pitfalls

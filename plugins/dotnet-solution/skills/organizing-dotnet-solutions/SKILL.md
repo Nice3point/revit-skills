@@ -9,8 +9,8 @@ license: MIT
 
 # Organizing .NET Solutions
 
-The solution tree answers one question for a reader: what does this repository produce, and what does each project contribute to it.
-Group projects by that answer, never by the technology they are written in or the kind of file they hold.
+The solution tree shows what the repository produces and what each project contributes to it.
+Group projects by that contribution, never by the technology they are written in or the kind of file they hold.
 
 ## When to use
 
@@ -19,13 +19,16 @@ Group projects by that answer, never by the technology they are written in or th
 - Naming a solution folder, or judging whether a name still fits its contents.
 - Mapping solution configurations onto project configurations in `.slnx`.
 
-## Three tiers
+## Tiers
 
 Every project belongs to exactly one tier, and the top level of the tree shows which.
 
-1. **Deliverable** — something a user installs or runs. One folder per deliverable.
-2. **Shared** — what deliverables consume. One folder per subject.
-3. **Non-shipping** — tests, build automation, samples, and local-development sandboxes. Their own top-level folders.
+1. **Deliverable** — something a user installs or runs.
+   One folder per deliverable.
+2. **Shared** — what deliverables consume.
+   One folder per subject.
+3. **Non-shipping** — tests, build automation, samples, and local-development sandboxes.
+   Their own top-level folders.
 
 A project the user never receives never sits inside a deliverable's folder.
 A reader identifies the shipping surface from the top level alone.

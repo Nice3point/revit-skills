@@ -4,7 +4,8 @@
 
 `revit-addin-application` is not a standalone feature project.
 It owns the `.addin` manifest, Revit entry point, deployment settings, launch configuration, and ribbon registration.
-Keep it small: coordinate startup and call module functionality from its commands instead of putting feature business logic in the host.
+Keep it small: coordinate startup and call module functionality from its commands.
+Feature business logic belongs in a module.
 
 ```shell
 dotnet new revit-addin-application --name MyAddin --addin application --di container
@@ -18,7 +19,8 @@ dotnet new revit-addin-application --name MyAddin --addin application --di conta
 | `--di`     | `disabled` (default), `container`, `hosting`        | Adds `Host.cs` and the selected Microsoft dependency-injection implementation.                                              |
 | `--logger` | `false` (default) or `true`                         | Adds Serilog packages. With DI the host configures logging; without DI the application initializes a debug logger directly. |
 
-The host uses WPF unless it is a DB application, but it intentionally does not generate feature `Models`, `Views`, and `ViewModels` folders.
+The host uses WPF unless it is a DB application.
+The generated host carries no feature `Models`, `Views`, and `ViewModels` folders.
 Generate those in a module instead.
 
 ## Link modules

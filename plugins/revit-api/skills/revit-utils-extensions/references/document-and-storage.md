@@ -2,7 +2,7 @@
 
 Document version and integrity, managers, global and project parameters, parameter filtering, and extensible storage.
 Each `## Heading (RawClass)` names the raw Revit static or manager this domain replaces; call the extension on the receiver shown instead.
-A member missing from your build means the installed `Nice3point.Revit.Extensions` version predates it.
+A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
 ## Document version and integrity (Document getters)
 
