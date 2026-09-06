@@ -69,7 +69,6 @@ Write in a strict, technical style: no explanatory scaffolding, no didactic comm
 
 - Use `record` for DTOs, message contracts, and configuration-style data.
 - Use `init` properties if applicable.
-- Use the `[Serializable]` attribute for external or serializable DTOs.
 
 ## Error handling
 
@@ -113,7 +112,7 @@ Write in a strict, technical style: no explanatory scaffolding, no didactic comm
 - [ ] Modern language features are used: `var`, pattern matching, collection and switch expressions, and source generators over hand-written equivalents.
 - [ ] Nullability is explicit and annotations match real contracts.
 - [ ] Async paths flow `CancellationToken` and never block.
-- [ ] Shared data contracts are immutable `record` types; serializable DTOs carry `[Serializable]`.
+- [ ] Shared data contracts are immutable `record` types; a DTO carries `[PublicAPI]`.
 - [ ] Exceptions are specific types, arguments are guarded at entry, and rethrows use `throw;`.
 - [ ] Hot paths avoid needless allocations (`struct`, `Span`); owned disposables and event subscriptions are released on the owner's lifetime.
 - [ ] Comments state facts about the code as it stands; none narrates the edit or argues why.
