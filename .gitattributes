@@ -1,2 +1,2 @@
-# Keep repository text files consistent across platforms.
+#Line endings
 * text=auto eol=lf

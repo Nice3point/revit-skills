@@ -1,10 +1,13 @@
 <Project>
 
+    <!-- Global NuGet configuration -->
     <PropertyGroup>
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageFloatingVersionsEnabled>false</CentralPackageFloatingVersionsEnabled>
         <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     </PropertyGroup>
 
+    <!-- Core dependencies -->
     <ItemGroup>
         <PackageVersion Include="ModularPipelines" Version="3.2.8"/>
         <PackageVersion Include="ModularPipelines.Git" Version="3.2.8"/>
@@ -12,6 +15,7 @@
         <PackageVersion Include="Shouldly" Version="4.3.0"/>
     </ItemGroup>
 
+    <!-- Development dependencies -->
     <ItemGroup>
         <GlobalPackageReference Include="JetBrains.Annotations.Sources" Version="2026.2.0"/>
     </ItemGroup>

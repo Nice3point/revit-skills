@@ -3,8 +3,9 @@
     <!-- Global build configuration -->
     <PropertyGroup>
         <Nullable>enable</Nullable>
-        <ImplicitUsings>true</ImplicitUsings>
         <LangVersion>latest</LangVersion>
+        <ImplicitUsings>true</ImplicitUsings>
+        <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
 
     <!-- Global usings -->
