@@ -16,12 +16,12 @@ dotnet new revit-addin-module --name MyFeature --wpf false
 |---------|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `--wpf` | `true` (default) or `false` | With `true`, adds `UseWPF`, CommunityToolkit.Mvvm, and starter `Views` and `ViewModels`. With `false`, creates an empty code-oriented module. |
 
-Use a WPF module for a feature that owns a dialog or view model.
+Use a WPF module for a feature that defines a dialog or a view model.
 Use a non-WPF module for services, data access, helpers, or other feature logic without a view.
-Modules can reference lower-level modules, but keep the application as the composition root.
+Modules can reference lower-level modules, and the application remains the composition root.
 
 ## Validation
 
-- [ ] The module is referenced by the manifest-owning application.
+- [ ] The module is referenced by the application that contains the manifest.
 - [ ] The module does not contain an `.addin` manifest, deploy, or launch settings.
-- [ ] WPF is enabled only when the module owns a UI.
+- [ ] WPF is enabled only when the module defines a UI.

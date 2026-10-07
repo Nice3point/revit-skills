@@ -20,7 +20,7 @@ A filter is a view, never a second source of truth.
 }
 ```
 
-- `path` is relative to the filter file, and points at a `.slnx` or a `.sln`.
+- `path` is relative to the filter file, and references a `.slnx` or a `.sln`.
 - Each entry in `projects` is relative to the solution.
 - Build or restore a filter the same way as a solution: `dotnet build Contoso.Installer.slnf`.
 
@@ -44,6 +44,6 @@ A filter is a view, never a second source of truth.
 Skip the filter when it would name most of the solution.
 Every project rename requires an edit in every filter that names the project.
 
-Skip the filter for a set that lives in a submodule with its own solution.
+Skip the filter for a set that is located in a submodule with its own solution.
 Open that solution instead.
-The repository that defines the working set owns it.
+The repository that contains the working set defines its filter.

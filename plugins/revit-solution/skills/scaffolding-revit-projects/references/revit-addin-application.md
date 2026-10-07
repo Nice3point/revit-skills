@@ -3,8 +3,8 @@
 **Load when:** creating the host for a modular add-in that has one or more `revit-addin-module` projects.
 
 `revit-addin-application` is not a standalone feature project.
-It owns the `.addin` manifest, Revit entry point, deployment settings, launch configuration, and ribbon registration.
-Keep it small: coordinate startup and call module functionality from its commands.
+It contains the `.addin` manifest, Revit entry point, deployment settings, launch configuration, and ribbon registration.
+Limit it to startup coordination and to commands that call module functionality.
 Feature business logic belongs in a module, and the service configuration the host and its modules share belongs in a `revit-servicedefaults` project.
 
 ```shell
@@ -39,12 +39,12 @@ Apply the shared defaults in `Host.cs` before the host is built:
 builder.AddServiceDefaults();
 ```
 
-Keep `ExternalCommand` classes and `Application` ribbon registration in the host.
-The host reference ensures each module is built and shipped with the add-in.
+Place `ExternalCommand` classes and `Application` ribbon registration in the host.
+The host reference ensures each module is built and deployed with the add-in.
 
 ## Validation
 
-- [ ] The application owns the `.addin` manifest, deployment, and debug launch configuration.
+- [ ] The application contains the `.addin` manifest, deployment, and debug launch configuration.
 - [ ] Every shipping module is referenced by the application.
 - [ ] A service defaults project uses the same `--di` value as the application, and the host calls `AddServiceDefaults`.
 - [ ] Commands and ribbon registration remain in the application project.

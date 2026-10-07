@@ -1,7 +1,7 @@
 # Schema fields
 
 Field types, units, containers, and nested entities.
-A schema holds at most 256 fields, and a name runs 1 to 247 characters.
+A schema contains at most 256 fields, and a name is 1 to 247 characters long.
 `SchemaBuilder.AcceptableName(name)` checks a name built at runtime.
 
 ## Simple fields
@@ -14,12 +14,13 @@ builder.AddSimpleField("Verified", typeof(bool));
 builder.AddSimpleField("HostId", typeof(ElementId));
 ```
 
-An `ElementId` field tracks the model: deleting the referenced element resets the stored value to `ElementId.InvalidElementId`, and the value is not carried into elements produced by copy, paste, or an array.
-Store a `Guid` — `element.UniqueId` — when the reference must survive those operations.
+An `ElementId` field tracks the model.
+Deleting the referenced element resets the stored value to `ElementId.InvalidElementId`, and copy, paste, or an array does not copy the value to the new elements.
+Store a `Guid` — `element.UniqueId` — when the reference must remain valid after those operations.
 
 ## Fields with units
 
-`float`, `double`, `XYZ`, and `UV` values convert on the way in and out.
+`float`, `double`, `XYZ`, and `UV` values are converted on every read and write.
 `Finish` rejects a schema whose numeric field has no spec.
 
 ```csharp
@@ -63,7 +64,7 @@ The generic argument is inferred from the static type, and Revit rejects a `List
 
 Keys accept `bool`, `byte`, `short`, `int`, `long`, `string`, `Guid`, and `ElementId`.
 Floating-point and entity keys are unsupported.
-Floating-point comparison is unstable under round-off, and an entity carries no comparison operator.
+Floating-point comparison is unstable under round-off, and an entity defines no comparison operator.
 Values accept everything a simple field accepts.
 
 ```csharp
@@ -85,7 +86,7 @@ To key by a measured value, put the values in an array field and key by index.
 
 ## Nested entities
 
-A field of type `Entity` holds an entity of another schema, named by `SetSubSchemaGUID`.
+A field of type `Entity` contains an entity of another schema, named by `SetSubSchemaGUID`.
 Give the nested schema its own definition class, the same as any other schema.
 
 ```csharp
@@ -101,7 +102,7 @@ supplier.Set(supplierSchema.GetField(SupplierConfiguration.Name), "ACME");
 element.SaveEntity(schema, supplier, "Supplier");
 ```
 
-The nested schema carries its own access levels, and `field.SubEntityReadAccessGranted()` and `field.SubEntityWriteAccessGranted()` report whether the current add-in may reach through.
+The nested schema defines its own access levels, and `field.SubEntityReadAccessGranted()` and `field.SubEntityWriteAccessGranted()` report whether the current add-in may access the nested value.
 An invalid entity written into such a field deletes the nested value.
 
 ## Inspecting a schema at runtime
@@ -110,8 +111,8 @@ An invalid entity written into such a field deletes the nested value.
 - `schema.GetField(name)` — one field, or `null`;
 - `field.ValueType`, `field.KeyType`, `field.ContainerType` — the declared shape;
 - `field.SubSchema`, `field.SubSchemaGUID` — the nested schema;
-- `element.GetEntitySchemaGuids()` — every schema that stored data on this element, whatever vendor owns it;
+- `element.GetEntitySchemaGuids()` — every schema that stored data on this element, whatever vendor defines it;
 - `Schema.ListSchemas()` — every schema registered in the session.
 
-`Schema`, `Field`, and `Entity` expose more of their definition than the members above; reach for whichever one the task needs.
-Use them when reading data whose schema another add-in owns, or when writing a diagnostic that dumps what a document carries.
+`Schema`, `Field`, and `Entity` expose more of their definition than the members above.
+Use them when reading data whose schema another add-in defines, or when writing a diagnostic that lists the stored data of a document.

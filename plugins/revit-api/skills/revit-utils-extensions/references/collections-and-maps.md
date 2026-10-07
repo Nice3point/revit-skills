@@ -1,12 +1,13 @@
 # Collections and maps
 
-Enumerating the Revit API's native arrays, sets, and maps with the element type carried into the sequence.
-Each `## Heading (RawClass)` names the raw member this domain replaces; call the extension on the collection instead.
+Enumerating the Revit API's native arrays, sets, and maps as sequences typed by their element type.
+Each `## Heading (RawClass)` names the raw member this domain replaces.
+Call the extension on the collection instead.
 A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
 ## Arrays and sets (Cast&lt;T&gt;)
 
-`EnumerateValues()` is available on every Revit array and set holding elements of a single type.
+`EnumerateValues()` is available on every Revit array and set that contains elements of a single type.
 
 ```csharp
 foreach (var face in solid.Faces.EnumerateValues())
@@ -17,7 +18,7 @@ var areas = solid.Faces.EnumerateValues().Select(face => face.Area);
 var names = categorySet.EnumerateValues().Select(category => category.Name);
 ```
 
-A Revit collection stops its contract at the non-generic `IEnumerable`.
+A Revit collection implements only the non-generic `IEnumerable`.
 A `foreach` over it yields `object`, and every LINQ query opens with a cast naming the element type.
 
 ```csharp
@@ -48,8 +49,8 @@ if (element.ParametersMap.TryGetValue("Comments", out var comments))
 }
 ```
 
-A Revit map keeps the key of the current entry on its iterator and the value on `Current`, and a `foreach` reaches only the value.
-Reading the keys through the raw API takes a hand-written loop that holds a native handle until it is disposed.
+A Revit map exposes the key of the current entry on its iterator and the value on `Current`, and a `foreach` returns only the value.
+Reading the keys through the raw API requires a hand-written loop that retains a native handle until it is disposed.
 
 ```csharp
 var iterator = document.ParameterBindings.ForwardIterator(); // raw
@@ -64,7 +65,9 @@ Each enumeration opens its own native iterator and disposes it when the enumerat
 
 ## Performance
 
-These members are not wrappers over `Cast<T>()`; each one spends half the interop calls of the raw equivalent.
+These members are not wrappers over `Cast<T>()`.
+Each one makes half the interop calls of the raw equivalent.
 
 Measured on Revit 2027: arrays 10% faster, sets 5% faster, map keys 30% faster, map values 23% faster, and both map enumerations allocate 35% less.
-Take a key or a value with `EnumerateKeys`/`EnumerateValues`; `EnumerateEntries` reads both sides and costs the pair.
+Read a key or a value with `EnumerateKeys`/`EnumerateValues`.
+`EnumerateEntries` reads both the key and the value, and costs both reads.

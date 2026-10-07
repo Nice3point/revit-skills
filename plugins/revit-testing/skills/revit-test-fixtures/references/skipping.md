@@ -2,7 +2,7 @@
 
 **Load when:** a sample set, folder, or Revit localization may be absent on the running machine, and the affected tests must skip, not fail.
 
-A skipped test carries the missing precondition as its reason.
+A skipped test reports the missing precondition as its skip reason.
 A failed test on the same condition is indistinguishable from a real regression.
 Pick the narrowest guard that fits.
 Requires the `Nice3point.TUnit.Revit` package.
@@ -23,7 +23,7 @@ public string[] DocumentPaths { get; } = Directory.Exists(samplesPath)
 ## Runtime guard in a hook
 
 When the precondition is only known at run time, call `Skip.Test(...)` from a `[Before(Test)]` hook.
-Every test in the class is skipped when the condition holds.
+Every test in the class is skipped when the condition is true.
 
 ```csharp
 [Before(Test)]
@@ -36,11 +36,11 @@ public void SkipWhenNotEnglish()
 }
 ```
 
-`Skip.Test(...)` also works inside a test body when only one case is conditional — for example, a sample that carries no matching elements.
+`Skip.Test(...)` also works inside a test body when only one case is conditional — for example, a sample that contains no matching elements.
 
 ## Attribute-driven skip
 
-When the same condition guards many tests, encode it once as a `SkipAttribute` subclass and tag the tests.
+When the same condition guards many tests, encode it once as a `SkipAttribute` subclass and mark the tests with it.
 The condition is read from the injected Revit environment.
 The check needs no running document.
 
@@ -101,5 +101,5 @@ public sealed class LocalizationSkipConfiguration : RevitApiTest
 - Prefer the empty-data-source approach for missing files; reserve `Skip.Test` for conditions discovered at run time.
 - `RevitEnvironment.Language` reflects the language the injector started Revit with; an empty value means the default (English).
 - A skip is not a pass.
-  Keep the assertion after the guard.
+  Place the assertion after the guard.
   A test that runs past the guard verifies behavior.

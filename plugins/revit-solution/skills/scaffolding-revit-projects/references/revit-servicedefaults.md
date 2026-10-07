@@ -3,7 +3,7 @@
 **Load when:** a modular add-in needs one place for the service registrations its application and modules share.
 
 `revit-servicedefaults` creates a class library on the model of the .NET Aspire service defaults project.
-It holds every service registration the application and its modules share, and one `AddServiceDefaults` method applies them.
+It contains every service registration the application and its modules share, and one `AddServiceDefaults` method applies them.
 The template provides logging on Microsoft.Extensions.Logging and the log of unhandled `AppDomain` exceptions.
 Serialization, HTTP clients, options, and every other shared registration are added to the same project.
 

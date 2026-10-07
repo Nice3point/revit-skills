@@ -28,7 +28,7 @@ The generated output is the source of truth for the selected template version an
 ### Step 1: Generate a target reference
 
 Install a new templates version.
-Create the same template type in an empty temporary directory, with the name and options the current project carries.
+Create the same template type in an empty temporary directory, with the name and options the current project uses.
 
 ```shell
 dotnet new install Nice3point.Revit.Templates
@@ -49,12 +49,12 @@ git diff --no-index -- <current-directory> <reference-directory>
 
 Treat every difference as a review item.
 Take template-generated infrastructure and configuration changes that the current project needs.
-Keep project identity, business logic, and deliberate product-specific customization unless the target template requires a compatible rewrite.
+Preserve project identity, business logic, and deliberate product-specific customization unless the target template requires a compatible rewrite.
 
 ### Step 3: Apply the reviewed changes
 
 Update each project only from the matching generated template type.
-Keep `.addin`, GUIDs, deployment logic and dynamic-loading configuration in the original project.
+Preserve the `.addin` manifest, GUIDs, deployment logic, and dynamic-loading configuration in the original project.
 
 ### Step 4: Verify
 
@@ -75,5 +75,5 @@ Run every generated pipeline path selected by the project: tests, installer, bun
 |-----------------------------------------------------------------|------------------------------------------------------------------------|
 | Generating the latest template when the target version is older | Install and generate the exact target version before comparing.        |
 | Comparing different template options                            | Match every current option for a meaningful diff.                      |
-| Copying a generated tree over the existing project              | Transfer reviewed changes selectively and preserve project-owned code. |
+| Copying a generated tree over the existing project              | Transfer reviewed changes selectively and preserve product code.       |
 | Applying an application configuration to a module               | Compare each project with its own template type.                       |

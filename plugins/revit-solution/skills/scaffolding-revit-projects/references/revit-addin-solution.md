@@ -25,7 +25,7 @@ The `build` project uses ModularPipelines to compile each declared release confi
 ## Configure the installer
 
 The build writes a manifest with the published add-in of every Revit version, and the `installer` project builds a per-user and a per-machine MSI package from it.
-Set a new GUID to `UpgradeCode` in the `Installer` section of `build/appsettings.json`, and keep it for every release of the add-in:
+Set a new GUID to `UpgradeCode` in the `Installer` section of `build/appsettings.json`, and reuse it for every release of the add-in:
 
 ```json
 "Installer": {
@@ -52,6 +52,6 @@ dotnet run
 
 - [ ] Add-in projects are under `source`.
 - [ ] Pipeline, installer, bundle, and tests match the selected options.
-- [ ] With the installer, `UpgradeCode` holds a GUID unique to the add-in.
+- [ ] With the installer, `UpgradeCode` contains a GUID unique to the add-in.
 - [ ] Git has an initial commit before the ModularPipelines build runs.
 - [ ] The build succeeds for every declared `Release.RNN` configuration.

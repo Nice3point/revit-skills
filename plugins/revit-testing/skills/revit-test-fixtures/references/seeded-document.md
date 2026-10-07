@@ -3,14 +3,14 @@
 **Load when:** a test needs a fresh, controlled model whose exact contents the test authors in code.
 
 Build the model in memory per test.
-Every test starts from a known state, and nothing leaks between tests.
+Every test starts from a known state, and no state is shared between tests.
 Requires the `Nice3point.TUnit.Revit` package.
 
 ## Fresh document per test
 
 Create the document in `[Before(Test)]`, seed it inside a transaction, and close it in `[After(Test)]`.
 Store the seeded elements the assertions run against.
-The test body then states intent, not rediscovery.
+The test body uses the stored elements and does not query the model for them again.
 
 ```csharp
 public sealed class WallModelTests : RevitApiTest
@@ -83,7 +83,12 @@ public sealed class WallModelTests : RevitApiTest
 }
 ```
 
-For read-only tests, use Class-level hook, for better performance:
+## Read-only tests share one document
+
+When every test only reads the model, seed it once in `[Before(Class)]` and close it in `[After(Class)]`.
+One shared document reduces the run time.
+The shared document is safe only while no test modifies it.
+Switch back to `[Before(Test)]` the moment a test writes.
 
 ```csharp
     [Before(Class)]
@@ -93,17 +98,10 @@ For read-only tests, use Class-level hook, for better performance:
     }
 ```
 
-## Read-only tests share one document
-
-When every test only reads the model, seed it once in `[Before(Class)]` and close it in `[After(Class)]`.
-This is faster.
-It stays safe only while no test mutates shared state.
-Switch back to `[Before(Test)]` the moment a test writes.
-
 ## Notes
 
 - Each test runs on a fresh instance of the class.
-  The `_document` and seeded-element fields never leak between tests.
+  The `_document` and seeded-element fields are never shared between tests.
 - `Application.NewProjectDocument(UnitSystem.Metric)` returns an unsaved in-memory document; `Close(false)` discards it without a save prompt.
 - Field initializers run at construction, before Revit is injected.
   Build seeded state inside the hook, not in a field initializer.

@@ -9,7 +9,7 @@ license: MIT
 
 # Revit Element and Parameter Access
 
-The `Nice3point.Revit.Extensions` accessors wrap the raw element and parameter API — `document.GetElement(id) as T`, raw different parameter getters, manual `StorageType` switching, and `UnitUtils` — into one fluent, nullable chain.
+The `Nice3point.Revit.Extensions` accessors wrap the raw element and parameter API — `document.GetElement(id) as T`, the different raw parameter getters, manual `StorageType` switching, and `UnitUtils` — into one fluent, nullable chain.
 `FindParameter` also falls back to the element type when the instance lacks the parameter.
 
 ## When to use
@@ -51,7 +51,8 @@ Level level = wall.FindParameter(BuiltInParameter.WALL_BASE_CONSTRAINT).AsElemen
 
 ### Step 4: Convert internal units at the boundary
 
-Revit stores lengths in feet; convert when values leave or enter the model.
+Revit stores lengths in feet.
+Convert a value when it is read from or written to the model.
 
 ```csharp
 double heightMm = parameter.AsDouble().ToMillimeters();
@@ -78,6 +79,6 @@ Writes require an open transaction.
 | Pitfall                                                         | Correct approach                                             |
 |-----------------------------------------------------------------|--------------------------------------------------------------|
 | `document.GetElement(id) as Wall`                               | `id.ToElement<Wall>(document)`.                              |
-| Choosing among `get_Parameter`/`LookupParameter`/`GetParameter` | `FindParameter(...)` handles instance and type.              |
+| Choosing among `get_Parameter`/`LookupParameter`/`GetParameter` | `FindParameter(...)` searches the instance and its type.     |
 | Using a raw feet value as millimeters                           | Convert with `.ToMillimeters()` / `.FromMeters()`.           |
 | `ToElement`/`FindParameter` not found                           | The `Nice3point.Revit.Extensions` package is not referenced. |

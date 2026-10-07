@@ -10,12 +10,13 @@ license: MIT
 # Revit Ribbon
 
 The `Nice3point.Revit.Extensions` ribbon API wraps the verbose, stringly-typed raw API (`RibbonPanel.AddItem(new PushButtonData(...))`, manual `BitmapImage` URIs, manual tab creation) into a fluent, generic, theme-aware chain.
-`CreatePanel` creates the tab if needed and returns an existing panel by name; calling it repeatedly is safe.
+`CreatePanel` creates the tab when it does not exist and returns an existing panel of the same name.
+Repeated calls are safe.
 
 ## When to use
 
 - Building an add-in's ribbon in `ExternalApplication.OnStartup`.
-- Reviewing ribbon code that constructs `PushButtonData` and `BitmapImage` by hand.
+- Reviewing ribbon code that constructs `PushButtonData` and `BitmapImage` manually.
 
 ## When not to use
 
@@ -40,7 +41,7 @@ panel.AddPushButton<AnalyzeCommand>("Analyze")
     .SetLargeImage("/MyAddin;component/Resources/Icons/Analyze32.png");
 ```
 
-`AddPushButton<TCommand>` wires the command by type.
+`AddPushButton<TCommand>` binds the button to the command type.
 Group related commands under `AddPullDownButton("…")` or `AddSplitButton("…")` and add their children with the pulldown's own `AddPushButton<TCommand>`; `AddRadioButtonGroup`, `AddComboBox`, and `AddTextBox` add the other input controls.
 
 ```csharp
@@ -51,8 +52,8 @@ pulldown.AddPushButton<ExportCommand>("Export");
 
 ### Step 3: Stack small items vertically
 
-`AddStackPanel` packs one to three small items into a vertical stack (overflow flows into a new column).
-It carries its own `AddPushButton`/`AddPullDownButton`/`AddSplitButton`/`AddComboBox`/`AddTextBox`, and `AddLabel` for a caption.
+`AddStackPanel` arranges one to three small items in a vertical stack, and additional items start a new column.
+The stack panel exposes its own `AddPushButton`/`AddPullDownButton`/`AddSplitButton`/`AddComboBox`/`AddTextBox`, and `AddLabel` for a caption.
 
 ```csharp
 var stack = panel.AddStackPanel();
@@ -65,8 +66,8 @@ On the stack panel the pulldown and split overloads take `(buttonText, internalN
 
 ### Step 4: Set icons, tooltips, availability, and shortcuts
 
-`SetImage`/`SetLargeImage` take a pack URI; when the file path contains `light`/`dark` the icon auto-swaps for the Revit theme (2024+).
-Add `SetToolTip`, `SetLongDescription` (which accepts `<p>` paragraphs), and `SetAvailabilityController<T>`, which greys the button out when its command cannot run.
+`SetImage`/`SetLargeImage` take a pack URI; when the file path contains `light`/`dark`, the icon switches with the Revit theme (2024+).
+Add `SetToolTip`, `SetLongDescription` (which accepts `<p>` paragraphs), and `SetAvailabilityController<T>`, which disables the button when its command is unavailable.
 Bind keyboard shortcuts with `AddShortcuts` (or `TryAddShortcuts`, which skips if other buttons use this shortcut); both support a `params` enumeration.
 
 ```csharp
@@ -87,7 +88,7 @@ Launch Revit and confirm the panel and buttons appear on the tab, icons render i
 
 ## Validation
 
-- [ ] Panels come from `CreatePanel`, not hand-built tabs.
+- [ ] Panels come from `CreatePanel`, not manually created tabs.
 - [ ] Buttons use `AddPushButton<TCommand>`, not raw `PushButtonData`.
 - [ ] Icons are set with `SetImage`/`SetLargeImage`.
 - [ ] The ribbon is built in `OnStartup`.

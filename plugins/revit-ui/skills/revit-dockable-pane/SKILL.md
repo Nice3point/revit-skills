@@ -63,8 +63,8 @@ Confirm the pane appears under the Revit view tab and docks in the configured po
 
 ## Common Pitfalls
 
-| Pitfall                                      | Correct approach                                                |
-|----------------------------------------------|-----------------------------------------------------------------|
-| Implementing `IDockablePaneProvider` by hand | Use `DockablePaneProvider.Register(...).SetConfiguration(...)`. |
-| A new pane id (`Guid`) generated per run     | Use a stable, persisted pane id.                                |
-| `DockablePaneProvider` not found             | The `Nice3point.Revit.Toolkit` package is not referenced.       |
+| Pitfall                                       | Correct approach                                                |
+|-----------------------------------------------|-----------------------------------------------------------------|
+| Implementing `IDockablePaneProvider` manually | Use `DockablePaneProvider.Register(...).SetConfiguration(...)`. |
+| A new pane id (`Guid`) generated per run      | Use a stable, persisted pane id.                                |
+| `DockablePaneProvider` not found              | The `Nice3point.Revit.Toolkit` package is not referenced.       |

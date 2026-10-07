@@ -1,11 +1,12 @@
 # Units, labels, and ForgeTypeId
 
 Unit conversion and formatting, user-visible labels, and ForgeTypeId inspection.
-Each `## Heading (RawClass)` names the raw Revit static this domain replaces; call the extension on the receiver shown instead.
+Each `## Heading (RawClass)` names the raw Revit static this domain replaces.
+Call the extension on the receiver shown instead.
 A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
 Revit stores lengths in feet and angles in radians.
-Convert at the boundary where a value enters or leaves the model.
+Convert a value when it is read from or written to the model.
 
 ## Unit conversion (UnitUtils)
 

@@ -3,14 +3,14 @@ name: revit-element-collector
 description: >
   Query the Revit model with the Nice3point.Revit.Extensions fluent FilteredElementCollector wrappers; filter with Revit's parameter filters, not by loading elements and filtering with LINQ.
   USE FOR: writing or reviewing element queries that filter by class, category, or parameter value and return the first match, a count, or the full set.
-  DO NOT USE FOR: reading or setting parameters on an element already in hand (use revit-element-and-parameter-access).
+  DO NOT USE FOR: reading or setting parameters on an element already retrieved (use revit-element-and-parameter-access).
 license: MIT
 ---
 
 # Revit Element Collector
 
 Query the model through the fluent `FilteredElementCollector` wrappers in `Nice3point.Revit.Extensions`.
-They wrap the raw Revit collector API into a single readable chain and keep filtering inside Revit's native database engine.
+They wrap the raw Revit collector API into a single readable chain and run the filtering inside Revit's native database engine.
 The database engine evaluates the filters before elements expand into memory.
 Filtering the collector output with LINQ materializes every element first.
 
@@ -22,13 +22,14 @@ Filtering the collector output with LINQ materializes every element first.
 
 ## When not to use
 
-- Reading or setting parameters on an element already in hand — use `revit-element-and-parameter-access`.
+- Reading or setting parameters on an element already retrieved — use `revit-element-and-parameter-access`.
 - Applying a specialized `ElementFilter` the extensions do not expose — fall back to a raw `FilteredElementCollector` with that filter.
 
 ## Workflow
 
 Always prefer the built-in methods of `FilteredElementCollector` extensions over using LINQ.
-LINQ materializes and marshals every element into the .NET process's memory and does not filter at the database level; use it only if the built-in methods are insufficient for filtering.
+LINQ materializes and marshals every element into the .NET process's memory and does not filter at the database level.
+Use LINQ only when the built-in methods are insufficient for filtering.
 
 ### Step 1: Open a collector from the document
 
@@ -53,7 +54,7 @@ var openings = document.CollectElements()
     .ToElements();
 
 var annotated = document.CollectElements()
-    .WithExtensibleStorage(schemaGuid) // elements carrying add-in data
+    .WithExtensibleStorage(schemaGuid) // elements that store add-in data
     .ToElements();
 ```
 
@@ -80,7 +81,8 @@ Comparisons include `Equals`, `IsGreaterThan`/`IsGreaterThanOrEqualTo`, `IsLessT
 
 ### Step 4: Terminate with the fast native path
 
-Use the extension terminators, not LINQ; they call Revit's native fast implementations (`Count()` uses the fast `GetElementCount()` implementation).
+Use the extension terminators, not LINQ.
+The terminators call Revit's native fast implementations, and `Count()` calls `GetElementCount()`.
 
 ```csharp
 var firstRoom = document.CollectElements().OfClass<SpatialElement>().FirstOrDefault();

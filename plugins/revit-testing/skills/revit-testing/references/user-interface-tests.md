@@ -6,7 +6,7 @@ The base class applies its executor to every test body and hook of the class, an
 
 ## Reference the user interface assembly
 
-`Nice3point.TUnit.Revit` does not pass `RevitAPIUI` on to the test project.
+`Nice3point.TUnit.Revit` does not reference `RevitAPIUI` transitively.
 The test project references it next to `RevitAPI`:
 
 ```xml

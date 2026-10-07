@@ -1,10 +1,12 @@
 # Disciplines and interoperability
 
 MEP, structure, and analytical helpers, with model paths, worksharing, coordination models, export, external references, and DirectContext3D.
-Each `## Heading (RawClass)` names the raw Revit static this domain replaces; call the extension on the receiver shown instead.
+Each `## Heading (RawClass)` names the raw Revit static this domain replaces.
+Call the extension on the receiver shown instead.
 A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
-Get/set pairs are shown on one row; call the `Get…` or `Set…` member the task needs.
+Get/set pairs are shown on one row.
+Call the `Get…` or `Set…` member the task needs.
 Many element members also have an `ElementId` overload taking `document`.
 
 ## MEP — Pipe (PlumbingUtils)

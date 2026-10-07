@@ -9,7 +9,8 @@ license: MIT
 
 # Revit SDK Project Configuration
 
-The `Nice3point.Revit.Sdk` MSBuild SDK derives Revit-project defaults from the active build configuration; the project file carries no hand-written per-configuration settings.
+The `Nice3point.Revit.Sdk` MSBuild SDK derives Revit-project defaults from the active build configuration.
+The project file declares no per-configuration settings by hand.
 
 ## When to use
 
@@ -64,7 +65,7 @@ Restore and build; confirm the target framework and the emitted `REVIT####` symb
 ## Validation
 
 - [ ] The project sets `Sdk="Nice3point.Revit.Sdk/…"`.
-- [ ] The target framework, language version, and usings are left to the SDK, not hand-written.
+- [ ] The target framework, language version, and usings come from the SDK and are not declared in the project.
 - [ ] Implicit usings are adjusted through SDK properties, not a manual using list.
 
 ## Common Pitfalls
@@ -74,5 +75,5 @@ Restore and build; confirm the target framework and the emitted `REVIT####` symb
 | Hand-writing `<TargetFramework>` per version           | Let the SDK derive it from `RevitVersion`.                                       |
 | Configuration name with no version number              | Add the year (`Release.R27`); the SDK errors when `RevitVersion` cannot resolve. |
 | Re-declaring `Nullable`/`LangVersion`/`ImplicitUsings` | The SDK already sets them.                                                       |
-| Removing `AppendTargetFrameworkToOutputPath=false`     | Keep it; add-in publishing depends on the flat output path.                      |
+| Removing `AppendTargetFrameworkToOutputPath=false`     | Retain it. Add-in publishing requires the flat output path.                      |
 | SDK not found on restore                               | Pin an available `Nice3point.Revit.Sdk` version in the `Sdk` attribute.          |

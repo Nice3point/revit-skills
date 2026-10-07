@@ -10,10 +10,11 @@ license: MIT
 # Revit Testing
 
 Every Revit API call must run on the single thread that initialized Revit.
-`Nice3point.TUnit.Revit` marshals each test and hook onto that thread; the test body reads like ordinary API code.
-It builds on TUnit and Microsoft.Testing.Platform; running the tests needs a matching licensed Revit installation.
+`Nice3point.TUnit.Revit` runs each test and hook on that thread, and the test body calls the Revit API without dispatch code.
+The package is based on TUnit and Microsoft.Testing.Platform.
+A test run requires a matching licensed Revit installation.
 
-A project scaffolded from the `revit-tunit` template already carries the project structure.
+A project scaffolded from the `revit-tunit` template already contains the project structure.
 
 ## When to use
 
@@ -25,26 +26,27 @@ A project scaffolded from the `revit-tunit` template already carries the project
 
 - Providing the document, service, or parameterized cases a test consumes — use `revit-test-fixtures`.
 - Scaffolding the test project itself — create it from the `revit-tunit` template.
-- The code under test never touches the Revit API — write a plain TUnit test with no Revit base class and no executor.
+- The code under test never calls the Revit API — write a plain TUnit test with no Revit base class and no executor.
 
 ## Workflow
 
 ### Step 1: Choose the base class
 
-| Code under test                                                                | Base class       | Exposes         |
-|--------------------------------------------------------------------------------|------------------|-----------------|
-| Calls `RevitAPI` only: documents, elements, geometry, transactions, etc        | `RevitApiTest`   | `Application`   |
-| Needs the Revit user interface: `UIApplication`, `UIDocument`, the ribbon, etc | `RevitApiUiTest` | `UiApplication` |
+| Code under test                                                                      | Base class       | Exposes         |
+|--------------------------------------------------------------------------------------|------------------|-----------------|
+| Calls `RevitAPI` only: documents, elements, geometry, transactions, and so on        | `RevitApiTest`   | `Application`   |
+| Needs the Revit user interface: `UIApplication`, `UIDocument`, the ribbon, and so on | `RevitApiUiTest` | `UiApplication` |
 
 `RevitApiTest` is the recommended base class: it runs without the Revit user interface and has better performance and stability.
-`RevitApiUiTest` starts Revit with its user interface and serves only the code that needs it.
+`RevitApiUiTest` starts Revit with its user interface and applies only to code that requires it.
 
 **Load when:** the test derives from `RevitApiUiTest` or references a `RevitAPIUI` type — read [references/user-interface-tests.md](references/user-interface-tests.md).
 
 ### Step 2: Write a test on the Revit thread
 
 The base class exposes the shared `Application` or `UiApplication`.
-TUnit constructs a new instance of the test class for every test; instance fields and properties are always isolated between tests — use them freely for per-test state.
+TUnit constructs a new instance of the test class for every test.
+Instance fields and properties are isolated between tests and store per-test state.
 Structure the body as distinct Arrange, Act, and Assert blocks, and assert the observable result, not framework plumbing.
 
 ```csharp
@@ -70,7 +72,7 @@ public sealed class BoundingBoxExtensionsTests : RevitApiTest
 }
 ```
 
-`Assert.Multiple()` groups related checks; one failure does not hide the rest.
+`Assert.Multiple()` groups related checks and reports every failure in the group.
 TUnit assertions are awaited: `IsEqualTo(...).Within(tol)` for doubles, `IsTrue()`/`IsNotEmpty()` for booleans and emptiness checks, `.All().Satisfy(...)` for collections, and `.Throws<TException>()` for failures.
 
 A UI test reads the user interface through `UiApplication` in the same shape:
@@ -96,7 +98,7 @@ public sealed class SelectionTests : RevitApiUiTest
 }
 ```
 
-### Step 3: Keep every Revit-touching member on the Revit thread
+### Step 3: Run every Revit API member on the Revit thread
 
 `RevitApiTest` and `RevitApiUiTest` apply their executor to every test and hook of the class; a test or a `[Before]`/`[After]` hook needs no executor attribute.
 
@@ -113,13 +115,14 @@ private ElementId LevelId => field ??= new ElementId(BuiltInCategory.OST_Levels)
 
 Calling the Revit API during test discovery causes an InvalidOperationException: "Attempted to write protected memory."
 Discovery happens before Revit is injected and off its thread: TUnit constructs the test class, evaluates every data source, and resolves every dependency-injection service at discovery.
-No constructor, field initializer, data-source member, or injected service may touch the Revit API at construction — defer that work to the test body or a `[Before]` hook.
+No constructor, field initializer, data-source member, or injected service may call the Revit API at construction.
+Move that work into the test body or a `[Before]` hook.
 `Application` and `UiApplication` throw an `InvalidOperationException` outside a test body or a hook.
 
 ### Step 4: Parameterize and supply fixtures
 
-Feed a small fixed set of primitive cases inline with `[Arguments]`; the test body builds the Revit objects.
-For a seeded model, an opened sample file, an injected service, or the same test across many file kinds, use `revit-test-fixtures` — it routes each situation to the right fixture and data source.
+Pass a small fixed set of primitive cases inline with `[Arguments]`, and build the Revit objects in the test body.
+For a seeded model, an opened sample file, an injected service, or the same test across many file kinds, use `revit-test-fixtures`; it maps each situation to a fixture and a data source.
 A test fixture is a basic TUnit feature, and the Revit thread is the only constraint Revit adds to it.
 
 ```csharp
@@ -139,11 +142,12 @@ public async Task NewXyz_Distance_MatchesLength(double x, double y, double z)
 }
 ```
 
-A data source runs during TUnit discovery, **off the Revit thread**; it yields plain inputs (numbers, strings, file paths) and never a Revit object.
+A data source runs during TUnit discovery, **off the Revit thread**.
+It returns plain inputs (numbers, strings, file paths) and never a Revit object.
 
 ### Step 5: Run against a matching Revit install
 
-TUnit runs on Microsoft.Testing.Platform, and the configuration carries the target Revit version.
+TUnit runs on Microsoft.Testing.Platform, and the build configuration selects the target Revit version.
 
 ```shell
 dotnet test -c Release.RNN
@@ -157,7 +161,7 @@ A run with UI tests starts a separate Revit process with its user interface.
 ## Validation
 
 - [ ] Tests inherit `RevitApiTest`, or `RevitApiUiTest` where the code under test needs the Revit user interface, and assert observable model behavior, not framework plumbing.
-- [ ] Data sources and inline arguments carry only primitives; Revit objects are built in the test body.
+- [ ] Data sources and inline arguments pass only primitives; Revit objects are built in the test body.
 - [ ] Only `RevitApiUiTest` classes reference `RevitAPIUI` types, and the test project references `Nice3point.Revit.Api.RevitAPIUI`.
 - [ ] A UI test removes the ribbon panels and other user interface changes it adds.
 - [ ] The selected `Release.RNN` configuration matches the installed Revit runtime.
@@ -171,7 +175,7 @@ A run with UI tests starts a separate Revit process with its user interface.
 | A field initializer that loads a Revit API type                  | Field initializers run before Revit is injected; move the value into a lazy `field ??= …` property.                 |
 | A `RevitApiTest` references a `RevitAPIUI` type                  | Derive the class from `RevitApiUiTest`; `RevitApiTest` runs without the Revit user interface.                       |
 | `UiApplication` read in a constructor, a field, or a data source | Read it in the test body or a hook; outside them it throws `InvalidOperationException`.                             |
-| A UI test leaves a ribbon panel or another UI change behind      | Remove it in a `finally` block or an `[After(Test)]` hook; every UI test of the session shares one Revit interface. |
+| A UI test does not remove a ribbon panel or another UI change    | Remove it in a `finally` block or an `[After(Test)]` hook; every UI test of the session shares one Revit interface. |
 | A timed-out UI test blocks the next one                          | Accept the `CancellationToken` of the test and pass it to long-running work.                                        |
 | Asserting framework plumbing                                     | Assert the resulting model, file, or value.                                                                         |
 | `RevitApiTest` or `RevitApiUiTest` not found                     | The `Nice3point.TUnit.Revit` package is not referenced.                                                             |

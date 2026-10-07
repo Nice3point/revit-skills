@@ -26,8 +26,8 @@ Use it only for a known failure the operation can safely handle — never to mak
 
 ### Step 1: Bound the suppression scope
 
-Wrap only the operation that owns the expected failure; leave unrelated work outside the scope.
-The scope hooks the application-level `FailuresProcessing` event; it covers both a transaction commit and a document open.
+Wrap only the operation that raises the expected failure, and run unrelated work outside the scope.
+The scope subscribes to the application-level `FailuresProcessing` event, and it applies to both a transaction commit and a document open.
 
 ```csharp
 using (RevitApiContext.BeginFailureSuppressionScope())
@@ -40,7 +40,8 @@ using (RevitApiContext.BeginFailureSuppressionScope())
 ```
 
 Opening a file can raise the same recoverable warnings.
-In an unattended or headless host (for example Autodesk Design Automation) no user can dismiss the warning; open the document inside the scope:
+In an unattended or headless host, for example Autodesk Design Automation, no user can dismiss the warning.
+Open the document inside the scope:
 
 ```csharp
 using (RevitApiContext.BeginFailureSuppressionScope())
@@ -56,7 +57,7 @@ Pass `resolveErrors: false` when the caller must observe unresolved errors, not 
 
 ### Step 3: Verify
 
-Assert the resulting document or artifact is valid, and confirm an unrelated failure still reaches the normal error boundary.
+Assert the resulting document or artifact is valid, and confirm the normal error boundary still receives an unrelated failure.
 
 ## Validation
 

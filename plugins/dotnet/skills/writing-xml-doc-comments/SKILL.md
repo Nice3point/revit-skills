@@ -3,15 +3,16 @@ name: writing-xml-doc-comments
 description: >
     Write or review C# XML documentation comments on public API surface.
     USE FOR: adding or reviewing XML documentation on public types, members, parameters, type parameters, and return values.
-    DO NOT USE FOR: prose, markdown, README, or wiki text (use technical-writing), or ordinary code comments (use csharp-style).
+    DO NOT USE FOR: ordinary code comments (use csharp-style), or prose, markdown, README, and wiki text; those follow the writing standard.
 license: MIT
 ---
 
 # Writing XML Doc Comments
 
-Write reference documentation held to an enterprise production standard, not tutorial or learning material.
+Write reference documentation to an enterprise production standard, not tutorial or learning material.
 Document the contract a caller depends on, not the mechanics a reader can see in the signature.
-The conventions match the .NET libraries.
+The conventions match Microsoft's own guidance for writing .NET API reference comments: complete, correct, contextual, and polished.
+Every tag opens with a third-person singular verb, has no personal pronoun, and states a contract instead of a mechanism.
 
 ## When to use
 
@@ -22,14 +23,16 @@ The conventions match the .NET libraries.
 ## Rules
 
 - Give every public and protected type, member, parameter, type parameter, and return value its tag.
-- Put the text on its own line between the opening and closing tag, indented four spaces past the `///` marker; keep the one-line form for a single short clause.
-- Indent a nested tag one level further, and leave a `<code>` block at the indentation its rendered output needs.
-- Write one sentence per tag and end it with a period; a second sentence belongs in `<remarks>`.
-- Ignore the line length; the text of a tag stays on one line however long it runs, and no line is wrapped by hand.
+- Put the text on its own line between the opening and closing tag, indented four spaces past the `///` marker; use the one-line form for a single short clause.
+- Indent a nested tag one level further, and indent a `<code>` block to the level its rendered output needs.
+- Write one sentence per tag and end it with a period; move a second sentence to `<remarks>`.
+- Ignore the line length; the text of a tag occupies one line however long it runs, and no line is wrapped by hand.
 - State the contract; never restate the name or the parameter list in words.
 - Describe observable behavior, not the current implementation.
-- Describe the member as it stands, not the change that produced it; the caller reading the doc never saw the previous version.
+- Describe the member as it stands, not the change that produced it.
+  The caller reading the documentation has no previous version to compare against.
 - State facts in the present indicative; never argue why.
+- Never use a personal pronoun (`you`, `we`, `I`); state the fact about the member instead.
 - Cut every purpose, result, cause, or comparison clause (`so`, `that makes`, `which makes`, `because`, `rather than`); if the clause states a fact the reader needs, make it its own sentence.
 
 ## Tag order
@@ -52,7 +55,7 @@ The skeleton is identical for every declaration; the opening phrase is what chan
 | Declaration                        | Summary opens with                                             | Example                                                                                 |
 |------------------------------------|----------------------------------------------------------------|-----------------------------------------------------------------------------------------|
 | Class, struct, record              | `Represents …`, `Provides …`, `Defines …`                      | `Represents the host portion of a URI.`                                                 |
-| Static class holding extensions    | `Extension methods for …`, `Provides extension methods for …`  | `Provides extension methods for <see cref="IEndpointRouteBuilder" /> to add endpoints.` |
+| Static class with extensions       | `Extension methods for …`, `Provides extension methods for …`  | `Provides extension methods for <see cref="IEndpointRouteBuilder" /> to add endpoints.` |
 | Interface                          | `Defines a contract that …`, `Provides an interface for …`     | `Defines a contract that represents the result of an HTTP endpoint.`                    |
 | Attribute                          | `Specifies …`                                                  | `Specifies a collection of tags in <see cref="Endpoint.Metadata" />.`                   |
 | Exception type                     | `Represents … error`                                           | `Represents an HTTP request error.`                                                     |
@@ -70,29 +73,31 @@ The skeleton is identical for every declaration; the opening phrase is what chan
 | Override, interface implementation | `<inheritdoc />`                                               | —                                                                                       |
 | Explicit interface implementation  | no doc comment                                                 | —                                                                                       |
 
-A delegate carries its `<param>` and `<returns>` on the type declaration.
-An `extension` block carries a `<param>` for its receiver, placed on the block; each member inside the block documents only its own parameters.
+A delegate has its `<param>` and `<returns>` on the type declaration.
+An `extension` block has a `<param>` for its receiver, placed on the block; each member inside the block documents only its own parameters.
 
 ## Parameters, returns, and exceptions
 
 - Write `<param>` and `<returns>` as noun phrases opening with `The`, `A`, or `An`, and end them with a period.
-- An async method returns `A task that represents the asynchronous <operation> operation.`; name the produced value when the task carries one.
+- An async method returns `A task that represents the asynchronous <operation> operation.`; name the produced value when the task has one.
 - A builder or registration method returns `The <see cref="T" /> for chaining.` or `A <see cref="T" /> that can be used to further customize the …`.
 - A `Try` method documents the `out` parameter as `When this method returns, contains …`, and returns `<see langword="true" /> if …; otherwise, <see langword="false" />.`.
 - State what a null or empty result means in `<summary>` or `<returns>`.
 - Reserve `<exception>` for a throw that is part of the contract; an argument guard at entry gets none.
-- Never leave a tag empty to silence CS1573; describe the parameter.
+- Never add an empty tag to silence CS1573; describe the parameter.
 
 ## Inherited documentation
 
 - Put `<inheritdoc />` on an override and on an implicit interface implementation.
 - Add `<remarks>` under `<inheritdoc />` when the implementation adds a caller-visible constraint the base contract does not state.
 - Use `<inheritdoc cref="…" />` when the source is not the immediate base member.
-- Leave an explicit interface implementation undocumented; the interface holds the documentation.
+- Add no doc comment to an explicit interface implementation.
+  The interface documents the contract.
 
 ## Cross-references and inline markup
 
-- Reference every type or member named in text with `<see cref="…" />`; renames stay linked.
+- Reference every type or member named in text with `<see cref="…" />`.
+  A rename refactoring updates the reference.
 - Reference the current member's parameters with `<paramref name="…" />` and `<typeparamref name="…" />`.
 - Write keywords as `<see langword="true" />`, `<see langword="false" />`, `<see langword="null" />`.
 - Use `<c>` for a literal value or fragment that names no symbol.
@@ -135,7 +140,7 @@ public sealed class DocumentSession : IDisposable
     public TimeSpan ReadTimeout { get; set; } = TimeSpan.FromSeconds(30);
 
     /// <summary>
-    ///     Gets a value indicating whether the session holds an open transaction.
+    ///     Gets a value indicating whether the session has an open transaction.
     /// </summary>
     public bool IsTransactional { get; }
 
@@ -208,13 +213,13 @@ public enum CacheMissBehavior
     Fetch,
 
     /// <summary>
-    ///     Returns no document and leaves the cache unchanged.
+    ///     Returns no document and does not modify the cache.
     /// </summary>
     Skip
 }
 
 /// <summary>
-///     A function that transforms a document before it reaches the caller.
+///     A function that transforms a document before it is returned to the caller.
 /// </summary>
 /// <param name="document">The document to transform.</param>
 /// <returns>The transformed document.</returns>
@@ -245,15 +250,16 @@ public static class DocumentStorageServiceCollectionExtensions
 
 ## Validation
 
-- [ ] Every public and protected type, member, parameter, type parameter, and return value carries its tag; the build reports no CS1591 or CS1573.
+- [ ] Every public and protected type, member, parameter, type parameter, and return value has its tag; the build reports no CS1591 or CS1573.
 - [ ] Tags appear in the order summary, value, typeparam, param, returns, exception, remarks, example.
-- [ ] Multi-line tag text sits four spaces past the `///` marker, and a nested tag sits one level further.
+- [ ] Multi-line tag text is indented four spaces past the `///` marker, and a nested tag one level further.
 - [ ] The summary opening matches the member kind, and a property opens with `Gets`, `Gets or sets`, or `Gets a value indicating whether`.
-- [ ] Overrides and implicit interface implementations use `<inheritdoc />`; explicit interface implementations carry no doc comment.
+- [ ] Overrides and implicit interface implementations use `<inheritdoc />`; explicit interface implementations have no doc comment.
 - [ ] Every type and member named in text is a `<see cref="…" />`, and `true`, `false`, and `null` are `<see langword="…" />`.
-- [ ] `<exception>` lists only contract throws; argument guards at entry carry none.
+- [ ] `<exception>` lists only contract throws; argument guards at entry have none.
 - [ ] Null and empty-result meaning appears in the summary or returns; ownership, defaults, and threading rules appear in remarks or value.
 - [ ] Text states facts about the member as it stands; none narrates the change or argues why.
+- [ ] No tag contains `you`, `we`, or `I`.
 
 ## Common Pitfalls
 
@@ -262,13 +268,14 @@ public static class DocumentStorageServiceCollectionExtensions
 | `<summary>Gets the name.</summary>` on `GetName()`            | State what the name is and any constraint.                 |
 | A property summary without `Gets` or `Gets or sets`           | Open with the accessor verb the member exposes.            |
 | Re-summarizing an override or interface implementation        | Use `<inheritdoc />`.                                      |
-| Documenting an explicit interface implementation              | Leave it undocumented; the interface carries the contract. |
+| Documenting an explicit interface implementation              | Omit the doc comment; the interface states the contract.   |
 | An empty `<param></param>` added to silence CS1573            | Describe the parameter.                                    |
 | `<exception cref="ArgumentNullException">` for an entry guard | Document only a throw that is part of the contract.        |
 | `<remarks>` placed before `<param>` on a method               | Put `<remarks>` after `<returns>`.                         |
-| Multi-line tag text left flush against `///`                  | Indent it four spaces past the marker.                     |
+| Multi-line tag text flush against `///`                       | Indent it four spaces past the marker.                     |
 | Documenting the implementation ("loops over items")           | Describe the observable contract.                          |
 | Hardcoding a type name in prose                               | Use `<see cref="TypeName" />`.                             |
 | Writing `true`, `false`, or `null` as plain text              | Use `<see langword="true" />`.                             |
-| Ownership, default value, or unit left implicit               | State it in `<remarks>` or `<value>`.                      |
+| Ownership, default value, or unit not stated                  | State it in `<remarks>` or `<value>`.                      |
 | Narrating the change ("now returns null when…")               | Describe the member as it stands.                          |
+| "You must dispose the returned stream."                        | "The caller disposes the returned stream."                 |

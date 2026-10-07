@@ -36,7 +36,7 @@ using (ResolveHelper.BeginAssemblyResolveScope<Application>())
 ```
 
 The generic and `typeof(...)` overloads probe the folder of the given type's assembly.
-Pass an explicit directory when the dependencies live elsewhere — a shared or external libraries folder:
+Pass an explicit directory when the dependencies are located in another folder, such as a shared or external libraries folder:
 
 ```csharp
 using (ResolveHelper.BeginAssemblyResolveScope(@"C:\Libraries"))
@@ -64,5 +64,5 @@ Confirm the dependency loads without a resolution error, and that resolution beh
 | Pitfall                                                          | Correct approach                                          |
 |------------------------------------------------------------------|-----------------------------------------------------------|
 | A hand-written `AppDomain.CurrentDomain.AssemblyResolve` handler | Use `ResolveHelper.BeginAssemblyResolveScope`.            |
-| Adding a scope inside a Toolkit entry point                      | The base class already resolves; remove it.               |
+| Adding a scope inside a Toolkit entry point                      | Remove it; the base class already opens a resolve scope.  |
 | `ResolveHelper` not found                                        | The `Nice3point.Revit.Toolkit` package is not referenced. |

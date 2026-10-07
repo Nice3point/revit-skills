@@ -1,15 +1,15 @@
 ---
 name: csharp-style
 description: >
-  Write or review C# code.
-  USE FOR: writing or reviewing any C# code.
-  DO NOT USE FOR: prose, markdown, or wiki text (use technical-writing), or XML doc comment content (use writing-xml-doc-comments).
+    Write or review C# code.
+    USE FOR: writing or reviewing any C# code.
+    DO NOT USE FOR: XML doc comment content (use writing-xml-doc-comments), or prose, markdown, and wiki text; those follow the writing standard.
 license: MIT
 ---
 
 # C# Style
 
-Hold the code to an enterprise production standard, never the level of tutorial or learning material.
+Write code to an enterprise production standard, never the level of tutorial or learning material.
 Write in a strict, technical style: no explanatory scaffolding, no didactic comments.
 
 ## Naming and layout
@@ -42,20 +42,21 @@ Write in a strict, technical style: no explanatory scaffolding, no didactic comm
 - Use list patterns to test that a sequence of elements matches corresponding nested patterns.
 - Use source generators from System and external libraries; `ObservableProperty`, `LoggerMessage`, `JsonSerializerContext` and others.
 - Use the `System.Memory` features and types, if this doesn't reduce code readability.
-- Use `Polyfill` when the project targets multiple frameworks; it brings new types and methods to legacy targets without copying .NET sources.
+- Use `Polyfill` when the project targets multiple frameworks.
+  `Polyfill` adds new types and methods to legacy targets without copying .NET sources.
 
 ## Nullability
 
-- Use nullable types; keep public and internal contracts null-safe.
+- Use nullable types, and make public and internal contracts null-safe.
 - Use `= null!` suppression only where the value is never null.
 
 ## Annotations
 
-- Express contracts with annotations from the JetBrains and `System.Diagnostics.CodeAnalysis` sets — both are large; reach for whichever fits, not a fixed few.
+- Express contracts with annotations from the JetBrains and `System.Diagnostics.CodeAnalysis` sets — both are large; use whichever fits, not a fixed few.
 - Use `[Pure]` if the method doesn't make any observable state changes.
 - Use `[NotNullWhen]` on `Try`-style methods with an `out` nullable result.
 - Use `[PublicAPI]` to mark a publicly available API or DTO that must not be removed.
-  The annotation keeps the symbol out of the unused-symbol report.
+  The annotation excludes the symbol from the unused-symbol report.
 - Use `[UsedImplicitly]` to mark a symbol as used implicitly.
 - Use `[MustUseReturnValue]`, `[MemberNotNull]`, `[DoesNotReturnIf]`, `[StringSyntax]` and others if applicable.
 
@@ -82,22 +83,22 @@ Write in a strict, technical style: no explanatory scaffolding, no didactic comm
 - A registration extension is named for its net effect on the container: `Add*` when something resolves after the call that did not before, `Configure*` when the call only supplies settings.
   Split a registration by phase, never by verb.
 - The file suffix of an extension class follows the host phase, never the verb of the method inside.
-  `*Registration.cs` holds everything that runs before `Build()`, whether the method reads `Add*` or `Configure*`.
-  `*Endpoints.cs` holds everything that runs after it, the `Map*` calls on `WebApplication` and `IEndpointRouteBuilder`.
-  A class that carries both phases is split into two files.
+  `*Registration.cs` contains every method that runs before `Build()`, whether the method reads `Add*` or `Configure*`.
+  `*Endpoints.cs` contains every method that runs after it, the `Map*` calls on `WebApplication` and `IEndpointRouteBuilder`.
+  A class that spans both phases is split into two files.
 - `*Configuration.cs` names a type that configures something — an `IConfigureOptions<T>` or an equivalent configurator — and never an extension class.
-  `*Extensions.cs` names ordinary extension methods over a domain or framework type, and an Aspire resource decorator returning `IResourceBuilder<T>` keeps the `With*` verb.
+  `*Extensions.cs` names ordinary extension methods over a domain or framework type, and an Aspire resource decorator returning `IResourceBuilder<T>` retains the `With*` verb.
 
 ## Performance
 
 - Do not use deep optimization if it affects code readability.
 - Use `Span` if it avoids allocations without significant code changes.
-- Use `struct` for internal value types on a hot path; keep them inside the owning type and don't expose them across a public boundary.
+- Use `struct` for internal value types on a hot path, declare them inside the owning type, and don't expose them across a public boundary.
   A value type allocates nothing.
 - Dispose owned streams and pooled resources.
 - Unsubscribe from events depending on the object lifetime.
 - Use source-generated types in place of their reflection-based equivalents.
-  A generated type carries no extra allocation and no reflection overhead.
+  A generated type has no extra allocation and no reflection overhead.
 
 ## Comments
 
@@ -108,11 +109,11 @@ Write in a strict, technical style: no explanatory scaffolding, no didactic comm
 
 ## Review
 
-- [ ] Identifiers carry full domain meaning; async methods end in `Async`.
+- [ ] Identifiers have full domain meaning; async methods end in `Async`.
 - [ ] Modern language features are used: `var`, pattern matching, collection and switch expressions, and source generators over hand-written equivalents.
 - [ ] Nullability is explicit and annotations match real contracts.
 - [ ] Async paths flow `CancellationToken` and never block.
-- [ ] Shared data contracts are immutable `record` types; a DTO carries `[PublicAPI]`.
+- [ ] Shared data contracts are immutable `record` types; a DTO has `[PublicAPI]`.
 - [ ] Exceptions are specific types, arguments are guarded at entry, and rethrows use `throw;`.
 - [ ] Hot paths avoid needless allocations (`struct`, `Span`); owned disposables and event subscriptions are released on the owner's lifetime.
 - [ ] Comments state facts about the code as it stands; none narrates the edit or argues why.

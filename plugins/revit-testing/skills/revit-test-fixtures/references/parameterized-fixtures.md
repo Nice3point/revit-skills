@@ -3,7 +3,7 @@
 **Load when:** the same test body must run across several file kinds or sample directories (families, projects, or a project folder) without duplicating the tests.
 
 Write the tests once in an abstract base parameterized by constructor arguments, then declare one sealed subclass per configuration.
-The path set depends on constructor state, and an **instance** member driven by `[InstanceMethodDataSource]` carries it.
+The path set depends on constructor state, and an **instance** member read by `[InstanceMethodDataSource]` exposes it.
 Each subclass re-runs the inherited tests with `[InheritsTests]`.
 Requires the `Nice3point.TUnit.Revit` package.
 
@@ -89,7 +89,7 @@ public abstract class DocumentSampleTests(string extension, string? samplesDirec
 
 ## One subclass per configuration
 
-Each subclass fixes its extension and directory and carries `[InheritsTests]`.
+Each subclass passes its extension and directory to the base constructor and is marked with `[InheritsTests]`.
 The base tests run again under its configuration.
 A subclass may add tests that apply only to its kind.
 
@@ -122,8 +122,8 @@ public sealed class ProjectFolderSampleTests() : DocumentSampleTests(".rvt", "./
 ## Notes
 
 - Combine this with a dependency-injection data source — see `dependency-injection` — and the constructor also receives the services under test.
-  The DI attribute goes on each concrete subclass, and `[InstanceMethodDataSource]` still fills the per-test parameter.
+  The DI attribute is applied to each concrete subclass, and `[InstanceMethodDataSource]` supplies the per-test parameter.
 - A subclass whose directory is empty produces no cases and is skipped — see `skipping`.
-- Keep the base class abstract; only sealed subclasses are discovered as test classes.
+- Declare the base class abstract; TUnit discovers only its sealed subclasses as test classes.
 - Guard version-specific API behind `#if REVIT####_OR_GREATER` inside the test body when a sample assertion differs across Revit versions.
-- One document per test keeps sample tests isolated; never reuse a document opened by another test.
+- Each sample test opens its own document and never reuses a document opened by another test.

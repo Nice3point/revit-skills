@@ -15,7 +15,7 @@ They replace the raw interface boilerplate (the full `Execute(commandData, ref m
 ## When to use
 
 - Authoring an `IExternalCommand`, `IExternalApplication`, or `IExternalDBApplication` entry point.
-- Reviewing an entry point that reimplements the raw interface by hand.
+- Reviewing an entry point that reimplements the raw interface manually.
 
 ## When not to use
 
@@ -26,7 +26,7 @@ They replace the raw interface boilerplate (the full `Execute(commandData, ref m
 
 ### Step 1: Derive an external command
 
-Override `Execute()`; reach the context through the inherited `Application`, not by unpacking `commandData`.
+Override `Execute()` and access the context through the inherited `Application` property, not through `commandData`.
 
 ```csharp
 [Transaction(TransactionMode.Manual)]
@@ -62,14 +62,15 @@ The ribbon helpers (`CreatePanel`, `AddPushButton<T>`) come from `Nice3point.Rev
 ### Step 3: Use the async base classes for long-running work
 
 Derive from `AsyncExternalCommand` and override `ExecuteAsync()`, or from `AsyncExternalApplication` and override `OnStartupAsync()`/`OnShutdownAsync()`.
-The sealed base pumps the message loop on Revit's main thread; `await` keeps the UI responsive while the continuation still runs in the API context — no external event needed.
+The base class pumps the message loop on the Revit main thread.
+The UI remains responsive during an `await`, and the continuation runs in the API context without an external event.
 
 ```csharp
 public class Application : AsyncExternalApplication
 {
     public override async Task OnStartupAsync()
     {
-        var settings = await LoadSettingsAsync(); // long-running work; the UI stays responsive
+        var settings = await LoadSettingsAsync(); // long-running work; the UI remains responsive
         CreateRibbon(settings);
     }
 }
@@ -77,17 +78,18 @@ public class Application : AsyncExternalApplication
 
 ### Step 4: Rely on automatic dependency resolution
 
-The base classes open an assembly-resolve scope automatically; add-in dependencies load from the add-in folder without a manual `AssemblyResolve` handler.
+The base classes open an assembly resolve scope automatically.
+The runtime loads add-in dependencies from the add-in folder without a manual `AssemblyResolve` handler.
 For dependencies loaded outside an entry point, open a scope explicitly with `ResolveHelper.BeginAssemblyResolveScope`.
 
 ### Step 5: Verify
 
 Test the observable model behavior on the Revit thread.
-Leave the default successful result unless the command must cancel or fail.
+Set `Result` only when the command must cancel or fail.
 
 ## Validation
 
-- [ ] The entry point derives from a Toolkit base class, not a hand-written interface implementation.
+- [ ] The entry point derives from a Toolkit base class, not a manual interface implementation.
 - [ ] Context comes from the inherited properties, not manual `commandData` unpacking.
 - [ ] An application overrides `OnShutdown()` only when it has session cleanup to perform.
 - [ ] Long-running UI work uses `AsyncExternalCommand`.
@@ -96,9 +98,9 @@ Leave the default successful result unless the command must cancel or fail.
 
 ## Common Pitfalls
 
-| Pitfall                                                            | Correct approach                                                                               |
-|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Implementing `Execute(commandData, ref message, elements)` by hand | Derive from `ExternalCommand` and override `Execute()`.                                        |
-| Manual `AppDomain.AssemblyResolve` for add-in dependencies         | The base classes resolve automatically; else open a `ResolveHelper.BeginAssemblyResolveScope`. |
-| Blocking the UI in a long command                                  | Use `AsyncExternalCommand` and `ExecuteAsync()`.                                               |
-| `ExternalCommand` not found                                        | The `Nice3point.Revit.Toolkit` package is not referenced.                                      |
+| Pitfall                                                             | Correct approach                                                                                                               |
+|---------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| Implementing `Execute(commandData, ref message, elements)` manually | Derive from `ExternalCommand` and override `Execute()`.                                                                        |
+| Manual `AppDomain.AssemblyResolve` for add-in dependencies          | The base classes resolve dependencies automatically; outside an entry point, open a `ResolveHelper.BeginAssemblyResolveScope`. |
+| Blocking the UI in a long command                                   | Use `AsyncExternalCommand` and `ExecuteAsync()`.                                                                               |
+| `ExternalCommand` not found                                         | The `Nice3point.Revit.Toolkit` package is not referenced.                                                                      |

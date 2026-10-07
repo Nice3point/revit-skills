@@ -3,13 +3,13 @@ name: configuring-dotnet-dependency-injection
 description: >
   Register and review .NET dependency-injection services and lifetimes on IServiceCollection.
   USE FOR: adding a registration, choosing singleton/scoped/transient, grouping registrations behind a feature extension, assembly scanning with Scrutor, or validating a service graph.
-  DO NOT USE FOR: choosing which kind of type to declare (use designing-dotnet-types), or wiring the host builder and its lifecycle (use configuring-dotnet-hosting).
+  DO NOT USE FOR: choosing which kind of type to declare (use designing-dotnet-types), or configuring the host builder and its lifecycle (use configuring-dotnet-hosting).
 license: MIT
 ---
 
 # Configuring .NET Dependency Injection
 
-Register a service in the composition that owns its lifetime, grouped with the capability it belongs to.
+Register a service in the composition that manages its lifetime, grouped with the capability it belongs to.
 
 ## When to use
 
@@ -44,7 +44,7 @@ public static class EmailServiceCollectionExtensions
 - **Scoped** — one instance per operation; the host opens a scope per window, request, or endpoint.
 - **Transient** — lightweight, stateless, constructed per consumer.
 
-Never inject a scoped service into a singleton, and never make a service singleton when it holds per-operation mutable state.
+Never inject a scoped service into a singleton, and never make a service singleton when it stores per-operation mutable state.
 
 ### Step 3: Register an interface only for a real boundary
 
@@ -66,7 +66,7 @@ services.Scan(scan => scan
 ### Step 5: Create an extension for group registration
 
 Move every registration group — a set of related `AddX` calls or a Scrutor `Scan` — into its capability's extension method, and let the host composition root call only those methods.
-Registration detail never lives at the place the host is configured.
+The host configuration contains no registration detail.
 
 Declare the extension with a C# 14 extension block; the `IServiceCollection` receiver is named once for the whole capability:
 
@@ -104,7 +104,7 @@ Never construct a second `ServiceProvider` in production registration code.
 
 ## Validation
 
-- [ ] The host that owns the behavior owns the registration.
+- [ ] The host that provides the behavior contains the registration.
 - [ ] The lifetime matches state, concurrency, and disposal needs.
 - [ ] No singleton captures a scoped or transient dependency.
 - [ ] Registrations are grouped with their capability, and the normal host composition succeeds.
@@ -115,7 +115,7 @@ Never construct a second `ServiceProvider` in production registration code.
 | Pitfall                                                             | Correct approach                                                                        |
 |---------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
 | Scoped service injected into a singleton                            | Make the consumer scoped, or pass a factory / `IServiceScopeFactory`.                   |
-| Singleton holding per-request mutable state                         | Use scoped or transient.                                                                |
+| Singleton storing per-request mutable state                         | Use scoped or transient.                                                                |
 | `Scan` not found                                                    | The `Scrutor` package is not referenced in the project.                                 |
 | A second `new ServiceProvider()` to resolve something               | Resolve through the real host or a composition test.                                    |
-| `AddX` group or Scrutor `Scan` inlined where the host is configured | Wrap it in a capability extension (e.g. `AddEmailSenders`) and call that from the root. |
+| `AddX` group or Scrutor `Scan` inlined where the host is configured | Wrap it in a capability extension, for example `AddEmailSenders`, and call it from the root. |

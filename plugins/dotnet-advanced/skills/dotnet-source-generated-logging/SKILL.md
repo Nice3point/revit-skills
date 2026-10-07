@@ -9,7 +9,7 @@ license: MIT
 # Source-Generated Logging
 
 Use the `LoggerMessage` source generator (part of `Microsoft.Extensions.Logging`) to declare log statements as partial methods.
-Generated methods allocate nothing when the level is disabled, validate the message template against the typed parameters at compile time, and keep structured fields queryable.
+Generated methods allocate nothing when the level is disabled, validate the message template against the typed parameters at compile time, and preserve structured fields for queries.
 `logger.LogInformation($"...")` allocates on every call and flattens the arguments into a string.
 
 ## When to use
@@ -20,7 +20,7 @@ Generated methods allocate nothing when the level is disabled, validate the mess
 
 ## Workflow
 
-### Step 1: Mark the owning type partial
+### Step 1: Mark the declaring type partial
 
 Add `partial` to the class that declares the log methods; the generator emits their bodies.
 

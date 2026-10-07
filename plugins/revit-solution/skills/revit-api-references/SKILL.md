@@ -9,8 +9,9 @@ license: MIT
 
 # Revit API References
 
-The `Nice3point.Revit.Api.*` NuGet packages carry the Revit API assemblies; a project compiles for any Revit year without that year installed locally.
-A local file (`HintPath`) reference ties the build to one installed version at one path and breaks CI and teammates' machines.
+The `Nice3point.Revit.Api.*` NuGet packages contain the Revit API assemblies.
+A project compiles for any Revit year without that year installed locally.
+A local file (`HintPath`) reference binds the build to one installed version at one path, and the build fails on CI and on other developer machines.
 
 ## When to use
 
@@ -32,7 +33,8 @@ A local file (`HintPath`) reference ties the build to one installed version at o
 
 The `$(RevitVersion).*` wildcard resolves the assembly set for the active configuration.
 `$(RevitVersion)` is supplied by the `Nice3point.Revit.Sdk`, which derives it from the build configuration (for example `Release.R27` → `2027`) — see `revit-sdk-project-configuration`.
-The `$(RevitVersion).*` wildcard fits the built-in API dependencies; they almost never carry critical changes within a major version.
+The `$(RevitVersion).*` wildcard applies to the built-in API dependencies.
+These packages rarely contain breaking changes within a major version.
 Every other dependency takes an exact package version.
 A floating version on such a dependency breaks the build when the package is updated.
 With central package management, pin the version in `Directory.Packages.props`.

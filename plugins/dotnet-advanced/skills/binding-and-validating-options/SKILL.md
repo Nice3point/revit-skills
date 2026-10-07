@@ -9,7 +9,8 @@ license: MIT
 
 # Binding and Validating Options
 
-Represent a cohesive configuration section as an immutable options type, bound once and validated at startup; a misconfigured process fails fast, not at first use.
+Represent a cohesive configuration section as an immutable options type, bound once and validated at startup.
+A misconfigured process fails at startup, not at first use.
 
 ## When to use
 
@@ -85,5 +86,5 @@ Start the host with a missing or out-of-range required value and confirm startup
 | Reading `IConfiguration["Database:ConnectionString"]` in a service | Bind a `DatabaseOptions` type and inject `IOptions<DatabaseOptions>`.         |
 | Invalid config discovered at first request                         | Add `ValidateDataAnnotations().ValidateOnStart()`.                            |
 | Cross-field rule checked inside a consumer                         | Add `.Validate(...)` or an `IValidateOptions<T>`.                             |
-| Mutating an options instance after binding                         | Keep it immutable; use `IOptionsMonitor<T>` for runtime changes.              |
+| Mutating an options instance after binding                         | Declare it immutable; use `IOptionsMonitor<T>` for runtime changes.           |
 | `ValidateDataAnnotations` not found                                | The `Microsoft.Extensions.Options.DataAnnotations` package is not referenced. |

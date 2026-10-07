@@ -1,9 +1,9 @@
 # Revit AddIn Template
 
-**Load when:** a small Revit add-in needs one project that owns the `.addin` manifest, entry point, commands, user interface, local deployment, and debugging.
+**Load when:** a small Revit add-in needs one project that contains the `.addin` manifest, entry point, commands, user interface, local deployment, and debugging.
 
 `revit-addin` is the single-project shape.
-It generates an SDK-style project with `DeployAddin`, `LaunchRevit`, and `EnableDynamicLoading` configured for a manifest-owning add-in.
+It generates an SDK-style project with `DeployAddin`, `LaunchRevit`, and `EnableDynamicLoading` configured for an add-in project that contains the `.addin` manifest.
 It references `Nice3point.Revit.Toolkit`, `Nice3point.Revit.Extensions`, and `Nice3point.Revit.Api.RevitAPI`.
 All variants except a DB application also reference `Nice3point.Revit.Api.RevitAPIUI`.
 
@@ -24,7 +24,7 @@ dotnet new revit-addin --name MyAddin --addin application --wpf --di hosting --l
 
 Use `application` for a normal ribbon-driven add-in; the generated application creates the ribbon and registers the starter command.
 Use `dbApplication` when the entry point is a database application and does not need the Revit UI API or WPF output.
-Use `command` when the manifest must register one command directly (Revit adds a command to the built-in `Add-ins` tab); don't use it unless explicitly required.
+Use `command` when the manifest must register one command directly (Revit adds a command to the built-in `Add-ins` tab); use it only when explicitly required.
 
 ## Validation
 

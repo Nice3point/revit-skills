@@ -81,7 +81,8 @@ To refresh the marketplace catalogue itself:
 ### VS Code / VS Code Insiders (Preview)
 
 > [!IMPORTANT]
-> Plugin support in VS Code is a preview feature and may change. Enable it in your settings first.
+> Plugin support in VS Code is a preview feature and may change.
+> Enable it in your settings first.
 
 ```jsonc
 // settings.json

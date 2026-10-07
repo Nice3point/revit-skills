@@ -1,11 +1,11 @@
 # Converters and helpers
 
 Enum/id/category converters, color representations, numeric and string helpers, and application capability checks.
-Most members here add behavior the raw API has no single call for — use them directly; there is nothing to replace.
+Most members here add behavior the raw API has no single call for, and replace no raw call.
 Where a `## Heading (RawClass)` names a raw static, prefer the extension over that call.
 A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
-Resolving an `ElementId` to a typed element (`wallId.ToElement<Wall>(document)`) belongs to `revit-element-and-parameter-access`.
+Resolving an `ElementId` to a typed element (`wallId.ToElement<Wall>(document)`) is described in `revit-element-and-parameter-access`.
 
 ## BuiltInParameter converters
 
@@ -25,7 +25,7 @@ Resolving an `ElementId` to a typed element (`wallId.ToElement<Wall>(document)`)
 
 ## Color representations
 
-All return a representation of the `Color`; the return type matches the model named by the method.
+Each method returns a representation of the `Color`, and its return type matches the color model the method names.
 
 | Extension                | Purpose                |
 |---------------------------|-------------------------|
@@ -46,7 +46,8 @@ All return a representation of the `Color`; the return type matches the model na
 
 ## Numeric and comparison
 
-Precision defaults to Revit's `1e-9` tolerance; pass a value to override.
+Precision defaults to Revit's `1e-9` tolerance.
+Pass a value to override it.
 
 | Extension                              | Purpose                                        |
 |-------------------------------------------|--------------------------------------------------|

@@ -45,7 +45,8 @@ For a newly released year, first update the SDK; set `TargetFramework` explicitl
 ### Step 3: Add preprocessor directives for incompatible API
 
 Write shared code first.
-Add a `#if` branch only where the Revit API genuinely differs; keep both branches independently compilable.
+Add a `#if` branch only where the Revit API genuinely differs.
+Each branch compiles independently.
 
 ```csharp
 #if REVIT2024_OR_GREATER
@@ -70,6 +71,6 @@ Restore and build every declared configuration, and run version-specific tests f
 | Pitfall                                             | Correct approach                                  |
 |-----------------------------------------------------|---------------------------------------------------|
 | Editing configurations through the IDE dialog       | Edit `<Configurations>` in the `.csproj` by hand. |
-| A `#if` around code that is identical on both sides | Keep it shared; branch only on real differences.  |
-| Solution and project matrices drifting apart        | Keep both lists identical.                        |
+| A `#if` around code that is identical on both sides | Use shared code; branch only on real differences. |
+| Solution and project matrices drifting apart        | Declare the same configurations in both lists.    |
 | A branch that only compiles for one version         | Ensure both `#if` sides build.                    |

@@ -2,10 +2,10 @@
 
 Identity, versioning, access, and the cost of the stored data.
 
-## Identity lives in the GUID
+## Identity is the GUID
 
 A schema is registered in the memory of the running Revit instance and shared by every open document.
-Saving a document saves the schemas of the entities it holds, and opening that document reintroduces them into memory.
+Saving a document saves the schemas of the entities it contains, and opening that document registers them in memory again.
 
 Two schemas conflict when they share a GUID but differ in any of:
 
@@ -14,13 +14,14 @@ Two schemas conflict when they share a GUID but differ in any of:
 - the vendor id or the application GUID;
 - the read or write access level.
 
-The conflict surfaces when a document written by one definition meets a session holding another — on open, and on synchronize in a workshared model.
-Copying a sample and keeping its GUID, or editing fields without minting a new GUID, is what produces it.
+The conflict occurs when a session that has registered one definition opens a document written with another, and on synchronize in a workshared model.
+Copying a sample without changing its GUID, or editing fields without creating a new GUID, causes the conflict.
 
 ## Evolving a shipped schema
 
 A published schema is immutable.
-Adding a field means a new GUID and a new definition class; the previous one stays in the code base as long as documents in the wild still carry it.
+Adding a field requires a new GUID and a new definition class.
+The previous class remains in the code base while existing documents still contain its schema.
 
 ```csharp
 public static class ProjectDataConfigurationV1
@@ -30,7 +31,7 @@ public static class ProjectDataConfigurationV1
 }
 ```
 
-The context reads the old schema when the new one holds nothing, and writes only the new one.
+The context reads the old schema when the new one contains no data, and writes only the new one.
 
 ```csharp
 public ProjectData Load()
@@ -47,7 +48,7 @@ public ProjectData Load()
 
 Migrate on an explicit user action or on first write, never inside a `DocumentOpened` or `DocumentSaved` handler.
 In a workshared model such a handler borrows elements without a user action.
-Erase the old schema from a document only once its data has been carried over.
+Erase the old schema from a document only after its data has been migrated.
 
 ## Access levels
 
@@ -57,7 +58,7 @@ Read and write levels are set independently, each one `Public`, `Vendor`, or `Ap
 A vendor id is 4 to 253 characters of letters, digits, and a small set of punctuation, matched case-insensitively.
 `SchemaBuilder.VendorIdIsValid(id)` checks one before use.
 
-Public read with vendor write is the usual choice: any add-in may read the data, and only an add-in of the owning vendor may change it.
+Public read with vendor write is the usual choice: any add-in may read the data, and only an add-in of the schema's vendor may change it.
 
 Write access is verified when the entity is stored, not when a field is set.
 The failure appears at `SetEntity`:
@@ -71,15 +72,15 @@ It means the running add-in's vendor id does not match the schema's — commonly
 
 An entity synchronizes like a parameter value: editing it borrows its host element, and other users see the change after reload.
 
-Splitting an element leaves the entity on both halves; copying an element copies its entities.
+Splitting an element copies the entity to both parts, and copying an element copies its entities.
 
-## Size and reach
+## Size and scope
 
-Every add-in in the session draws on the same budget for one file.
+Every add-in in the session shares the same storage budget for one file.
 
 Split data into fields, arrays, and maps.
 One large serialized string slows save, open, and synchronize.
 Many `ElementId` values in a single entity are the expensive case.
 
-Extensible Storage does not reach the Autodesk viewer.
+The Autodesk viewer does not display Extensible Storage data.
 The SVF conversion pipeline loads no add-ins and reads no schema.

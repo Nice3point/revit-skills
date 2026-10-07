@@ -10,7 +10,7 @@ dotnet new revit-tunit --name MyAddin.Tests
 ```
 
 The template has no options.
-Keep tests in a dedicated project.
+Place tests in a dedicated project.
 When the repository was created with `revit-addin-sln --tests`, place the project under the `tests` folder.
 
 ## Validation

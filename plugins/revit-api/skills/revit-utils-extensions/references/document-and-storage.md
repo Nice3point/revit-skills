@@ -1,7 +1,8 @@
 # Document and storage
 
 Document version and integrity, managers, global and project parameters, parameter filtering, and extensible storage.
-Each `## Heading (RawClass)` names the raw Revit static or manager this domain replaces; call the extension on the receiver shown instead.
+Each `## Heading (RawClass)` names the raw Revit static or manager this domain replaces.
+Call the extension on the receiver shown instead.
 A member missing from the build means the installed `Nice3point.Revit.Extensions` version predates it.
 
 ## Document version and integrity (Document getters)
@@ -55,4 +56,4 @@ A member missing from the build means the installed `Nice3point.Revit.Extensions
 - `element.SaveEntity(schema, 0.5, "thicknessField", UnitTypeId.Meters)` — a field built with a spec;
 - `element.LoadEntity<double>(schema, "thicknessField", UnitTypeId.Meters)`;
 
-Extensible storage covered by `revit-extensible-storage`.
+`revit-extensible-storage` describes extensible storage.

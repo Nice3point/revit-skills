@@ -1,7 +1,7 @@
 ---
 name: revit-selection-filter
 description: >
-  Filter which elements and references a user can pick in Autodesk Revit UI with the Nice3point.Revit.Toolkit SelectionConfiguration, not a hand-rolled ISelectionFilter.
+  Filter which elements and references a user can pick in Autodesk Revit UI with the Nice3point.Revit.Toolkit SelectionConfiguration, not a custom ISelectionFilter.
   USE FOR: constraining an interactive Selection.PickObject/PickObjects with a fluent Allow.Element / Allow.Reference filter.
   DO NOT USE FOR: headless API callbacks such as family load or duplicate-type options (use Toolkit option handlers like FamilyLoadOptions).
 license: MIT
@@ -10,8 +10,8 @@ license: MIT
 # Revit Selection Filter
 
 `Selection.PickObject` takes an `ISelectionFilter` that constrains what the user may pick.
-`SelectionConfiguration` (from `Nice3point.Revit.Toolkit`) builds that filter from two lambdas; no hand-rolled class is needed.
-It drives an interactive pick and needs the Revit UI.
+`SelectionConfiguration` (from `Nice3point.Revit.Toolkit`) builds that filter from two lambdas without a custom class.
+It applies to an interactive pick and requires the Revit UI.
 
 ## When to use
 
@@ -26,7 +26,8 @@ It drives an interactive pick and needs the Revit UI.
 ### Step 1: Configure the allowed elements and references
 
 `Allow.Element` gates which elements are pickable; `Allow.Reference` gates which references (faces, edges, points).
-Set either or both — each returns the configuration and they chain — then pass `configuration.Filter` to the pick call.
+Set either or both, then pass `configuration.Filter` to the pick call.
+Each method returns the configuration, and the calls chain.
 
 ```csharp
 var configuration = new SelectionConfiguration()
@@ -42,7 +43,7 @@ Run the command and confirm only the intended elements or references highlight a
 
 ## Validation
 
-- [ ] The filter uses `SelectionConfiguration`, not a hand-rolled `ISelectionFilter`.
+- [ ] The filter uses `SelectionConfiguration`, not a custom `ISelectionFilter`.
 - [ ] `Allow.Element`/`Allow.Reference` express the rule with a lambda, not a new class.
 
 ## Common Pitfalls

@@ -12,10 +12,10 @@ dotnet run -c Release.R26 -- --filter '*'
 ```
 
 The template has no options.
-Keep setup and assertions focused on reliable measurement.
-Keep product functionality in a `revit-addin-module` project, then reference the code being measured as appropriate.
+Restrict setup and assertions to what the measurement requires.
+Place product functionality in a `revit-addin-module` project, then reference the code being measured as appropriate.
 
 ## Validation
 
 - [ ] The project builds for the selected `Debug.RNN` or `Release.RNN` configuration.
-- [ ] Benchmark code measures Revit API work; application startup and unrelated test setup stay outside the measurement.
+- [ ] Benchmark code measures Revit API work; application startup and unrelated test setup are excluded from the measurement.

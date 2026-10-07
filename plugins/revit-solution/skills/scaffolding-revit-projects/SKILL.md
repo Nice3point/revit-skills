@@ -9,7 +9,7 @@ license: MIT
 
 # Scaffolding Revit Projects
 
-The `Nice3point.Revit.Templates` package provides `dotnet new` templates for Revit add-ins, solutions, benchmarks, and tests, already wired to `Nice3point.Revit.Sdk`.
+The `Nice3point.Revit.Templates` package provides `dotnet new` templates for Revit add-ins, solutions, benchmarks, and tests, preconfigured for `Nice3point.Revit.Sdk`.
 Choose the project topology before generating files.
 Choosing the wrong project shape causes either a monolithic add-in or a modular add-in without a host.
 
@@ -37,8 +37,8 @@ dotnet new install Nice3point.Revit.Templates
 Match the required outcome to one reference and open only that reference.
 
 - [references/revit-addin-solution.md](references/revit-addin-solution.md) — **Load when:** a repository needs a standard layout, default root files, ModularPipelines build, MSI installer, App Store bundle, tests, or CI.
-- [references/revit-addin.md](references/revit-addin.md) — **Load when:** a small self-contained add-in needs one project that owns its manifest, entry point, UI.
-- [references/revit-addin-application.md](references/revit-addin-application.md) — **Load when:** creating the manifest-owning host for a modular add-in; use it with `revit-addin-module`.
+- [references/revit-addin.md](references/revit-addin.md) — **Load when:** a small self-contained add-in needs one project that contains its manifest, entry point, and UI.
+- [references/revit-addin-application.md](references/revit-addin-application.md) — **Load when:** creating the host project that contains the manifest of a modular add-in; use it with `revit-addin-module`.
 - [references/revit-addin-module.md](references/revit-addin-module.md) — **Load when:** adding one modular feature, service, or WPF MVVM area to an application host.
 - [references/revit-servicedefaults.md](references/revit-servicedefaults.md) — **Load when:** a modular add-in needs one project for the service registrations its application and modules share.
 - [references/revit-benchmark.md](references/revit-benchmark.md) — **Load when:** measuring Revit API code with BenchmarkDotNet inside Revit.
@@ -103,6 +103,6 @@ dotnet run
 | Pitfall                                                       | Correct approach                                                                                 |
 |---------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
 | Treating an application template as a complete modular add-in | Create it with one or more modules, then add project references from the application to modules. |
-| Putting commands or ribbon registration in a module           | Keep Revit entry points in the application project.                                              |
+| Putting commands or ribbon registration in a module           | Place Revit entry points in the application project.                                             |
 | Guessing a template option                                    | Open the reference for that template and use its documented CLI option.                          |
 | Building a scaffolded solution before committing              | Commit first; GitVersion needs history.                                                          |

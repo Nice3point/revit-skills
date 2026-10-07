@@ -12,7 +12,7 @@ license: MIT
 The `Nice3point.Revit.Sdk` targets copy the built add-in and its `.addin` manifest to one of two destinations and patch the manifest per Revit version.
 `DeployAddin` copies into the local Revit add-ins folder (`%AppData%\Autodesk\Revit\Addins\<version>`); the running Revit loads the add-in on its next start.
 `PublishAddin` copies into `bin\publish` (like `dotnet publish`) for distribution or the installer.
-Enable them only in the project that owns the `.addin` manifest.
+Enable them only in the project that contains the `.addin` manifest.
 
 ## When to use
 
@@ -43,11 +43,11 @@ The SDK removes the `ManifestSettings` node for Revit versions older than 2027 d
 
 ### Step 4: Verify
 
-Build, and confirm the add-in and manifest land in the deploy or publish folder and that Revit loads the add-in.
+Build, and confirm the add-in and manifest are copied to the deploy or publish folder and that Revit loads the add-in.
 
 ## Validation
 
-- [ ] Deploy/publish is enabled only in the project holding the `.addin` manifest.
+- [ ] Deploy/publish is enabled only in the project that contains the `.addin` manifest.
 - [ ] Extra content is declared with `PublishDirectory` / `CopyToPublishDirectory`.
 - [ ] The manifest works across supported years via SDK patching.
 
@@ -55,6 +55,6 @@ Build, and confirm the add-in and manifest land in the deploy or publish folder 
 
 | Pitfall                                                     | Correct approach                                                 |
 |-------------------------------------------------------------|------------------------------------------------------------------|
-| Enabling deploy in a class-library project with no `.addin` | Enable it only in the manifest-owning project.                   |
+| Enabling deploy in a class-library project with no `.addin` | Enable it only in the project that contains the manifest.        |
 | Copying families with a raw `<None>` item                   | Use `<Content … PublishDirectory=… CopyToPublishDirectory=… />`. |
 | Hand-editing the manifest per Revit version                 | Let the SDK patch `ManifestSettings` on publish.                 |

@@ -10,12 +10,12 @@ license: MIT
 # Organizing .NET Solutions
 
 The solution tree shows what the repository produces and what each project contributes to it.
-Group projects by that contribution, never by the technology they are written in or the kind of file they hold.
+Group projects by that contribution, never by the technology they are written in or the kind of file they contain.
 
 ## When to use
 
 - Creating a solution tree, or restructuring one that has grown into a flat list.
-- Placing a new project, or deciding whether an existing folder should hold it.
+- Placing a new project, or deciding whether an existing folder should contain it.
 - Naming a solution folder, or judging whether a name still fits its contents.
 - Mapping solution configurations onto project configurations in `.slnx`.
 
@@ -30,15 +30,15 @@ Every project belongs to exactly one tier, and the top level of the tree shows w
 3. **Non-shipping** — tests, build automation, samples, and local-development sandboxes.
    Their own top-level folders.
 
-A project the user never receives never sits inside a deliverable's folder.
-A reader identifies the shipping surface from the top level alone.
+A project the user never receives is never placed in a deliverable's folder.
+A reader identifies the shipped deliverables from the top level alone.
 
 ## Naming a folder
 
 Name a folder for the thing it governs, then check that the name still describes the folder once every project inside it is listed.
 
 - Name a deliverable folder after the deliverable.
-  A folder takes the name of the flagship project inside it: `/Installer/` holds `Contoso.Installer`.
+  A folder takes the name of the flagship project inside it: `/Installer/` contains `Contoso.Installer`.
 - Name a shared folder after its subject.
   `/Design System/` names a subject; `/UI/` names nothing when every deliverable also has UI of its own.
 - Reject a name that admits more than one kind of member.
@@ -48,35 +48,35 @@ Name a folder for the thing it governs, then check that the name still describes
 
 ## The root of the tree
 
-The root holds projects that need no qualifier: framework-level helpers and hosting defaults that belong to no product and no subject.
+The root contains projects that need no qualifier: framework-level helpers and hosting defaults that belong to no product and no subject.
 Everything else is qualified by a product, a subject, or a role, and belongs in the folder that names that qualifier.
 
 No folder name explains a project in the root.
 A root project's own name states what it is.
 Rename a root project whose name only makes sense from context.
 
-In a single-product solution the core is the product, and the root carries it.
+In a single-product solution the core is the product, and the root contains it.
 In a multi-product solution a project serving one subject moves into that subject's folder.
 
 ## Group by shared fate
 
-A set of projects that leaves the repository in one operation takes its own folder, whatever tier each project belongs to.
+A set of projects that is removed from the repository in one operation gets its own folder, whatever tier each project belongs to.
 Name the folder for what the set is, and delete the folder with the set.
 
 Shared fate outranks the tier rule only while the set has an end.
-A set with no end stays in its tier.
+A set with no end remains in its tier.
 
-- A folder that holds one project after a planned change does not survive that change.
-  Flatten it up one level when the change lands.
-- Skip the folder when the change lands within days.
+- A folder that contains one project after a planned change is removed with that change.
+  Move its project up one level when the change is merged.
+- Skip the folder when the change is merged within days.
 
 ## Depth
 
 Depth equals rank.
 A top-level folder names something a maintainer would say when describing what the solution produces.
 
-Add a subfolder only when its parent already holds more than roughly six projects and the subfolder names a real division.
-A subfolder holding one or two projects adds a level without adding a division.
+Add a subfolder only when its parent already contains more than roughly six projects and the subfolder names a real division.
+A subfolder containing one or two projects adds a level without adding a division.
 
 ## Writing the .slnx
 
@@ -111,7 +111,7 @@ The `.slnx` format is XML, and the .NET SDK reads it directly.
 </Solution>
 ```
 
-- A nested folder is a sibling element carrying the full path, not a child element.
+- A nested folder is a sibling element that specifies the full path, not a child element.
 - `<File>` puts the root files a maintainer edits into `/Solution Items/`.
 - Use forward slashes in every `Path`.
 - Sort entries within a folder.
@@ -132,26 +132,26 @@ Map and exclude explicitly:
 - `<BuildType Solution="…" Project="…" />` maps one solution configuration onto the project configuration to build.
 - `<Build Project="false" />` excludes the project from every configuration; adding `Solution="…"` narrows the exclusion to one.
 
-When a solution carries configurations beyond `Debug` and `Release` — one per target platform, framework, or host version — classify every project once.
+When a solution defines configurations beyond `Debug` and `Release` — one per target platform, framework, or host version — classify every project once.
 
-| Project role                    | Mapping                                                                              |
-|---------------------------------|--------------------------------------------------------------------------------------|
-| Owns the extra configurations   | Map plain `Debug`/`Release` onto one representative, and exclude them from the build |
-| Shared, needed by every variant | Map each extra configuration onto `Debug`/`Release`, and build everywhere            |
-| Outside the variant matrix      | Map onto `Debug`/`Release`, and exclude from every extra configuration               |
+| Project role                     | Mapping                                                                              |
+|----------------------------------|--------------------------------------------------------------------------------------|
+| Defines the extra configurations | Map plain `Debug`/`Release` onto one representative, and exclude them from the build |
+| Shared, needed by every variant  | Map each extra configuration onto `Debug`/`Release`, and build everywhere            |
+| Outside the variant matrix       | Map onto `Debug`/`Release`, and exclude from every extra configuration               |
 
 A project outside the matrix that lacks the exclusion compiles once per configuration for no result.
 
 ### Scoping a working set
 
-[references/solution-filters.md](references/solution-filters.md) — **Load when:** a subset of a large solution should load and build on its own.
+[references/solution-filters.md](references/solution-filters.md) — **Load when:** a subset of a large solution loads and builds independently.
 
 ## Validation
 
-- [ ] Every project sits in a folder, or in the root as a project with no qualifier.
+- [ ] Every project is in a folder, or in the root as a project with no qualifier.
 - [ ] Every folder name still describes the folder once its projects are listed.
 - [ ] No folder name admits more than one kind of member, and none names the form of its members.
-- [ ] Tests, build automation, and sandboxes sit outside every deliverable folder.
+- [ ] Tests, build automation, and sandboxes are outside every deliverable folder.
 - [ ] Every project is classified into one configuration group, and projects outside the variant matrix are excluded from its configurations.
 - [ ] Paths use one separator and entries are sorted.
 - [ ] `dotnet sln <solution>.slnx list` lists every expected project.
@@ -160,10 +160,10 @@ A project outside the matrix that lacks the exclusion compiles once per configur
 
 | Pitfall                                                                | Correct approach                                                                       |
 |------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| Shared projects left loose in the root                                 | The root is for projects with no qualifier; a subject gets its own folder              |
-| One folder holding both a shared library and a deliverable's own views | Name the shared folder for its subject; a deliverable's views stay with it             |
-| Test or sandbox project filed inside the deliverable's folder          | Keep the non-shipping tier in its own top-level folder                                 |
-| A shared-fate folder kept after its set is gone                        | Flatten the surviving folder up one level                                              |
+| Shared projects placed directly in the root                            | The root is for projects with no qualifier; a subject gets its own folder              |
+| One folder containing a shared library and a deliverable's own views   | Name the shared folder for its subject; a deliverable's views remain in its folder     |
+| Test or sandbox project filed inside the deliverable's folder          | Place the non-shipping tier in its own top-level folder                                |
+| A shared-fate folder retained after its set is removed                 | Flatten the surviving folder up one level                                              |
 | Sandbox or tool project with no `<Build … Project="false" />`          | Exclude it from every configuration it produces no result in                           |
 | Folder named for a class of file, such as `Services`                   | Name what the folder is about                                                          |
 | Mixed `\` and `/` in `Path` attributes                                 | Normalize to `/`; mixed separators come from editing the file on two operating systems |

@@ -10,7 +10,7 @@ license: MIT
 # Revit API Option Handlers
 
 Several Revit API calls demand a small callback interface.
-`Nice3point.Revit.Toolkit` ships ready implementations with a default behavior and lambda or enum customization.
+`Nice3point.Revit.Toolkit` provides ready implementations with a default behavior and lambda or enum customization.
 A hand-rolled implementation of the interface is unnecessary.
 
 ## When to use
@@ -23,11 +23,12 @@ A hand-rolled implementation of the interface is unnecessary.
 
 ```csharp
 document.LoadFamily(fileName, new FamilyLoadOptions(), out var family); //overwrite existing types, load from the family
-document.LoadFamily(fileName, new FamilyLoadOptions(false, FamilySource.Project), out var family); // keep values, load from the project
+document.LoadFamily(fileName, new FamilyLoadOptions(false, FamilySource.Project), out var family); // preserve values, load from the project
 document.LoadFamily(fileName, UIDocument.GetRevitUIFamilyLoadOptions(), out var family); //reuse Revit's interactive prompt
 ```
 
-The default constructor overwrites the parameter values of existing types; the `(overwrite, FamilySource)` constructor sets those explicitly, and `UIDocument.GetRevitUIFamilyLoadOptions()` defers to Revit's own dialog.
+The default constructor overwrites the parameter values of existing types.
+The `(overwrite, FamilySource)` constructor sets both options explicitly, and `UIDocument.GetRevitUIFamilyLoadOptions()` shows Revit's own dialog.
 
 ### Step 2: Duplicate type names handler
 
@@ -35,24 +36,26 @@ The default constructor overwrites the parameter values of existing types; the `
 var options = new CopyPasteOptions();
 options.SetDuplicateTypeNamesHandler(new DuplicateTypeNamesHandler()); //default: UseDestinationTypes
 options.SetDuplicateTypeNamesHandler(new DuplicateTypeNamesHandler(DuplicateTypeAction.Abort)); //fixed action
-options.SetDuplicateTypeNamesHandler(new DuplicateTypeNamesHandler(args => DuplicateTypeAction.Abort)); // decide per call
+options.SetDuplicateTypeNamesHandler(new DuplicateTypeNamesHandler(args => DuplicateTypeAction.Abort)); // select the action per call
 ```
 
-The default constructor keeps the destination types; pass a `DuplicateTypeAction` for a fixed action, or a lambda that returns the action per call from the `args`.
+The default constructor uses the destination types.
+Pass a `DuplicateTypeAction` for a fixed action, or a lambda that returns the action per call from the `args`.
 
 ### Step 3: Save shared coordinates callback
 
 ```csharp
 linkType.Unload(new SaveSharedCoordinatesCallback()); //default: SaveLinks
 linkType.Unload(new SaveSharedCoordinatesCallback(SaveModifiedLinksOptions.DoNotSaveLinks)); //fixed option
-linkType.Unload(new SaveSharedCoordinatesCallback(link => //decide per link
+linkType.Unload(new SaveSharedCoordinatesCallback(link => //select the option per link
 {
     if (link.AttachmentType == AttachmentType.Overlay) return SaveModifiedLinksOptions.SaveLinks;
     return SaveModifiedLinksOptions.DoNotSaveLinks;
 }));
 ```
 
-The default constructor saves the links; pass a `SaveModifiedLinksOptions` value for a fixed choice, or a lambda that returns the option per link.
+The default constructor saves the links.
+Pass a `SaveModifiedLinksOptions` value for a fixed option, or a lambda that returns the option per link.
 
 ### Step 4: Verify
 

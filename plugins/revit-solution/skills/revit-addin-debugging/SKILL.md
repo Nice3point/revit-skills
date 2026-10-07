@@ -2,7 +2,7 @@
 name: revit-addin-debugging
 description: >
   Configure an Autodesk Revit add-in project's IDE launch of the matching Revit with the debugger attached, using the Nice3point.Revit.Sdk launch properties.
-  USE FOR: setting up a project where a debug session launches the matching Revit and breaks in the add-in, overriding the Revit path or start arguments, and keeping Hot Reload responsive while debugging.
+  USE FOR: setting up a project where a debug session launches the matching Revit and breaks in the add-in, overriding the Revit path or start arguments, and preserving Hot Reload while debugging.
   DO NOT USE FOR: copying built files to the Revit add-ins folder (use revit-addin-publishing), dependency isolation or repacking (use revit-dependency-isolation).
 license: MIT
 ---
@@ -16,7 +16,7 @@ Deploy the add-in first (`revit-addin-publishing`); the launched Revit loads the
 
 - Setting up a project where a debug session starts the right Revit version and breaks in the add-in.
 - Pointing the launcher at a non-default Revit install or start arguments.
-- Keeping iterative debugging and Hot Reload responsive.
+- Preserving Hot Reload during iterative debugging.
 
 ## When not to use
 
@@ -31,7 +31,8 @@ Deploy the add-in first (`revit-addin-publishing`); the launched Revit loads the
 ```
 
 The SDK sets `StartAction=Program`, `StartProgram` to `C:\Program Files\Autodesk\Revit $(RevitVersion)\Revit.exe`, and `StartArguments=/language ENG`; the IDE reads them, starts Revit, and attaches the debugger.
-Enable it in the manifest-owning project alongside `DeployAddin`; each build deploys before launch.
+Enable it alongside `DeployAddin` in the project that contains the `.addin` manifest.
+Each build deploys the add-in before launch.
 
 ### Step 2: Override the target when the defaults are wrong
 
@@ -42,11 +43,11 @@ Enable it in the manifest-owning project alongside `DeployAddin`; each build dep
 
 Set these when Revit is installed off the default path, or when forcing a language or opening a model on start.
 
-### Step 3: Keep Hot Reload working
+### Step 3: Preserve Hot Reload
 
 With `DeployAddin`, repacking (`IsRepackable`) replaces the deployed add-in assembly with a merged assembly on every build.
 The loaded assembly then differs from the compiled one, Hot Reload stops applying edits, and the edit–run loop slows down.
-For local debugging on Revit 2027+, leave `IsRepackable` off and rely on manifest-level isolation (`revit-dependency-isolation`); reserve repacking for release builds on pre-2027 versions.
+For local debugging on Revit 2027+, disable `IsRepackable` and use manifest-level isolation (`revit-dependency-isolation`); reserve repacking for release builds on pre-2027 versions.
 
 ### Step 4: Verify
 
@@ -54,7 +55,7 @@ Set a breakpoint in a command, start a debug session, and confirm the matching R
 
 ## Validation
 
-- [ ] `LaunchRevit` is enabled in the manifest-owning project, alongside `DeployAddin`.
+- [ ] `LaunchRevit` is enabled alongside `DeployAddin` in the project that contains the `.addin` manifest.
 - [ ] `StartProgram`/`StartArguments` are overridden only when the defaults do not fit.
 - [ ] `IsRepackable` is off for debug builds; isolation covers dependency conflicts.
 
@@ -62,7 +63,7 @@ Set a breakpoint in a command, start a debug session, and confirm the matching R
 
 | Pitfall                                              | Correct approach                                                             |
 |------------------------------------------------------|------------------------------------------------------------------------------|
-| Looking for a `launchSettings.json`                  | The SDK drives launch through `LaunchRevit`/`StartProgram`/`StartArguments`. |
+| Looking for a `launchSettings.json`                  | The SDK defines the launch in `LaunchRevit`/`StartProgram`/`StartArguments`. |
 | A debug session starts Revit but the add-in is stale | Enable `DeployAddin`; the build deploys before launch.                       |
 | Hot Reload does nothing while repacking is on        | Disable `IsRepackable` for debug; isolate dependencies via the manifest.     |
 | The wrong Revit year launches                        | `StartProgram` uses `$(RevitVersion)`; select the matching configuration.    |

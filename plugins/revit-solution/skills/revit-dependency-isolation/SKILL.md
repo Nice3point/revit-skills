@@ -36,7 +36,8 @@ Add a `ManifestSettings` block that gives the add-in its own load context:
 </ManifestSettings>
 ```
 
-`UseRevitContext=False` loads the add-in in its own `AssemblyLoadContext` named by `ContextName`; it can then use any dependency version without colliding with other add-ins.
+`UseRevitContext=False` loads the add-in in its own `AssemblyLoadContext` named by `ContextName`.
+The add-in then uses any dependency version without a conflict with other add-ins.
 Adding `ManifestSettings` on Revit versions older than 2027 crashes Revit — the SDK strips the node during publish for older years (see `revit-addin-publishing`).
 
 This is separate from `<EnableDynamicLoading>true</EnableDynamicLoading>` — a stock .NET SDK property every modern add-in sets; it emits the add-in's dependencies to the output folder.
@@ -53,7 +54,7 @@ Merge the dependencies into the add-in assembly with ILRepack.
 ```
 
 Repacking requires the `ILRepack` package and `PublishAddin` or `DeployAddin`.
-ILRepack merges the assemblies in the publish and deploy directories, and the `bin` directory keeps the original assemblies for the projects that reference the add-in, such as a test project.
+ILRepack merges the assemblies in the publish and deploy directories, and the `bin` directory retains the original assemblies for the projects that reference the add-in, such as a test project.
 Prefer isolation on 2027+ over repacking.
 
 ### Step 3: Verify
@@ -70,7 +71,7 @@ Load the add-in alongside another that uses a different version of the same depe
 
 | Pitfall                                                 | Correct approach                                                                                     |
 |---------------------------------------------------------|------------------------------------------------------------------------------------------------------|
-| `ManifestSettings` shipped to Revit < 2027              | Let the SDK patch the manifest on publish; keep the block for 2027+.                                 |
+| `ManifestSettings` shipped to Revit < 2027              | Let the SDK patch the manifest on publish; retain the block for 2027+.                               |
 | Treating `EnableDynamicLoading` as the isolation switch | It only emits dependencies to the output folder; isolate with the manifest `ManifestSettings` block. |
 | Repacking a .NET Core add-in                            | Use isolation on 2027+, not ILRepack.                                                                |
 | Repacking the UI or `System.*` assemblies               | Exclude them via `RepackBinariesExcludes`.                                                           |

@@ -9,18 +9,19 @@ license: MIT
 
 # Revit External Events
 
-The Revit API may only be touched inside its API context.
-`Nice3point.Revit.Toolkit` external events auto-initialize; a caller constructs an event and raises it from any thread without creating it inside the API context first.
+The Revit API is accessible only inside the API context.
+`Nice3point.Revit.Toolkit` external events initialize automatically.
+A caller constructs an event and raises it from any thread without creating it inside the API context first.
 
 ## When to use
 
 - Invoking the API from a modeless WPF window, a background task, or another non-API-context callback.
-- Reviewing that code outside the API context does not touch the API directly.
+- Reviewing that code outside the API context does not call the API directly.
 
 ## When not to use
 
 - The caller already runs in the API context (an external command, a Revit event handler, a Revit-invoked callback) — call the API directly.
-- The window is shown modally with `ShowDialog`: it runs on the API thread, where the API is reachable directly.
+- The window is shown modally with `ShowDialog`: it runs on the API thread and calls the API directly.
 
 ## Workflow
 
@@ -34,7 +35,7 @@ The Revit API may only be touched inside its API context.
 
 Mark every containing type `partial` and annotate a handler method with `[ExternalEvent]`.
 The generator emits the event member from the method signature and names it after the method — `<Method>Event` for the synchronous form and `<Method>AsyncEvent` for the awaitable one — and the caller raises the work through that generated property.
-Keep the transaction inside the method.
+Open and commit the transaction inside the method.
 
 ```csharp
 public sealed partial class WindowCleaner
@@ -81,17 +82,18 @@ Await completion with `AsyncExternalEvent`/`AsyncExternalEvent<T>` (`await …Ra
 
 ### Step 4: Allow direct invocation only for dual-context operations
 
-Set `[ExternalEvent(AllowDirectInvocation = true)]` only when one operation must serve callers inside and outside the API context; it runs inline when already in API mode.
+Set `[ExternalEvent(AllowDirectInvocation = true)]` only when one operation must serve callers inside and outside the API context.
+The event runs the method inline when the caller is already in the API context.
 Never use it to bypass ownership or concurrency rules.
 
 ### Step 5: Verify
 
-Await async event results before consuming generated Revit objects, and test the observable model result.
+Await async event results before using the Revit objects the handler creates, and test the observable model result.
 
 ## Validation
 
-- [ ] Code outside the API context reaches the API through an external event.
-- [ ] Transactions stay inside the event callback or annotated method.
+- [ ] Code outside the API context accesses the API through an external event.
+- [ ] Transactions are opened and committed inside the event callback or annotated method.
 - [ ] An `[ExternalEvent]` method's containing type is `partial`.
 - [ ] `AllowDirectInvocation` is set only for a real dual-context need.
 

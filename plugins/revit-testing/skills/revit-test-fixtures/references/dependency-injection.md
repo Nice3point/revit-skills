@@ -2,13 +2,13 @@
 
 **Load when:** the code under test is a service that should run with its real dependencies (logging, options, collaborators) built by a DI container.
 
-Feed the test class's constructor from an `IServiceProvider` by subclassing TUnit's `DependencyInjectionDataSourceAttribute<TScope>`, then apply that attribute to the test class.
-The tests exercise the real object graph, and no test assembles collaborators by hand.
+Supply the constructor arguments of the test class from an `IServiceProvider`: derive an attribute from TUnit's `DependencyInjectionDataSourceAttribute<TScope>`, then apply it to the test class.
+The tests exercise the real object graph, and no test assembles collaborators manually.
 Requires the `Nice3point.TUnit.Revit`, TUnit, and `Microsoft.Extensions.DependencyInjection` packages.
 
 ## Author the attribute once
 
-Build the provider a single time and hand out a scope per test.
+Build the provider once and create a scope for each test.
 Register exactly the services the tests need, with real or test-friendly implementations.
 
 ```csharp
@@ -99,7 +99,7 @@ public sealed class ElementInspectorTests(ElementInspector elementInspector) : R
 
 ## Compose with a per-test data source
 
-Dependency injection fills the **constructor**; a method data source still fills each **test parameter**.
+Dependency injection supplies the **constructor** arguments; a method data source supplies each **test parameter**.
 Put the DI attribute on the class and `[MethodDataSource]` / `[InstanceMethodDataSource]` (see `parameterized-fixtures`) on the method — for example, a service test that runs over sample paths:
 
 ```csharp
@@ -128,6 +128,7 @@ public sealed class ElementInspectorOverSamplesTests(ElementInspector elementIns
 - The provider is built and services are resolved during discovery, before Revit is injected.
   A service's constructor and field initializers must not call the Revit API.
   Defer Revit calls to methods the test body invokes on the Revit thread.
-- Keep the provider `static`: one container is built for the whole run, and each test gets its own scope for scoped/transient services.
-- Register test doubles here (in-memory options, a fake storage service) when a real dependency would touch the network or disk.
-- For data-source patterns beyond DI, use the TUnit documentation linked from `revit-test-fixtures`; return only plain inputs that the Revit-thread test body can consume.
+- Declare the provider `static`: one container is built for the whole run, and each test receives its own scope for scoped and transient services.
+- Register test doubles here (in-memory options, a fake storage service) when a real dependency accesses the network or the disk.
+- For data-source patterns beyond DI, use the TUnit documentation linked from `revit-test-fixtures`.
+  A data source returns only plain inputs, and the test body uses them on the Revit thread.
