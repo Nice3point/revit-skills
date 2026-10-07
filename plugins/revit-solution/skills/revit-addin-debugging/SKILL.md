@@ -44,7 +44,8 @@ Set these when Revit is installed off the default path, or when forcing a langua
 
 ### Step 3: Keep Hot Reload working
 
-Repacking (`IsRepackable`) merges dependencies as a post-build step that rewrites the output assembly; it defeats Hot Reload and slows the edit–run loop.
+With `DeployAddin`, repacking (`IsRepackable`) replaces the deployed add-in assembly with a merged assembly on every build.
+The loaded assembly then differs from the compiled one, Hot Reload stops applying edits, and the edit–run loop slows down.
 For local debugging on Revit 2027+, leave `IsRepackable` off and rely on manifest-level isolation (`revit-dependency-isolation`); reserve repacking for release builds on pre-2027 versions.
 
 ### Step 4: Verify

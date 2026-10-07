@@ -14,7 +14,7 @@ dotnet new revit-addin-module --name MyFeature --wpf false
 
 | Option  | Values and default          | Generated behavior                                                                                                                                       |
 |---------|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `--wpf` | `true` (default) or `false` | With `true`, adds `UseWPF`, CommunityToolkit.Mvvm, and starter `Models`, `Views`, and `ViewModels`. With `false`, creates an empty code-oriented module. |
+| `--wpf` | `true` (default) or `false` | With `true`, adds `UseWPF`, CommunityToolkit.Mvvm, and starter `Views` and `ViewModels`. With `false`, creates an empty code-oriented module. |
 
 Use a WPF module for a feature that owns a dialog or view model.
 Use a non-WPF module for services, data access, helpers, or other feature logic without a view.

@@ -9,7 +9,6 @@ Requires the `Nice3point.TUnit.Revit` package.
 ## Fresh document per test
 
 Create the document in `[Before(Test)]`, seed it inside a transaction, and close it in `[After(Test)]`.
-Both hooks run on the Revit thread via `[HookExecutor<RevitThreadExecutor>]`.
 Store the seeded elements the assertions run against.
 The test body then states intent, not rediscovery.
 
@@ -20,7 +19,6 @@ public sealed class WallModelTests : RevitApiTest
     private IList<Wall> _exteriorWalls = null!;
 
     [Before(Test)]
-    [HookExecutor<RevitThreadExecutor>]
     public void SeedModel()
     {
         _document = Application.NewProjectDocument(UnitSystem.Metric);
@@ -41,7 +39,6 @@ public sealed class WallModelTests : RevitApiTest
     }
 
     [After(Test)]
-    [HookExecutor<RevitThreadExecutor>]
     public void CloseModel()
     {
         _document.Close(false);
@@ -84,6 +81,16 @@ public sealed class WallModelTests : RevitApiTest
         await Assert.That(remaining.Count).IsEqualTo(_exteriorWalls.Count - 1);
     }
 }
+```
+
+For read-only tests, use Class-level hook, for better performance:
+
+```csharp
+    [Before(Class)]
+    [HookExecutor<RevitThreadExecutor>]
+    public static void SeedModel()
+    {
+    }
 ```
 
 ## Read-only tests share one document

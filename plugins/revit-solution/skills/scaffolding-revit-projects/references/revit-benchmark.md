@@ -8,6 +8,7 @@ The generated `Program.cs` runs the starter benchmark for the specified configur
 
 ```shell
 dotnet new revit-benchmark --name MyBenchmarks
+dotnet run -c Release.R26 -- --filter '*'
 ```
 
 The template has no options.

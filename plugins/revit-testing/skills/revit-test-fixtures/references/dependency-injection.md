@@ -49,7 +49,6 @@ public sealed class ElementInspectorTests(ElementInspector elementInspector) : R
     private Wall _wall = null!;
 
     [Before(Test)]
-    [HookExecutor<RevitThreadExecutor>]
     public void SeedModel()
     {
         _document = Application.NewProjectDocument(UnitSystem.Metric);
@@ -64,7 +63,6 @@ public sealed class ElementInspectorTests(ElementInspector elementInspector) : R
     }
 
     [After(Test)]
-    [HookExecutor<RevitThreadExecutor>]
     public void CloseModel()
     {
         _document.Close(false);

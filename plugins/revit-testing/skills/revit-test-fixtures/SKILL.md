@@ -14,7 +14,8 @@ Choosing the wrong one is the usual cause of tests that pass alone but fail toge
 
 These invariants hold across every variant:
 
-1. **Create and close documents on the Revit thread.** Any hook that opens, seeds, or closes a document carries `[HookExecutor<RevitThreadExecutor>]`, and every opened or created document is closed in teardown.
+1. **Create and close documents in hooks.** `RevitApiTest` and `RevitApiUiTest` run every hook on the Revit thread, and every opened or created document is closed in teardown.
+    For class-level hooks need to set [HookExecutor<RevitThreadExecutor>] or [HookExecutor<RevitUiThreadExecutor>] explicitly.
 2. **Discovery runs before Revit exists.** TUnit evaluates every data source, constructs the test class, and resolves every injected service during discovery, off the Revit thread.
    They yield only primitives (numbers, strings, file paths) and never call the Revit API at construction.
    The test body turns those primitives into Revit objects on the Revit thread.
@@ -22,8 +23,7 @@ These invariants hold across every variant:
 ```csharp
 public static string[] DocumentPaths => Directory.EnumerateFiles(directory, "*.rvt").ToArray(); // primitives, off-thread
 
-[After(Test)]
-[HookExecutor<RevitThreadExecutor>] // teardown touches Revit; it runs on the Revit thread
+[After(Test)] // runs on the Revit thread
 public void CloseDocument()
 {
     _document?.Close(false);
@@ -60,7 +60,7 @@ For other TUnit data sources, read TUnit's [Method Data Sources source](https://
 ## Validation
 
 - [ ] Each test gets isolated state; nothing leaks between tests.
-- [ ] Every opened or created document is closed in `[After(Test)]`, and fixture hooks that touch Revit use `[HookExecutor<RevitThreadExecutor>]`.
+- [ ] Every opened or created document is closed in `[After(Test)]`.
 - [ ] Sample files are opened from a private copy, not in place.
 - [ ] A missing sample set or localization skips the affected test; it does not fail it.
 - [ ] The data-source attribute matches the member: `[MethodDataSource]` for static, `[InstanceMethodDataSource]` for constructor-dependent.

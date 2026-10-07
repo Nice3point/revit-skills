@@ -33,6 +33,7 @@ Declare the alternatives as sibling `[Benchmark]` methods in the same class.
 A small application-level comparison needs no document:
 
 ```csharp
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public class XyzBenchmarks : RevitApiBenchmark
 {
     [Benchmark]
@@ -52,6 +53,7 @@ public class XyzBenchmarks : RevitApiBenchmark
 A benchmark that needs a seeded model opens it once in setup; keep the seeding out of the measured method:
 
 ```csharp
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public class CollectorBenchmarks : RevitApiBenchmark
 {
     private Document _document = null!;
@@ -104,13 +106,16 @@ var configuration = ManualConfig.Create(DefaultConfig.Instance)
     .AddJob(Job.Default.WithCurrentConfiguration())
     .AddDiagnoser(MemoryDiagnoser.Default);
 
-BenchmarkRunner.Run<CollectorBenchmarks>(configuration);
+BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly)
+    .Run(args, configuration);
 ```
 
 ### Step 3: Run and decide
 
+`BenchmarkSwitcher` runs the benchmarks the command-line arguments select:
+
 ```shell
-dotnet run -c Release.RNN
+dotnet run -c Release.RNN -- --filter '*CollectorBenchmarks*'
 ```
 
 `RNN` is the target Revit-year configuration, for example `Release.R26`; it must match the licensed Revit installed on the machine.

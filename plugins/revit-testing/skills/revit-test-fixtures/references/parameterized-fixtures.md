@@ -35,7 +35,6 @@ public abstract class DocumentSampleFixture : RevitApiTest
     public Document? Document { get; private set; }
 
     [After(Test)]
-    [HookExecutor<RevitThreadExecutor>]
     public void CloseDocument()
     {
         Document?.Close(false);

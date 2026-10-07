@@ -52,7 +52,8 @@ Merge the dependencies into the add-in assembly with ILRepack.
 <RepackBinariesExcludes>$(AssemblyName).UI.dll;System*.dll</RepackBinariesExcludes>
 ```
 
-Repacking requires the `ILRepack` package.
+Repacking requires the `ILRepack` package and `PublishAddin` or `DeployAddin`.
+ILRepack merges the assemblies in the publish and deploy directories, and the `bin` directory keeps the original assemblies for the projects that reference the add-in, such as a test project.
 Prefer isolation on 2027+ over repacking.
 
 ### Step 3: Verify

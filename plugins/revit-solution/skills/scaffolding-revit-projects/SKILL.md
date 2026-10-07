@@ -1,7 +1,7 @@
 ---
 name: scaffolding-revit-projects
 description: >
-  Scaffold an Autodesk Revit add-in, benchmark, or test project from the Nice3point.Revit.Templates.
+  Scaffold an Autodesk Revit add-in, service defaults, benchmark, or test project from the Nice3point.Revit.Templates.
   USE FOR: installing the templates and creating a new project or solution with dotnet new.
   DO NOT USE FOR: configuring an existing project's SDK, versions, or references (use revit-sdk-project-configuration), or upgrading a scaffolded project to a newer template version (use revit-template-migration).
 license: MIT
@@ -40,6 +40,7 @@ Match the required outcome to one reference and open only that reference.
 - [references/revit-addin.md](references/revit-addin.md) — **Load when:** a small self-contained add-in needs one project that owns its manifest, entry point, UI.
 - [references/revit-addin-application.md](references/revit-addin-application.md) — **Load when:** creating the manifest-owning host for a modular add-in; use it with `revit-addin-module`.
 - [references/revit-addin-module.md](references/revit-addin-module.md) — **Load when:** adding one modular feature, service, or WPF MVVM area to an application host.
+- [references/revit-servicedefaults.md](references/revit-servicedefaults.md) — **Load when:** a modular add-in needs one project for the service registrations its application and modules share.
 - [references/revit-benchmark.md](references/revit-benchmark.md) — **Load when:** measuring Revit API code with BenchmarkDotNet inside Revit.
 - [references/revit-tunit.md](references/revit-tunit.md) — **Load when:** creating a TUnit test project that runs inside Revit.
 
@@ -53,15 +54,17 @@ Pass only the options that change the default shape.
 For example, create a solution with an App Store bundle and tests:
 
 ```shell
-dotnet new revit-addin-sln --name MyAddin --bundle --includeTests
+dotnet new revit-addin-sln --name MyAddin --bundle --tests
 ```
 
-For a modular solution, create the host and a module under `source`, then add the module reference to the host:
+For a modular solution, create the host, a module, and the service defaults project under `source`, then reference them from the host:
 
 ```shell
-dotnet new revit-addin-application --name MyAddin
+dotnet new revit-addin-application --name MyAddin --di hosting
 dotnet new revit-addin-module --name MyFeature
+dotnet new revit-servicedefaults --name MyAddin.ServiceDefaults --di hosting
 dotnet add MyAddin/MyAddin.csproj reference MyFeature/MyFeature.csproj
+dotnet add MyAddin/MyAddin.csproj reference MyAddin.ServiceDefaults/MyAddin.ServiceDefaults.csproj
 ```
 
 ### Step 4: Initialize the solution repository
@@ -91,6 +94,7 @@ dotnet run
 - [ ] The templates are installed via `dotnet new install Nice3point.Revit.Templates`.
 - [ ] The chosen template and options match the intended topology and output.
 - [ ] A modular add-in has an application host, modules referenced from that host, and entry points in the host.
+- [ ] Service registrations the host and its modules share are placed in a service defaults project, and the host calls `AddServiceDefaults`.
 - [ ] A solution has an initial Git commit before its build runs.
 - [ ] The generated project builds for one declared `Debug.RNN` or `Release.RNN` configuration.
 

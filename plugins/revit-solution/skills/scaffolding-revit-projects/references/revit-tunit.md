@@ -4,7 +4,6 @@
 
 `revit-tunit` creates an executable test project.
 It references `Nice3point.TUnit.Revit`, TUnit, `Nice3point.Revit.Api.RevitAPI`, and Polyfill.
-The generated project contains a starter test and test configuration.
 
 ```shell
 dotnet new revit-tunit --name MyAddin.Tests
@@ -12,7 +11,7 @@ dotnet new revit-tunit --name MyAddin.Tests
 
 The template has no options.
 Keep tests in a dedicated project.
-When the repository was created with `revit-addin-sln --includeTests`, place the project under the `tests` folder.
+When the repository was created with `revit-addin-sln --tests`, place the project under the `tests` folder.
 
 ## Validation
 

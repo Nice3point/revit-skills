@@ -16,9 +16,9 @@ dotnet new revit-addin --name MyAddin --addin application --wpf --di hosting --l
 | Option     | Values and default                                  | Generated behavior                                                                                                                                           |
 |------------|-----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `--addin`  | `application` (default), `dbApplication`, `command` | Selects the manifest registration and entry point. Application and DB application generate `Application.cs`. Command generates `Commands/StartupCommand.cs`. |
-| `--wpf`    | `true` (default) or `false`                         | Adds `UseWPF`, CommunityToolkit.Mvvm, and starter `Models`, `Views`, and `ViewModels`. It does not apply to a DB application.                                |
+| `--wpf`    | `true` (default) or `false`                         | Adds `UseWPF`, CommunityToolkit.Mvvm, and starter `Views` and `ViewModels`. It does not apply to a DB application.                                           |
 | `--di`     | `disabled` (default), `container`, `hosting`        | Adds `Host.cs` and either Microsoft.Extensions.DependencyInjection or Microsoft.Extensions.Hosting.                                                          |
-| `--logger` | `false` (default) or `true`                         | Adds Serilog packages. With DI the host configures logging; without DI the application initializes a debug logger directly.                                  |
+| `--logger` | `false` (default) or `true`                         | Adds `Logging` and `Diagnostics` on Microsoft.Extensions.Logging: the debug and Revit journal providers and the log of unhandled exceptions. Requires `--di`. |
 
 ## Choosing the add-in type
 
