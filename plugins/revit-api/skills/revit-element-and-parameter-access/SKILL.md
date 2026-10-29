@@ -27,9 +27,10 @@ The `Nice3point.Revit.Extensions` accessors wrap the raw element and parameter A
 
 ```csharp
 var wall = wallId.ToElement<Wall>(document);
+var view = elementId.ToElementOrDefault<View>(document);
 ```
 
-Returns null when the element is missing or not that type.
+`ToElement` throws when the element is missing or not that type; `ToElementOrDefault` returns null.
 
 ### Step 2: Find a parameter
 
@@ -47,6 +48,7 @@ double heightFeet = parameter.AsDouble(); // native api call
 bool isStructural = wall.FindParameter(BuiltInParameter.WALL_STRUCTURAL_SIGNIFICANT).AsBool();
 Color color = door.FindParameter("Door color").AsColor();
 Level level = wall.FindParameter(BuiltInParameter.WALL_BASE_CONSTRAINT).AsElement<Level>();
+Material? material = door.FindParameter("Door material").AsElementOrDefault<Material>();
 ```
 
 ### Step 4: Convert internal units at the boundary
@@ -69,7 +71,7 @@ Writes require an open transaction.
 
 ## Validation
 
-- [ ] `ElementId` is resolved with `ToElement<T>`, not `GetElement(id) as T`.
+- [ ] `ElementId` is resolved with `ToElement<T>` or `ToElementOrDefault<T>`, not `GetElement(id) as T`.
 - [ ] Parameters are found with `FindParameter`, and optional ones are null-checked.
 - [ ] Stored lengths are converted at the boundary with the unit conversion extensions.
 - [ ] Writes happen inside a transaction.
@@ -78,7 +80,7 @@ Writes require an open transaction.
 
 | Pitfall                                                         | Correct approach                                             |
 |-----------------------------------------------------------------|--------------------------------------------------------------|
-| `document.GetElement(id) as Wall`                               | `id.ToElement<Wall>(document)`.                              |
+| `document.GetElement(id) as Wall`                               | `id.ToElementOrDefault<Wall>(document)`.                     |
 | Choosing among `get_Parameter`/`LookupParameter`/`GetParameter` | `FindParameter(...)` searches the instance and its type.     |
 | Using a raw feet value as millimeters                           | Convert with `.ToMillimeters()` / `.FromMeters()`.           |
 | `ToElement`/`FindParameter` not found                           | The `Nice3point.Revit.Extensions` package is not referenced. |
