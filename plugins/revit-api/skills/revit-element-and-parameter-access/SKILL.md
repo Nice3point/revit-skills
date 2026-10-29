@@ -27,21 +27,10 @@ The `Nice3point.Revit.Extensions` accessors wrap the raw element and parameter A
 
 ```csharp
 var wall = wallId.ToElement<Wall>(document);
-```
-
-`ToElement<T>` returns null when the id references no element, and throws `InvalidCastException` when the element is of another type.
-It applies to an id whose element type is known.
-
-An id from outside the code, such as a user selection or an id another process passes, may reference an element of any type.
-`ToElementOrDefault<T>` returns null for an element of another type and for an id of no element:
-
-```csharp
 var view = elementId.ToElementOrDefault<View>(document);
-if (view is null)
-{
-    return;
-}
 ```
+
+`ToElement` throws when the element is missing or not that type; `ToElementOrDefault` returns null.
 
 ### Step 2: Find a parameter
 
@@ -61,8 +50,6 @@ Color color = door.FindParameter("Door color").AsColor();
 Level level = wall.FindParameter(BuiltInParameter.WALL_BASE_CONSTRAINT).AsElement<Level>();
 Material? material = door.FindParameter("Door material").AsElementOrDefault<Material>();
 ```
-
-`AsElement<T>` throws `InvalidCastException` for an element of another type, and `AsElementOrDefault<T>` returns null for it.
 
 ### Step 4: Convert internal units at the boundary
 
@@ -84,8 +71,7 @@ Writes require an open transaction.
 
 ## Validation
 
-- [ ] An `ElementId` of a known element type is resolved with `ToElement<T>`.
-- [ ] An `ElementId` that may reference an element of another type is resolved with `ToElementOrDefault<T>`, not `GetElement(id) as T`.
+- [ ] `ElementId` is resolved with `ToElement<T>` or `ToElementOrDefault<T>`, not `GetElement(id) as T`.
 - [ ] Parameters are found with `FindParameter`, and optional ones are null-checked.
 - [ ] Stored lengths are converted at the boundary with the unit conversion extensions.
 - [ ] Writes happen inside a transaction.
@@ -95,7 +81,6 @@ Writes require an open transaction.
 | Pitfall                                                         | Correct approach                                             |
 |-----------------------------------------------------------------|--------------------------------------------------------------|
 | `document.GetElement(id) as Wall`                               | `id.ToElementOrDefault<Wall>(document)`.                     |
-| `ToElement<T>` for an id that may reference another type        | `ToElementOrDefault<T>`; `ToElement<T>` throws for it.       |
 | Choosing among `get_Parameter`/`LookupParameter`/`GetParameter` | `FindParameter(...)` searches the instance and its type.     |
 | Using a raw feet value as millimeters                           | Convert with `.ToMillimeters()` / `.FromMeters()`.           |
 | `ToElement`/`FindParameter` not found                           | The `Nice3point.Revit.Extensions` package is not referenced. |
